@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/homeFragmentNewest"
+        android:icon="@drawable/ic_home_4_line"
+        yourapp:showAsAction="ifRoom|collapseActionView"
+        android:title="الرئيسية" />
+    <item
+        android:id="@+id/passengersFragment"
+        android:icon="@drawable/ic_briefcase"
+        yourapp:showAsAction="ifRoom|collapseActionView"
+         android:title="المسافرين" />
+    <item
+        android:id="@+id/myBookingFragment"
+        android:icon="@drawable/ic_file"
+        yourapp:showAsAction="ifRoom|collapseActionView"
+         android:title="حجوزاتى" />
+    <item
+        android:id="@+id/moreFragment"
+        android:icon="@drawable/ic_more_fill"
+        android:title="" />
+</menu>

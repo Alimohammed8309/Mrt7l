@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:layoutDirection="ltr"
+    android:background="@drawable/white_background"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"   >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:padding="6dp"
+            android:textSize="14sp"
+            android:id="@+id/firstName"
+            android:textColor="@color/black"
+             />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="start"
+            android:textColor="@color/dark_gray"
+            android:text="@string/lbl_first_name"
+            android:textSize="14sp"
+            android:padding="6dp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"    >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:padding="6dp"
+            android:gravity="right"
+            android:id="@+id/phoneNumber"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="start"
+            android:textSize="14sp"
+            android:textColor="@color/dark_gray"
+            android:text="@string/text_phone"
+            android:padding="6dp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"   >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:padding="6dp"
+            android:textSize="14sp"
+            android:id="@+id/passportNumber"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="start"
+            android:textSize="14sp"
+            android:textColor="@color/dark_gray"
+            android:text="@string/passport_num"
+            android:padding="6dp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="start"
+            android:textSize="14sp"
+            android:id="@+id/genderText"
+            android:padding="6dp"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="start"
+            android:textColor="@color/dark_gray"
+            android:textSize="14sp"
+            android:text="@string/lbl_gender"
+            android:padding="6dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
+</layout>

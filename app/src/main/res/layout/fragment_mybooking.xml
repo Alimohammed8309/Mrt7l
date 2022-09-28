@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/refreshButton"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layoutDirection="rtl"
+            android:layout_height="match_parent"
+            android:background="@color/app_background">
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_toolbar"
+                android:layoutDirection="rtl"
+
+                app:contentInsetStart="0dp"
+                app:title="Home"
+                app:titleTextColor="@color/white">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layoutDirection="rtl"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:text="@string/my_rservations"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_mlarge" />
+
+                    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:orientation="vertical" android:layout_width="wrap_content"
+                        android:layoutDirection="rtl"
+                        android:layout_alignParentEnd="true"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ivNotification"
+                            android:layout_width="@dimen/spacing_mlarge"
+                            android:layout_height="@dimen/spacing_mlarge"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="@dimen/spacing_medium"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_marginBottom="@dimen/spacing_medium"
+                            android:padding="@dimen/spacing_small"
+                            android:src="@drawable/notification"
+                            android:contentDescription="@string/txt_todo"/>
+
+                        <TextView
+                            android:id="@+id/tvNotificationCount"
+                            android:layout_width="@dimen/notification_size"
+                            android:layout_height="@dimen/notification_size"
+                            android:layout_alignTop="@id/ivNotification"
+                            android:layout_alignEnd="@id/ivNotification"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:background="@drawable/bg_shape_notification"
+                            android:gravity="center"
+                            android:textColor="@color/textheader"
+                            android:textSize="@dimen/font_small"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutDirection="rtl"
+                android:layout_below="@+id/toolbar"
+                android:background="@drawable/bg_card"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llOffer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layoutDirection="rtl"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:orientation="horizontal"
+                    >
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        >
+
+
+
+                        <TextView
+                            android:id="@+id/tvCompleted"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_small"
+                            android:layout_marginTop="@dimen/spacing_small"
+
+                            android:gravity="center"
+                            android:paddingTop="@dimen/spacing_medium"
+                            android:paddingBottom="@dimen/spacing_medium"
+                            android:text="@string/text_booked"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_large" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="3dp"
+                            android:background="@color/colorPrimary"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:id="@+id/currentLine"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:id="@+id/tvCancelled"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_small"
+                            android:layout_marginEnd="@dimen/spacing_small"
+                            android:background="@drawable/bg_rightswitch"
+
+                            android:gravity="center"
+                            android:paddingTop="@dimen/spacing_medium"
+                            android:paddingBottom="@dimen/spacing_medium"
+                            android:text="@string/txtCancelled"
+                            android:textColor="@color/textheader"
+                            android:textSize="@dimen/font_large" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="3dp"
+                            android:background="@color/colorPrimary"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:id="@+id/pastLine"
+                            android:visibility="gone"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvBooking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPast"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    />
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progresss"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cvDate"
+                    android:layout_marginBottom="12dp"
+                    />
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mainProgress"
+                    android:visibility="gone"
+                    android:layout_marginTop="190dp"
+                    />
+                <TextView
+                    android:id="@+id/noData"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:clipToPadding="false"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="@string/no_reservations"
+                    android:visibility="gone"     />
+
+
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>
+
+

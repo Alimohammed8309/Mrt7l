@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/homeFragmentNewest">
+
+    <fragment
+        android:id="@+id/homeFragmentNewest"
+        android:name="com.mrt7l.ui.fragment.home.HomeFragmentNewest"
+        android:label="HomeFragmentNewest" >
+        <action
+            android:id="@+id/action_homeFragmentNewest_to_passengersFragment"
+            app:popUpTo="@+id/homeFragmentNewest"
+            app:destination="@id/passengersFragment" />
+        <action
+            android:id="@+id/action_homeFragmentNewest_to_companyDetailsFragment"
+            app:popUpTo="@+id/homeFragmentNewest"
+            app:destination="@id/companyDetailsFragment" />
+        <action
+            android:id="@+id/action_homeFragmentNewest_to_searchTripsFragment"
+            app:popUpTo="@+id/homeFragmentNewest"
+            app:destination="@id/searchTripsFragment" />
+        <action
+            android:id="@+id/action_homeFragmentNewest_to_reservationBottomSheet"
+            app:popUpTo="@+id/homeFragmentNewest"
+            app:destination="@id/reservationBottomSheet" />
+        <action
+            android:id="@+id/action_homeFragmentNewest_to_addPassengersFragment"
+            app:destination="@id/addPassengersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/passengersFragment"
+        android:name="com.mrt7l.ui.fragment.passengers.PassengersFragment"
+        android:label="PassengersFragment"
+        >
+        <action
+            android:id="@+id/action_passengersFragment_to_addPassengerFragment"
+            app:destination="@id/addPassengerFragment"
+            app:popUpTo="@id/homeFragmentNewest"/>
+        <action
+            android:id="@+id/action_passengersFragment_to_editPassengerFragment"
+            app:destination="@id/editPassengerFragment"
+            />
+        <action
+            android:id="@+id/action_passengersFragment_to_reserveForMeFragment"
+            app:destination="@id/reserveForMeFragment" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_notifications"
+        app:destination="@id/notificationsFragment"
+         />
+    <fragment
+        android:id="@+id/myBookingFragment"
+        android:name="com.mrt7l.ui.fragment.mytrips.MyBookingFragment"
+        android:label="MyBookingFragment" >
+        <action
+            android:id="@+id/action_myBookingFragment_to_printTicketFragment"
+            app:destination="@id/printTicketFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="com.mrt7l.ui.fragment.MoreFragment"
+        android:label="MoreFragment" >
+        <action
+            android:id="@+id/action_moreFragment_to_favouriteFragment"
+            app:destination="@id/favouriteFragment" />
+        <action
+            android:id="@+id/action_moreFragment_to_contactUsFragment"
+            app:destination="@id/contactUsFragment" />
+        <action
+            android:id="@+id/action_moreFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_moreFragment_to_explainAppFragment"
+            app:destination="@id/explainAppFragment" />
+        <action
+            android:id="@+id/action_moreFragment_to_stationsFragment"
+            app:destination="@id/stationsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addPassengerFragment"
+        android:name="com.mrt7l.ui.fragment.passengers.AddPassengerFragment"
+        android:label="AddPassengerFragment" >
+        <action
+            android:id="@+id/action_addPassengerFragment_to_reserveForMeFragment"
+            app:destination="@id/reserveForMeFragment" />
+        <action
+            android:id="@+id/action_addPassengerFragment_to_passengersFragment"
+            app:destination="@id/passengersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPassengerFragment"
+        android:name="com.mrt7l.ui.fragment.passengers.edit_passenger.EditPassengerFragment"
+        android:label="EditPassengerFragment" />
+    <fragment
+        android:id="@+id/companyDetailsFragment"
+        android:name="com.mrt7l.ui.fragment.company_details.CompanyDetailsFragment"
+        android:label="CompanyDetailsFragment" >
+        <action
+            android:id="@+id/action_companyDetailsFragment_to_reservationBottomSheet"
+            app:destination="@id/reservationBottomSheet" />
+        <action
+            android:id="@+id/action_companyDetailsFragment_to_addPassengersFragment"
+            app:destination="@id/addPassengersFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/reservationBottomSheet"
+        android:name="com.mrt7l.ui.ReservationBottomSheet"
+        android:label="ReservationBottomSheet" >
+        <action
+            android:id="@+id/action_reservationBottomSheet_to_addPassengerFragment"
+            app:destination="@id/addPassengerFragment" />
+        <action
+            android:id="@+id/action_reservationBottomSheet_to_passengersFragment"
+            app:destination="@id/passengersFragment" />
+        <action
+            android:id="@+id/action_reservationBottomSheet_to_reserveForMeFragment"
+            app:destination="@id/reserveForMeFragment" />
+    </dialog>
+
+
+    <dialog
+        android:id="@+id/filterBottomSheet"
+        android:name="com.mrt7l.ui.fragment.search_trips.FilterFragment"
+        android:label="ReservationBottomSheet" >
+        <action
+            android:id="@+id/action_filterBottomSheet_to_searchTripsFragment"
+            app:destination="@id/searchTripsFragment" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/reserveForMeFragment"
+        android:name="com.mrt7l.ui.fragment.reservation.ReserveForMeFragment"
+        android:label="ReserveForMeFragment"
+         >
+        <action
+            android:id="@+id/backToHome"
+            app:destination="@+id/homeFragmentNewest"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/main_nav_graph"
+            app:popUpToInclusive="true"
+        />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.mrt7l.ui.fragment.favourite.FavouriteFragment"
+        android:label="FavouriteFragment" >
+        <action
+            android:id="@+id/action_favouriteFragment_to_companyDetailsFragment"
+            app:destination="@id/companyDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchTripsFragment"
+        android:name="com.mrt7l.ui.fragment.search_trips.SearchTripsFragment"
+        android:label="SearchTripsFragment" >
+        <action
+            android:id="@+id/action_searchTripsFragment_to_passengersFragment"
+            app:destination="@id/passengersFragment" />
+        <action
+            android:id="@+id/action_searchTripsFragment_to_reservationBottomSheet"
+            app:destination="@id/reservationBottomSheet" />
+        <action
+            android:id="@+id/action_searchTripsFragment_to_filterBottomSheet"
+            app:destination="@id/filterBottomSheet" />
+        <action
+            android:id="@+id/action_searchTripsFragment_to_addPassengersFragment"
+            app:destination="@id/addPassengersFragment" />
+        <action
+            android:id="@+id/action_searchTripsFragment_to_companyDetailsFragment"
+            app:destination="@id/companyDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/contactUsFragment"
+        android:name="com.mrt7l.ui.fragment.contact.ContactUsFragment"
+        android:label="ContactUsFragment" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.mrt7l.ui.fragment.about.AboutFragment"
+        android:label="AboutFragment" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.mrt7l.ui.fragment.notifications.NotificationsFragment"
+        android:label="notifications_fragment"
+        tools:layout="@layout/notifications_fragment" />
+    <fragment
+        android:id="@+id/explainAppFragment"
+        android:name="com.mrt7l.ui.fragment.explain_app.ExplainAppFragment"
+        android:label="ExplainAppFragment" />
+    <fragment
+        android:id="@+id/stationsFragment"
+        android:name="com.mrt7l.ui.fragment.stations.StationsFragment"
+        android:label="StationsFragment" >
+        <action
+            android:id="@+id/action_stationsFragment_to_stationsBottomSheet"
+            app:destination="@id/stationsBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/stationsBottomSheet"
+        android:name="com.mrt7l.ui.fragment.stations.StationsBottomSheet"
+        android:label="StationsBottomSheet" />
+    <fragment
+        android:id="@+id/addPassengersFragment"
+        android:name="com.mrt7l.ui.fragment.reservation.addpassengers.AddPassengersFragment"
+        android:label="fragment_add_passengers"
+        tools:layout="@layout/fragment_add_passengers" >
+        <action
+            android:id="@+id/action_addPassengersFragment_to_reserveForMeFragment"
+            app:destination="@id/reserveForMeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/printTicketFragment"
+        android:name="com.mrt7l.ui.fragment.mytrips.PrintTicketFragment"
+        android:label="PrintTicketFragment" />
+</navigation>

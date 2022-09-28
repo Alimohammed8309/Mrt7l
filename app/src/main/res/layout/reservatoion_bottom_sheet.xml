@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layoutDirection="rtl"
+    android:layout_gravity="end"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/user"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/me"
+        android:drawablePadding="7dp"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        android:text="@string/reserve_me"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/passenger"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="14dp"
+        android:drawablePadding="7dp"
+        android:paddingStart="5dp"
+        android:id="@+id/pastPassenger"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        android:text="@string/reserve_another"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/add_new"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="14dp"
+        android:drawablePadding="7dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/newPassenger"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        android:text="@string/reserve_else"
+        />
+
+
+</LinearLayout>

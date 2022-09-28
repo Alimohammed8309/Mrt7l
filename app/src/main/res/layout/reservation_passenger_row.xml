@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        android:id="@+id/passengerType"
+        android:paddingTop="6dp"
+        android:text="@string/type"
+        android:gravity="right"
+        android:paddingStart="7dp"
+        android:paddingEnd="7dp"  />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        android:id="@+id/passportNumber"
+        android:paddingTop="6dp"
+        android:text="@string/passport_num"
+        android:paddingStart="7dp"
+        android:paddingEnd="7dp"
+        android:gravity="right"
+        />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.7"
+        android:textColor="@color/red"
+        android:id="@+id/passengerName"
+        android:textSize="12sp"
+        android:paddingTop="6dp"
+        android:text="@string/name"
+        android:gravity="right"
+        android:paddingStart="7dp"
+        android:paddingEnd="7dp" />
+
+</LinearLayout>
+
+
+</layout>

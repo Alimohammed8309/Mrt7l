@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layoutDirection="rtl"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_xxsmall"
+        android:layoutDirection="rtl"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginEnd="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        app:cardCornerRadius="@dimen/spacing_small"
+        app:cardElevation="@dimen/card_shadow">
+
+        <LinearLayout
+            android:layout_width="@dimen/search_width"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/rlOfferBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
+
+                app:cardCornerRadius="@dimen/spacing_small"
+                app:cardElevation="@dimen/card_shadow">
+
+                <ImageView
+                    android:id="@+id/ivImageSrc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/txt_todo"
+                    android:src="@drawable/ic_sale_1" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <LinearLayout
+                android:id="@+id/llOffer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
+                android:background="@color/white"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:layout_weight="1"
+
+                    android:gravity="end"
+                    android:paddingTop="@dimen/spacing_large"
+                    android:paddingBottom="@dimen/spacing_large"
+                    android:text="@string/lbl_use_code"
+                    android:textAllCaps="true"
+                    android:textColor="@color/textheader"
+                    android:textSize="@dimen/font_medium" />
+
+                <TextView
+                    android:id="@+id/tvSpecial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:paddingStart="@dimen/spacing_small"
+                    android:paddingTop="@dimen/spacing_large"
+                    android:paddingEnd="@dimen/spacing_small"
+                    android:paddingBottom="@dimen/spacing_large"
+                    android:text="@string/lbl_special"
+                    android:textAllCaps="true"
+                    android:textColor="@color/textheader"
+                    android:textSize="@dimen/font_medium" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

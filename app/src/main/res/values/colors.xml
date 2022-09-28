@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#eb4b51</color>
+    <color name="colorPrimary_back">#EC373E</color>
+    <color name="colorPrimaryDark">#eb4b51</color>
+    <color name="colorPrimaryRipple">#F57074</color>
+    <color name="black_trans_dark">#CC000000</color>
+    <color name="wrong_text_body">#faf0f1</color>
+    <color name="wrong_text_border">#e7183f</color>
+    <color name="colorAccent">#eb4b51</color>
+    <color name="blue">#4C92C0</color>
+    <color name="onboard_blue">#81cddd</color>
+    <color name="onboard_blue_back">#76B8C6</color>
+    <color name="move">#9b8dc3</color>
+    <color name="move_back">#8F7CC6</color>
+    <color name="red">#e51415</color>
+    <color name="white">#fff</color>
+    <color name="gray">#EFEFEF</color>
+    <color name="rating">#FFC107</color>
+    <color name="darkblues">#07395A</color>
+    <color name="black">#1E1E1E</color>
+    <color name="color_yellow">#ffcc00</color>
+
+    <color name="startcolor">@color/colorPrimary</color>
+    <color name="endcolor">@color/colorPrimary </color>
+
+    <color name="view_color">#DADADA</color>
+    <color name="app_background">#F1F1F1</color>
+    <color name="color_check">#139B18</color>
+    <color name="colorlink_blue">#06386A</color>
+    <color name="tercwaz">#07BF95</color>
+    <color name="textheader">#464545</color>
+    <color name="textchild">#747474</color>
+    <color name="light_grey">#EDEDED</color>
+    <color name="dark_gray">#686868</color>
+    <color name="icon_color">#747474</color>
+    <color name="black_transparent">#991E1E1E</color>
+    <color name="very_light_grey">#F6F5F5</color>
+
+    <item name="purple" type="color">#B88DDD</item>
+    <item name="green" type="color">#307C2B</item>
+    <item name="orange" type="color">#F38F24</item>
+    <item name="darkblue" type="color">#2484A8</item>
+    <item name="darkpurple" type="color">#B285CC</item>
+    <item name="darkgreen" type="color">#B6DD6E</item>
+    <item name="pink" type="color">#f5bebe</item>
+    <item name="green_light" type="color">#209519</item>
+
+    <integer-array name="androidcolors">
+        <item>@color/purple</item>
+        <item>@color/green</item>
+        <item>@color/orange</item>
+        <item>@color/darkblue</item>
+        <item>@color/darkpurple</item>
+        <item>@color/darkgreen</item>
+    </integer-array>
+
+</resources>

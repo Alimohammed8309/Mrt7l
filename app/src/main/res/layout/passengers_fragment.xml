@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layoutDirection="rtl"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.passengers.PassengersFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_toolbar"
+            android:layoutDirection="rtl"
+
+            app:contentInsetStart="0dp"
+            app:title="Home"
+            app:titleTextColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layoutDirection="rtl"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/passengers"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_mlarge" />
+
+
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical" android:layout_width="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:layout_alignParentEnd="true"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/ivNotification"
+                        android:layout_width="@dimen/spacing_mlarge"
+                        android:layout_height="@dimen/spacing_mlarge"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+                        android:padding="@dimen/spacing_small"
+                        android:src="@drawable/notification"
+                        android:contentDescription="@string/txt_todo"/>
+
+                    <TextView
+                        android:id="@+id/tvNotificationCount"
+                        android:layout_width="@dimen/notification_size"
+                        android:layout_height="@dimen/notification_size"
+                        android:layout_alignTop="@id/ivNotification"
+                        android:layout_alignEnd="@id/ivNotification"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:background="@drawable/bg_shape_notification"
+                        android:gravity="center"
+                        android:textColor="@color/textheader"
+                        android:textSize="@dimen/font_small"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/add_passenger"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_btn_shape"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:id="@+id/addPassengerBtn"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/addPassengerBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="25dp"
+            android:textSize="24sp"
+            android:id="@+id/title"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/passenger_list"
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="7dp"
+            android:id="@+id/noData"
+            android:layout_marginEnd="7dp"
+            android:layoutDirection="rtl"
+            android:layout_marginBottom="8dp"
+            android:text="@string/no_passengers"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/loadProgress"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="7dp"
+            android:id="@+id/passengerRecycler"
+            android:layout_marginEnd="7dp"
+            android:layoutDirection="rtl"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/loadProgress"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <TextView
+            android:id="@+id/noDatad"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_marginEnd="7dp"
+            android:layoutDirection="rtl"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/loadProgress"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:clipToPadding="false"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/no_reservations"
+            android:visibility="gone"     />
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mainProgress"
+            app:layout_constraintBottom_toTopOf="@+id/loadProgress"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_below="@+id/rvBus"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/reserveNow"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/loadProgress"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:text="@string/reserve_now"
+            android:visibility="gone"
+            android:gravity="center"
+            android:padding="11dp"
+            android:id="@+id/reserveNow"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/bg_btn_shape"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

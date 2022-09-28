@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlMain"
+    android:layout_width="match_parent"
+    android:layoutDirection="rtl"
+    android:layout_height="wrap_content"
+    android:background="@color/app_background"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_medium"
+        android:layout_marginEnd="@dimen/spacing_medium"
+        android:layoutDirection="rtl"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="@dimen/spacing_small"
+        app:cardElevation="@dimen/card_shadow">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layoutDirection="rtl"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:layoutDirection="rtl"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_toStartOf="@+id/lldate"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/date"
+                     />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small"
+
+                    android:singleLine="true"
+                    android:layout_below="@+id/date"
+                     android:textColor="@color/textheader"
+                    android:textSize="@dimen/font_large" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title"
+                    android:id="@+id/body"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:layout_marginBottom="@dimen/spacing_small"
+
+                    android:gravity="center_vertical"
+                     android:textColor="@color/textchild"
+                    android:textSize="@dimen/font_medium" />
+
+
+
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/lldate"
+                android:layout_width="@dimen/img_height"
+                android:layout_height="@dimen/img_height"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/spacing_medium"
+                android:visibility="gone"
+                android:layoutDirection="rtl"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_shape_notification"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    tools:text="@string/text__2"
+                    android:textColor="@color/startcolor"
+                    android:textSize="@dimen/font_large" />
+
+                <TextView
+                    android:id="@+id/tvMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    tools:text="@string/lbl_may"
+                    android:textColor="@color/startcolor"
+                    android:textSize="@dimen/font_large"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvSeatNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvPNR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvTicketNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/totalfare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/starttime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/endtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/totaltime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+</RelativeLayout>
+
+
+</layout>

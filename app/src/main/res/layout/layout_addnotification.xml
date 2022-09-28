@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layoutDirection="rtl"
+    android:layout_alignParentEnd="true"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivNotification"
+        android:layout_width="@dimen/spacing_mlarge"
+        android:layout_height="@dimen/spacing_mlarge"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginEnd="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:padding="@dimen/spacing_small"
+        android:src="@drawable/notification"
+        android:contentDescription="@string/txt_todo"/>
+
+    <TextView
+        android:id="@+id/tvNotificationCount"
+        android:layout_width="@dimen/notification_size"
+        android:layout_height="@dimen/notification_size"
+        android:layout_alignTop="@id/ivNotification"
+        android:layout_alignEnd="@id/ivNotification"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/spacing_medium"
+        android:background="@drawable/bg_shape_notification"
+        android:gravity="center"
+        android:visibility="gone"
+         android:textColor="@color/textheader"
+        android:textSize="@dimen/font_small"
+          />
+
+</RelativeLayout>
+</layout>

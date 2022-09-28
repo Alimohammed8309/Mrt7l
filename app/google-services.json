@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "182392722095",
+    "firebase_url": "https://mrt7l-d770f.firebaseio.com",
+    "project_id": "mrt7l-d770f",
+    "storage_bucket": "mrt7l-d770f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182392722095:android:5fde57d897195e43f57a5a",
+        "android_client_info": {
+          "package_name": "com.mrt7l"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182392722095-htsuhrkhends0308hgq3sh0ghchpbdp7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mrt7l",
+            "certificate_hash": "c786e5181fec5b51926b42a3910e8cb5b2e7de01"
+          }
+        },
+        {
+          "client_id": "182392722095-r5qf3042pliopshihh4vp3h6m60i55iv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApA0WMf1tYHkMo5BamNikm7LyEWlGoMVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182392722095-r5qf3042pliopshihh4vp3h6m60i55iv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "182392722095-852806v5ckmcto6ceuvtpqmc237havqt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Ashraf-Project.mort7al"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

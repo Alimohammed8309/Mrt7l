@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.notifications.NotificationsFragment">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_toolbar"
+            android:layoutDirection="rtl"
+
+            app:contentInsetStart="0dp"
+            app:title="Home"
+            app:titleTextColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layoutDirection="rtl"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                     android:text="@string/lbl_notification"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_mlarge" />
+
+                <include
+                    layout="@layout/layout_addnotification" />
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNotification"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_width="match_parent"
+        android:layoutDirection="rtl"
+        android:visibility="gone"
+        android:layout_below="@+id/toolbar"
+        android:layout_height="match_parent"
+        />
+
+        <ProgressBar
+            android:id="@+id/mainProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+        <TextView
+            android:id="@+id/noData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_notifications"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+</RelativeLayout>
+</layout>

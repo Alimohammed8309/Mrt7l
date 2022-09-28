@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:layout_margin="9dp"
+    android:background="@drawable/bg_square"
+     swipe:leftEdgeSwipeOffset="0dp"
+    swipe:rightEdgeSwipeOffset="0dp">
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="2"
+        >
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:id="@+id/delete"
+            android:src="@drawable/delete"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"
+             app:tint="@color/white"
+            android:background="@drawable/bg_red_square"
+            android:contentDescription="@string/delete"
+            />
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/deleteProgress"
+            android:visibility="gone"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+             android:id="@+id/edit"
+            android:background="@drawable/bg_square"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/edit"
+            android:contentDescription="@string/edit_passport"
+            />
+
+    </LinearLayout>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/image"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/uploadImage"
+        android:layout_marginEnd="12dp"
+        />
+
+<CheckBox
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/name"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/image"
+     android:textSize="15sp"
+    android:layout_marginTop="10dp"
+    android:textStyle="bold"
+    android:layoutDirection="rtl"
+    android:textColor="@color/black"
+    android:text="@string/uploadImage"
+    android:layout_marginEnd="13dp"
+    />
+
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/correct"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/correct"
+        app:tint= "@color/dark_gray"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+         android:contentDescription="@string/uploadImage"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/correct"
+        android:textColor="@color/dark_gray"
+        android:textSize="12sp"
+        android:id="@+id/phone"
+        android:text="@string/birthday"
+        android:paddingTop="7dp"
+        android:paddingStart="7dp"
+        android:paddingEnd="4dp"
+        android:visibility="gone"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="7dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintEnd_toStartOf="@+id/image"
+        android:layout_marginEnd="30dp"
+        android:id="@+id/birthDay"
+        android:textColor="@color/textchild"
+         android:layout_marginBottom="9dp"
+        android:paddingStart="7dp"
+        android:paddingEnd="4dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:text="@string/birthday"
+        android:layout_marginTop="7dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/birthDay"
+        app:layout_constraintEnd_toStartOf="@+id/image"
+        android:layout_marginEnd="30dp"
+        android:id="@+id/phoneNumber"
+        android:textColor="@color/dark_gray"
+         android:layout_marginBottom="9dp"
+        android:paddingStart="7dp"
+        android:paddingEnd="4dp"
+        android:textSize="12sp"
+        android:text="@string/text_phone"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumber"
+        app:layout_constraintEnd_toStartOf="@+id/image"
+        android:layout_marginEnd="35dp"
+        android:id="@+id/passportNumber"
+        android:textColor="@color/textchild"
+         android:layout_marginBottom="14dp"
+        android:textStyle="bold"
+        android:paddingStart="7dp"
+        android:paddingEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_goneMarginBottom="9dp"
+        android:textSize="12sp"
+        android:text="@string/passport_num"
+        android:layout_marginTop="7dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.daimajia.swipe.SwipeLayout>
+</layout>

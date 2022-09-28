@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layoutDirection="rtl"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            tools:context=".ui.fragment.company_details.CompanyDetailsFragment">
+          <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPageAndroid"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+              android:visibility="gone"
+              app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/pagerBackground"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                 android:scaleType="centerInside"
+                android:src="@drawable/ic_buslogo"
+                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewPageAndroid" />
+
+             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bottomGalleryRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layoutDirection="ltr"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pagerBackground" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="49dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="12dp"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/msg_logout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bottomGalleryRecyclerView" />
+
+            <TextView
+                android:id="@+id/companyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_14sdp"
+                 android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                 app:layout_constraintBottom_toBottomOf="@+id/logo"
+                app:layout_constraintStart_toEndOf="@+id/logo"
+                app:layout_constraintTop_toTopOf="@+id/logo" />
+
+            <ImageView
+                android:id="@+id/favourite"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:background="@drawable/blank_heart"
+                app:layout_constraintBottom_toBottomOf="@+id/logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/logo" />
+
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="12dp"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                 app:drawableStartCompat="@drawable/pin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+            <TextView
+                android:id="@+id/ratingNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:text="4.2"
+                android:visibility="gone"
+                android:textColor="@color/dark_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+<!--            <RatingBar-->
+<!--                android:id="@+id/ratingBar"-->
+<!--                style="@style/smallRatingBar"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginEnd="@dimen/_10sdp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/ratingNumber"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/ratingNumber"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/ratingNumber" />-->
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/smallRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                 android:layout_marginBottom="4dp"
+                android:duplicateParentState="true"
+                android:stepSize="0.1"
+                android:isIndicator="true"
+                 android:layout_marginEnd="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@+id/companyName"
+                app:layout_constraintStart_toEndOf="@+id/logo"
+                 />
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:visibility="gone"
+                android:background="@color/dark_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ratingNumber" />
+
+            <TextView
+                android:id="@+id/detailsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="10dp"
+                android:text="@string/company_information"
+                android:textColor="@color/darkblues"
+                android:textSize="22sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line" />
+
+            <TextView
+                android:id="@+id/details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="20dp"
+                 android:textColor="@color/dark_gray"
+                android:textSize="14sp"
+                android:paddingTop="6dp"
+                android:lineSpacingExtra="5dp"
+                android:paddingBottom="6dp"
+                android:textAlignment="inherit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailsTitle" />
+            <TextView
+                android:id="@+id/busType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/dark_gray"
+                android:textSize="14sp"
+                android:paddingTop="6dp"
+                android:lineSpacingExtra="5dp"
+                android:paddingBottom="6dp"
+                android:textAlignment="inherit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/addressLayout"
+                app:layout_constraintTop_toBottomOf="@+id/busType"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:padding="4dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/address"
+
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:gravity="right"
+                    android:padding="4dp"
+                    android:id="@+id/address"
+                    android:textColor="@color/dark_gray"
+                     android:layout_marginEnd="12dp"
+
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/bankLayout"
+                app:layout_constraintTop_toBottomOf="@+id/addressLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:padding="4dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/account"
+
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:gravity="right"
+                    android:padding="4dp"
+                    android:id="@+id/bankStatement"
+                    android:textColor="@color/dark_gray"
+                    android:layout_marginEnd="12dp"
+
+                    />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:padding="4dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="4dp"
+                android:text="@string/company_policy"
+                android:id="@+id/policies"
+                app:layout_constraintTop_toBottomOf="@+id/bankLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                 />
+
+            <TextView
+                android:id="@+id/specialOffers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="10dp"
+                android:text="@string/special_offers"
+                android:textColor="@color/darkblues"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/policies" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/specialOffersRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/specialOffers" />
+
+            <TextView
+                android:id="@+id/tripsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="10dp"
+                android:text="@string/company_trips"
+                android:textColor="@color/darkblues"
+                android:textSize="20sp"
+                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/specialOffersRecycler" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_medium"
+                android:layoutDirection="rtl"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tripsTitle"
+                 android:layout_marginEnd="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_xsmall"
+                app:cardCornerRadius="@dimen/spacing_small"
+                app:cardElevation="@dimen/card_shadow">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layoutDirection="rtl"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_medium">
+
+                    <ImageView
+                        android:id="@+id/ivPrevious"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rotation="180"
+                        android:contentDescription="@string/txt_todo"
+                        android:padding="@dimen/spacing_small"
+                        android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@id/ivNext"
+                        android:layout_toEndOf="@id/ivPrevious"
+
+                        android:gravity="center"
+                        android:textColor="@color/textheader"
+                        android:textSize="@dimen/font_large" />
+
+                    <ImageView
+                        android:id="@+id/ivNext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/txt_todo"
+                        android:padding="@dimen/spacing_small"
+                        android:rotation="180"
+                        android:src="@drawable/ic_keyboard_arrow_right" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tripsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                 android:layout_marginTop="10dp"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvDate" />
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mainProgress"
+                    android:layout_marginTop="80dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cvDate"
+                    />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/noData"
+                android:text="@string/no_tripps"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:lineSpacingExtra="4dp"
+                 android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvDate"
+                android:gravity="center"
+                android:visibility="gone"
+                 android:layout_centerInParent="true"
+                app:drawableTopCompat="@drawable/no_trips" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</layout>
