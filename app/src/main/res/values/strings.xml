@@ -358,6 +358,8 @@
     <string name="notes">ملاحظات</string>
     <string name="write_note">اكتب ملاحظاتك هنا</string>
     <string name="send">ارسال</string>
+    <string name="new_passenger">مسافر جديد</string>
+    <string name="reserve_for_others">حجز الرحلة لمسافرين تابعين</string>
     <string name="passwore_required">من فضلك قم بادخل كلمة المرور</string>
     <string name="message">رسالة</string>
     <string name="ok">موافق</string>

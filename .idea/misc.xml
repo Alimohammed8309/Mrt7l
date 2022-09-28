@@ -67,7 +67,9 @@
         <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.12056434373663959" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.12056434373663959" />
         <entry key="app/src/main/res/layout/activity_verification.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/add_passenger_bottom_dialog.xml" value="0.10584518167456557" />
         <entry key="app/src/main/res/layout/add_passenger_fragment.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/add_passenger_reservation_dialog.xml" value="0.13958333333333334" />
         <entry key="app/src/main/res/layout/car_reservation_another_options_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/car_reservation_bill_row.xml" value="0.12056434373663959" />
         <entry key="app/src/main/res/layout/choose_car_row.xml" value="0.39221140472878996" />
@@ -85,11 +87,11 @@
         <entry key="app/src/main/res/layout/item_card.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_addnotification.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/messege_exceeded.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/passenger_row.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/passenger_row.xml" value="0.18" />
         <entry key="app/src/main/res/layout/passengers_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/policy_dialog.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/reservation_passenger_row.xml" value="0.12056434373663959" />
-        <entry key="app/src/main/res/layout/reservation_passengers.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/reservation_passengers.xml" value="0.1" />
         <entry key="app/src/main/res/layout/reserve_car_row.xml" value="0.22" />
         <entry key="app/src/main/res/layout/reserve_for_me_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/search_trips_fragment.xml" value="0.146875" />

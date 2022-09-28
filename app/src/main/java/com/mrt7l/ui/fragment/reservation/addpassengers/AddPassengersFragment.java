@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,8 @@ import com.google.gson.Gson;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.mrt7l.R;
+import com.mrt7l.databinding.AddPassengerReservationDialogBinding;
+import com.mrt7l.databinding.DeletePassengerDialogBinding;
 import com.mrt7l.databinding.EnterPassportDialogBinding;
 import com.mrt7l.databinding.ReservationPassengersBinding;
 import com.mrt7l.helpers.DialogsHelper;
@@ -141,6 +145,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate( inflater,R.layout.reservation_passengers, container, false);
         reservationPostModel = ReservationPostModel.getInstance();
+
         passengersResponse = PassengersResponse.getInstance();
         token = new PreferenceHelper(requireActivity()).getTOKEN();
         userId = new PreferenceHelper(requireActivity()).getUSERID();
@@ -149,6 +154,10 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
         viewModel.setIsPassportSent(true);
         binding.cancel.setOnClickListener(v -> {
             Navigation.findNavController(requireActivity(),R.id.main_fragment).navigateUp();
+        });
+        binding.close.setOnClickListener(v -> {
+            binding.addPassengerLayout.setVisibility(View.GONE);
+            isAddPassenger = false;
         });
         Gson gson = new Gson();
         loginResponse = LoginResponse.getInstance();
@@ -229,53 +238,53 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
         });
 
         reservationPostModel.setBeforeConfirm("ON");
-        binding.pastPassenger.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked){
-                if (pastPassengersList.size() ==0) {
-                    for (int i = 0; i < passengersResponse.getMrt7al().getData().size(); i++) {
-                        DataBean dataBean = new DataBean();
-                        dataBean.setNationality_id(passengersResponse.getMrt7al().getData().get(i).getNationality_id());
-                        dataBean.setUser_id(passengersResponse.getMrt7al().getData().get(i).getUser_id());
-                        dataBean.setId(passengersResponse.getMrt7al().getData().get(i).getId());
-                        dataBean.setPassport_id(passengersResponse.getMrt7al().getData().get(i).getPassport_id());
-                        dataBean.setFull_name(passengersResponse.getMrt7al().getData().get(i).getFull_name());
-                        dataBean.setDate_of_birth(passengersResponse.getMrt7al().getData().get(i).getDate_of_birth());
-                        dataBean.setPassport_file(passengersResponse.getMrt7al().getData().get(i).getPassport_file());
-                        dataBean.setGender(passengersResponse.getMrt7al().getData().get(i).getGender());
-                        dataBean.setMobile(passengersResponse.getMrt7al().getData().get(i).getMobile());
-                        dataBean.setCreated(passengersResponse.getMrt7al().getData().get(i).getCreated());
-                        dataBean.setPassangerType(passengersResponse.getMrt7al().getData().get(i).getPassangerType());
-                        dataBean.setSelected(true);
-                        pastPassengersList.add(dataBean);
-                    }
-                } else {
-                    for (int i=0;i<pastPassengersList.size();i++){
-                        pastPassengersList.get(i).setSelected(true);
-                        passengersAdapter.notifyDataSetChanged();
-                    }
-                }
-                binding.passengerRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
-                passengersAdapter = new Passengers_adapter(requireActivity(),pastPassengersList,this,true);
-                binding.passengerRecycler.setAdapter(passengersAdapter);
-                binding.passengerRecycler.setVisibility(View.VISIBLE);
-            } else {
-//                binding.passengerRecycler.setVisibility(View.GONE);
-                if (pastPassengersList.size() >0){
-                    for (int i=0;i<pastPassengersList.size();i++){
-                        pastPassengersList.get(i).setSelected(false);
-                        passengersAdapter.notifyDataSetChanged();
-                    }
-                    for (int i=0;i<pastPassengersList.size();i++) {
-                        for (int a = 0; a < SubPassengers.size(); a++) {
-                            if (pastPassengersList.get(i).getId() ==
-                                    SubPassengers.get(a).getId()){
-                                SubPassengers.remove(a);
-                            }
-                        }
-                    }
-                }
-            }
-        });
+//        binding.pastPassenger.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            if (isChecked){
+//                if (pastPassengersList.size() ==0) {
+//                    for (int i = 0; i < passengersResponse.getMrt7al().getData().size(); i++) {
+//                        DataBean dataBean = new DataBean();
+//                        dataBean.setNationality_id(passengersResponse.getMrt7al().getData().get(i).getNationality_id());
+//                        dataBean.setUser_id(passengersResponse.getMrt7al().getData().get(i).getUser_id());
+//                        dataBean.setId(passengersResponse.getMrt7al().getData().get(i).getId());
+//                        dataBean.setPassport_id(passengersResponse.getMrt7al().getData().get(i).getPassport_id());
+//                        dataBean.setFull_name(passengersResponse.getMrt7al().getData().get(i).getFull_name());
+//                        dataBean.setDate_of_birth(passengersResponse.getMrt7al().getData().get(i).getDate_of_birth());
+//                        dataBean.setPassport_file(passengersResponse.getMrt7al().getData().get(i).getPassport_file());
+//                        dataBean.setGender(passengersResponse.getMrt7al().getData().get(i).getGender());
+//                        dataBean.setMobile(passengersResponse.getMrt7al().getData().get(i).getMobile());
+//                        dataBean.setCreated(passengersResponse.getMrt7al().getData().get(i).getCreated());
+//                        dataBean.setPassangerType(passengersResponse.getMrt7al().getData().get(i).getPassangerType());
+//                        dataBean.setSelected(true);
+//                        pastPassengersList.add(dataBean);
+//                    }
+//                } else {
+//                    for (int i=0;i<pastPassengersList.size();i++){
+//                        pastPassengersList.get(i).setSelected(true);
+//                        passengersAdapter.notifyDataSetChanged();
+//                    }
+//                }
+//                binding.passengerRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
+//                passengersAdapter = new Passengers_adapter(requireActivity(),pastPassengersList,this,true);
+//                binding.passengerRecycler.setAdapter(passengersAdapter);
+//                binding.passengerRecycler.setVisibility(View.VISIBLE);
+//            } else {
+////                binding.passengerRecycler.setVisibility(View.GONE);
+//                if (pastPassengersList.size() >0){
+//                    for (int i=0;i<pastPassengersList.size();i++){
+//                        pastPassengersList.get(i).setSelected(false);
+//                        passengersAdapter.notifyDataSetChanged();
+//                    }
+//                    for (int i=0;i<pastPassengersList.size();i++) {
+//                        for (int a = 0; a < SubPassengers.size(); a++) {
+//                            if (pastPassengersList.get(i).getId() ==
+//                                    SubPassengers.get(a).getId()){
+//                                SubPassengers.remove(a);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        });
         binding.birthDay.setOnClickListener(view -> {
             myCalendar = Calendar.getInstance();
             new DatePickerDialog(requireActivity(), date, myCalendar
@@ -351,10 +360,38 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             }
         });
 
-
         return binding.getRoot();
     }
     private String imagePath;
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requireView().setFocusableInTouchMode(true);
+        requireView().requestFocus();
+        requireView().setOnKeyListener((v, keyCode, event) -> {
+            if( keyCode == KeyEvent.KEYCODE_BACK )
+            {
+                if(isAddPassenger){
+                    binding.addPassengerLayout.setVisibility(View.GONE);
+                    isAddPassenger = false;
+
+                    return true;
+                } else {
+//                    Navigation.findNavController(requireActivity(),R.id.main_fragment).navigateUp();
+                    return false;
+                }
+
+            }
+            return false;
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 
     private void setUpNationalitySpinner(Spinner spinners, final RegisterCollectionResponse initialData) {
         ArrayList<String> NameList = new ArrayList<>();
