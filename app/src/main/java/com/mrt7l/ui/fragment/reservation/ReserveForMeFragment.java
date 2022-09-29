@@ -332,6 +332,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                 postModel.setPayMethod("transfer");
             } else {
                 DialogsHelper.showErrorDialog(getString(R.string.choose_pay_type), requireActivity());
+                return;
             }
 
             if (checkData()) {

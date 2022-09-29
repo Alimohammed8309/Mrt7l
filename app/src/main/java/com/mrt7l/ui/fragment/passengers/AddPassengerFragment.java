@@ -133,11 +133,12 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
             if (checkInputs()) {
                 if (loginResponse.getMrt7al() != null) {
 //                     uri = getImageUri(requireContext(),imageBitmap);
-                    binding.savePassenger.setVisibility(View.GONE);
-                    binding.confirmProgress.setVisibility(View.VISIBLE);
-                    DialogsHelper.disable(binding.wholeView, false);
-                    String phone = binding.phoneNumber.getText().toString();
+
                     if (uri != null) {
+                        binding.savePassenger.setVisibility(View.GONE);
+                        binding.confirmProgress.setVisibility(View.VISIBLE);
+                        DialogsHelper.disable(binding.wholeView, false);
+                        String phone = binding.phoneNumber.getText().toString();
                         viewModel.AddPassenger(token, createPartFromString(binding.fullName.getText().toString()),
                                 createPartFromString(String.valueOf(countryId)),
                                 createPartFromString(String.valueOf(genderId)),
@@ -146,14 +147,16 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
                                 createPartFromString(phone)
                                 , prepareFilePart(uri.toString()));
                     } else {
-
-                        viewModel.AddPassenger(token, createPartFromString(binding.fullName.getText().toString()),
-                                createPartFromString(String.valueOf(countryId)),
-                                createPartFromString(String.valueOf(genderId)),
-                                createPartFromString(birthDay), createPartFromString(
-                                        binding.passportNumber.getText().toString()),
-                                createPartFromString(phone)
-                        );
+                        Toast.makeText(requireActivity(), getString(R.string.upload_passport), Toast.LENGTH_SHORT).show();
+                        binding.savePassenger.setVisibility(View.VISIBLE);
+                        binding.confirmProgress.setVisibility(View.GONE);
+                        //                        viewModel.AddPassenger(token, createPartFromString(binding.fullName.getText().toString()),
+//                                createPartFromString(String.valueOf(countryId)),
+//                                createPartFromString(String.valueOf(genderId)),
+//                                createPartFromString(birthDay), createPartFromString(
+//                                        binding.passportNumber.getText().toString()),
+//                                createPartFromString(phone)
+//                        );
                     }
                 }
             }
@@ -397,7 +400,7 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
     public void onResponse(boolean isSuccess, AddPassengerResponse registerResponse) {
 
         if (isSuccess){
-
+            DialogsHelper.disable(binding.wholeView, true);
             Toast.makeText(requireActivity(), getString(R.string.passenger_added)
                     , Toast.LENGTH_SHORT).show();
             new PreferenceHelper(requireActivity()).setReloadProfile(true);
@@ -423,11 +426,14 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
                 }
             }
         }
+        DialogsHelper.disable(binding.wholeView, true);
+
     }
 
     private ErrorResponse errorResponse;
     @Override
     public void handleError(Throwable t) {
+        DialogsHelper.disable(binding.wholeView, true);
 
         if (ConnectivityReceiver.isConnected()){
             if (t instanceof HttpException) {

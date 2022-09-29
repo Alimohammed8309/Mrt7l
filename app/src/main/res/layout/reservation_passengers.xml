@@ -213,7 +213,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/addPassengerLayout"
-            android:background="@color/white"
+            android:background="@color/light_grey"
             android:visibility="gone"
             >
             <LinearLayout
@@ -262,7 +262,7 @@
                     android:id="@+id/nameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="10dp"
                     android:layoutDirection="rtl"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -613,9 +613,9 @@
                     android:background="@drawable/bg_btn_shape"
                     android:gravity="center"
                     android:paddingStart="14dp"
-                    android:paddingTop="5dp"
+                    android:paddingTop="9dp"
                     android:paddingEnd="1dp"
-                    android:paddingBottom="5dp"
+                    android:paddingBottom="9dp"
                     android:text="@string/add_passenger"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
