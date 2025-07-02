@@ -35,8 +35,7 @@ import com.mrt7l.helpers.DialogsHelper;
 import com.mrt7l.helpers.PreferenceHelper;
 import com.mrt7l.model.LoginResponse;
 import com.mrt7l.ui.fragment.reservation.ErrorResponse;
-import com.onesignal.OSSubscriptionObserver;
-import com.onesignal.OSSubscriptionStateChanges;
+
 import com.onesignal.OneSignal;
 
 import java.io.IOException;
@@ -46,7 +45,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import okhttp3.ResponseBody;
 
-public class SignInActivity extends BaseActivity implements View.OnClickListener, LoginInterface, OSSubscriptionObserver {
+public class SignInActivity extends BaseActivity implements View.OnClickListener, LoginInterface {
     /*variable declaration*/
     private TextView mBtnContinue;
     private EditText mEdMobileNumber,passwordEt;
@@ -60,8 +59,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        OneSignal.addSubscriptionObserver(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign_in);
 
         viewModel = new ViewModelProvider(this).get(SignInViewModel.class);
@@ -76,16 +74,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             }
         }
     }
-    public void onOSSubscriptionChanged(OSSubscriptionStateChanges stateChanges) {
-        if (!stateChanges.getFrom().isSubscribed() &&
-                stateChanges.getTo().isSubscribed()) {
-            String userId = stateChanges.getTo().getUserId();
-            new PreferenceHelper(getApplicationContext()).setDeviceToken(userId);
-            new PreferenceHelper(getApplicationContext()).setISDeviceTokenUpdated(true);
-        }
 
-        Log.i("Debug", "onOSPermissionChanged: " + stateChanges);
-    }
     /* init layout */
     private void initLayouts() {
         mEdMobileNumber = findViewById(R.id.edMobileNumber);

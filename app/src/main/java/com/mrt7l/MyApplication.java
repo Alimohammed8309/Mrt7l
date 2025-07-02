@@ -5,7 +5,9 @@ import android.content.Context;
 
 import androidx.multidex.MultiDex;
 
+import com.onesignal.Continue;
 import com.onesignal.OneSignal;
+import com.onesignal.debug.LogLevel;
 
 
 /**
@@ -24,11 +26,13 @@ public class MyApplication extends Application {
         mInstance = this;
         MultiDex.install(mInstance);
         // Enable verbose OneSignal logging to debug issues if needed.
-        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
-
-        // OneSignal Initialization
-        OneSignal.initWithContext(mInstance);
-        OneSignal.setAppId(ONESIGNAL_APP_ID);
+        // Enable verbose logging for debugging (remove in production)
+        OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
+        // Initialize with your OneSignal App ID
+        OneSignal.initWithContext(this, "YOUR_APP_ID");
+        // Use this method to prompt for push notifications.
+        // We recommend removing this method after testing and instead use In-App Messages to prompt for notification permission.
+        OneSignal.getNotifications().requestPermission(false, Continue.none());
 //        if (BuildConfig.DEBUG) {
 //            StrictMode.enableDefaults();
 //

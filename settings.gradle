@@ -1,2 +1,20 @@
-include ':app'
-rootProject.name = "Mrt7l"
+
+pluginManagement {
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id "com.android.application" version '8.10.1' apply false
+    // START: FlutterFire Configuration
+    id "com.google.gms.google-services" version "4.3.15" apply false
+    // END: FlutterFire Configuration
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+//    id 'gradle.plugin.com.onesignal:onesignal-gradle-plugin' version "0.12.10"
+}
+
+include ":app"

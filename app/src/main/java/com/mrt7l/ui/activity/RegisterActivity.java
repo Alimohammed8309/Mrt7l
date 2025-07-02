@@ -46,8 +46,7 @@ import com.mrt7l.model.LoginResponse;
 import com.mrt7l.model.RegisterCollectionResponse;
 import com.mrt7l.model.RegisterResponse;
 import com.mrt7l.ui.fragment.reservation.ErrorResponse;
-import com.onesignal.OSSubscriptionObserver;
-import com.onesignal.OSSubscriptionStateChanges;
+
 import com.onesignal.OneSignal;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -63,7 +62,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
-public class RegisterActivity extends AppCompatActivity implements RegisterInterface, OSSubscriptionObserver {
+public class RegisterActivity extends AppCompatActivity implements RegisterInterface {
     private ActivityRegisterBinding binding;
     private RegisterViewModel viewModel;
     private String birthDay;
@@ -73,8 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OneSignal.addSubscriptionObserver(this);
-        DialogsHelper.showProgressDialog(this,getString(R.string.loading_data));
+         DialogsHelper.showProgressDialog(this,getString(R.string.loading_data));
         binding = DataBindingUtil.setContentView(this,R.layout.activity_register);
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
         viewModel.init(this,this);
@@ -134,14 +132,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
         binding.firstName.requestFocus();
     }
 
-    public void onOSSubscriptionChanged(OSSubscriptionStateChanges stateChanges) {
-        if (!stateChanges.getFrom().isSubscribed() &&
-                stateChanges.getTo().isSubscribed()) {
-            String userId = stateChanges.getTo().getUserId();
-            new PreferenceHelper(getApplicationContext()).setDeviceToken(userId);
-            new PreferenceHelper(getApplicationContext()).setISDeviceTokenUpdated(true);
-        }
-    }
+
 
         private RequestBody createPartFromString(String param) {
             return RequestBody.create(param,MediaType.parse("multipart/form-data"));
@@ -207,6 +198,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
 
         @Override
         public void onBackPressed() {
+            super.onBackPressed();
             Intent in = new Intent(this,SignInActivity.class);
             startActivity(in);
             finish();

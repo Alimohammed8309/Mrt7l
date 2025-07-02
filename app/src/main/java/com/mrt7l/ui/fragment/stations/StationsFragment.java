@@ -317,8 +317,9 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
         if (receiver == null) {
             receiver = new Receiver();
             IntentFilter filter = new IntentFilter(BroadcastHelper.ACTION_NAME);
-            if (getActivity() != null)
-                getActivity().registerReceiver(receiver, filter);
+            if (getActivity() != null) {
+                ContextCompat.registerReceiver(getActivity(), receiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
+            }
             isRecieverRegistered = true;
         }
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {

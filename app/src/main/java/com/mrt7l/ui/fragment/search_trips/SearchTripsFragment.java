@@ -340,8 +340,7 @@ public class SearchTripsFragment extends Fragment implements SearchInterface,
         if (DashboardActivity.tvTitle != null){
             DashboardActivity.tvTitle.setText(getString(R.string.search_h));
         }
-        requireActivity().registerReceiver(someBroadcastReceiver,
-                new IntentFilter("searchFilter"));
+        ContextCompat.registerReceiver(requireActivity(), someBroadcastReceiver, new IntentFilter("searchFilter"), ContextCompat.RECEIVER_NOT_EXPORTED);
     }
     @Override
     public void onPause() {

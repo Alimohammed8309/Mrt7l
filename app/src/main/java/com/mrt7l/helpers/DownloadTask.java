@@ -2,6 +2,7 @@ package com.mrt7l.helpers;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
@@ -65,7 +67,9 @@ public class DownloadTask {
         downloadFileName = downloadFileUrl.substring(downloadFileUrl.lastIndexOf('/') + 1);//Create file name by picking download file name from URL
         Log.e(TAG, downloadFileName);
 
-        context.registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+         ContextCompat.registerReceiver(context, onDownloadComplete, new
+                 IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                 ContextCompat.RECEIVER_NOT_EXPORTED);
         downloadFile(downloadFileUrl);
 
     }
@@ -133,9 +137,9 @@ public class DownloadTask {
         query.setFilterById(downloadId);
         Cursor cursor = downloadManager.query(query);
         if (cursor.moveToFirst()) {
-            int downloadStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
-            String downloadLocalUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-            String downloadMimeType = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE));
+            @SuppressLint("Range") int downloadStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+            @SuppressLint("Range") String downloadLocalUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            @SuppressLint("Range") String downloadMimeType = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE));
             if ((downloadStatus == DownloadManager.STATUS_SUCCESSFUL) && downloadLocalUri != null) {
                 path = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider",
                         new File(Objects.requireNonNull(Uri.parse(downloadLocalUri).getPath())));
