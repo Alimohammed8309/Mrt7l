@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -101,26 +102,25 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
     private CompanyDetailsResponse.Mrt7alBean.DataBean detailsModel;
     private String token;
 
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        this.uri = uri;
+                        Picasso.get().load(Uri.parse(uri.toString()))
+                                .error(Objects.requireNonNull(ContextCompat.getDrawable(
+                                        requireActivity(), R.drawable.cameras)))
+                                .into(fragmentBinding.resetImage);
+                        fragmentBinding.resetImage.setVisibility(View.VISIBLE);
 
-        mLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            Intent data = result.getData();
-                            assert data != null;
-                            uri = result.getData().getData();
-                            Picasso.get().load(Uri.parse(uri.toString()))
-                                    .error(Objects.requireNonNull(ContextCompat.getDrawable(
-                                            requireActivity(), R.drawable.cameras)))
-                                    .into(fragmentBinding.resetImage);
-                            fragmentBinding.resetImage.setVisibility(View.VISIBLE);
-                        }
-
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
                     }
                 });
 
@@ -279,7 +279,9 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
             }
         });
         fragmentBinding.uploadBillLayout.setOnClickListener(v -> {
-            checkPermission();
+            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
 
         fragmentBinding.verifyPromo.setOnClickListener(v -> {
@@ -423,33 +425,8 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
         return null;
     }
 
-    ActivityResultLauncher<Intent> mLauncher;
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            triggerChooser(); }
-
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-//            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
 
 
-    };
-    private void checkPermission() {
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("من فضلك قم بالسماح بتصريح الذاكرة لتتمكن من ارفاق صورة الفاتورة")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-    private void triggerChooser() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        mLauncher.launch(intent);
-    }
 //    public void loadResetImage() {
 //        Intent intent = createIntent(requireContext());
 //        launchSomeActivity.launch(intent);
@@ -749,28 +726,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
 
     }
 
-    private void checkPermissionForPassport() {
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("من فضلك قم بالسماح بتصريح الذاكرة لتتمكن من ارفاق صورة جواز السفر")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-    PermissionListener passportPermissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            ImagePicker.with(requireActivity()).galleryOnly().start();
-        }
 
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-//            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-
-    };
     private boolean isFirstOpen = true;
 
 //    public void showConfirmDialog(String total) {

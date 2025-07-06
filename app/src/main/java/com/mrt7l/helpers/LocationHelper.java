@@ -1,5 +1,7 @@
 package com.mrt7l.helpers;
 
+import static java.sql.DriverManager.println;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -250,7 +252,7 @@ public class LocationHelper implements LocationListener,
 	private LocationCallback mLocationCallback;
 	private void startPeriodicUpdates() {
 		if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// TODO: Consider calling
+			println("requestLocationPermission error");
 			return;
 		}
 		mLocationRequest = LocationRequest.create();

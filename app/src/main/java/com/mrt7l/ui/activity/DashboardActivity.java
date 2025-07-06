@@ -31,6 +31,8 @@ import com.mrt7l.helpers.DialogsHelper;
 import com.mrt7l.helpers.PreferenceHelper;
 import com.mrt7l.ui.fragment.home.HomeFragmentNewest;
 import com.mrt7l.ui.fragment.stations.StationsFragment;
+import com.onesignal.Continue;
+import com.onesignal.OneSignal;
 
 public class DashboardActivity extends BaseActivity implements
         View.OnClickListener {
@@ -41,6 +43,7 @@ public class DashboardActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        OneSignal.getNotifications().requestPermission(false, Continue.none());
         BottomNavigationView bottomNavigationView= findViewById(R.id.bottomNavigation);
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager()

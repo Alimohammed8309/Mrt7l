@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +94,9 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
     private int userId;
     private int genderId = 0,countryId = 0;
     private LoginResponse loginResponse;
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    ActivityResultLauncher<PickVisualMediaRequest> passportPickMedia;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,32 +105,34 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             model =  getArguments().getString("model");
             itemPosition = getArguments().getString("pos");
         }
-        mLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        assert data != null;
-                        uri = result.getData().getData();
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        this.uri = uri;
                         binding.image.setImageURI(uri);
                         binding.image.setVisibility(View.VISIBLE);
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
                     }
-
                 });
-        pLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        assert data != null;
+        passportPickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
                         if (addPassportDialog.isShowing()) {
-                            passportUri = result.getData().getData();
-                            Picasso.get().load(Uri.parse(passportUri.toString()))
-                                    .error(Objects.requireNonNull(ContextCompat.getDrawable(
-                                            requireActivity(), R.drawable.cameras)))
-                                    .into(enterPassportDialogBinding.image);
-                            enterPassportDialogBinding.image.setVisibility(View.VISIBLE);
-                        }
+                        passportUri = uri;
+                        Picasso.get().load(Uri.parse(passportUri.toString()))
+                                .error(Objects.requireNonNull(ContextCompat.getDrawable(
+                                        requireActivity(), R.drawable.cameras)))
+                                .into(enterPassportDialogBinding.image);
+                        enterPassportDialogBinding.image.setVisibility(View.VISIBLE);
                     }
-
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
+                    }
                 });
 
     }
@@ -291,7 +298,9 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
-        binding.uploadImage.setOnClickListener(view -> checkPermission());
+        binding.uploadImage.setOnClickListener(view ->  pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build()));
         binding.nationality.setOnClickListener(view -> binding.nationalitySpinner.performClick());
         binding.genderType.setOnClickListener(view -> binding.genderSpinner.performClick());
         binding.fullName.requestFocus();
@@ -472,35 +481,8 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             updateLabel();
         }
     };
-    ActivityResultLauncher<Intent> mLauncher;
-    private void checkPermission() {
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("من فضلك قم بالسماح بتصريح الذاكرة لتتمكن من ارفاق صورة جواز السفر")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            triggerChooser();
-        }
-
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-//            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
 
 
-    };
-
-    private void triggerChooser() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        mLauncher.launch(intent);
-    }
 
     private void setUpGenderSpinner(Spinner spinners ) {
         ArrayList<String> NameList = new ArrayList<>();
@@ -773,7 +755,6 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
     }
 
     Dialog addPassportDialog;
-    ActivityResultLauncher<Intent> pLauncher;
     Uri passportUri;
     EnterPassportDialogBinding enterPassportDialogBinding;
     public void showAddPassportDialog(Activity activity) {
@@ -786,7 +767,9 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
 
 
         enterPassportDialogBinding.uploadImage.setOnClickListener(v -> {
-            checkPermissionForPassport();
+            passportPickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
         enterPassportDialogBinding.okButton.setOnClickListener(v -> {
             if (enterPassportDialogBinding.passportNumber.getText().toString().isEmpty()) {
@@ -839,30 +822,23 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
         addPassportDialog.setContentView(enterPassportDialogBinding.getRoot());
         addPassportDialog.show();
     }
-    private void checkPermissionForPassport() {
-        TedPermission.create()
-                .setPermissionListener(passportPermissionlistener)
-                .setDeniedMessage("من فضلك قم بالسماح بتصريح الذاكرة لتتمكن من ارفاق صورة جواز السفر")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-    PermissionListener passportPermissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            pLauncher.launch(intent);
-        }
 
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-//            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-
-    };
+//    PermissionListener passportPermissionlistener = new PermissionListener() {
+//        @Override
+//        public void onPermissionGranted() {
+////            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.setType("image/*");
+//            pLauncher.launch(intent);
+//        }
+//
+//        @Override
+//        public void onPermissionDenied(List<String> deniedPermissions) {
+////            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+//        }
+//
+//
+//    };
 
 
     ArrayList<Integer> pastSubPassengers = new ArrayList<>();

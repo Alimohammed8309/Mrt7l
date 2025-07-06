@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,36 +75,33 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        assert data != null;
-                        uri = result.getData().getData();
-                        binding.image.setImageURI(uri);
-                        binding.image.setVisibility(View.VISIBLE);
-                    }
-
-                });
+//        mLauncher = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(), result -> {
+//                    if (result.getResultCode() == Activity.RESULT_OK) {
+//                        Intent data = result.getData();
+//                        assert data != null;
+//                        uri = result.getData().getData();
+//                        binding.image.setImageURI(uri);
+//                        binding.image.setVisibility(View.VISIBLE);
+//                    }
+//
+//                });
 
     }
-
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activityResultLauncher = registerForActivityResult(new
-                        ActivityResultContracts.RequestMultiplePermissions(),
-                result -> {
-                    Log.e("activityResultLauncher", ""+result.toString());
-                    boolean areAllGranted = true;
-                    for(Boolean b : result.values()) {
-                        areAllGranted = areAllGranted && b;
-                    }
-
-                    if(areAllGranted) {
-                        triggerChooser();
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        this.uri = uri;
+                        binding.image.setImageURI(uri);
+                        binding.image.setVisibility(View.VISIBLE);
                     } else {
-                        Toast.makeText(requireActivity(), "من فضلك قم بقبول التصريح حتي تستطيع من اضافة صورة الجواز", Toast.LENGTH_SHORT).show();
+                        Log.d("PhotoPicker", "No media selected");
                     }
                 });
     }
@@ -124,7 +122,9 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
-        binding.uploadImage.setOnClickListener(view -> checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE,33));
+        binding.uploadImage.setOnClickListener(view -> pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build()));
         binding.nationality.setOnClickListener(view -> binding.nationalitySpinner.performClick());
         binding.genderType.setOnClickListener(view -> binding.genderSpinner.performClick());
         binding.fullName.requestFocus();
@@ -132,8 +132,6 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
         binding.savePassenger.setOnClickListener(view -> {
             if (checkInputs()) {
                 if (loginResponse.getMrt7al() != null) {
-//                     uri = getImageUri(requireContext(),imageBitmap);
-
                     if (uri != null) {
                         binding.savePassenger.setVisibility(View.GONE);
                         binding.confirmProgress.setVisibility(View.VISIBLE);
@@ -182,7 +180,7 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
         }
         return null;
     }
-    ActivityResultLauncher<Intent> mLauncher;
+//    ActivityResultLauncher<Intent> mLauncher;
 
     private boolean checkInputs(){
         if (TextUtils.isEmpty(binding.fullName.getText())){
@@ -273,7 +271,7 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
     private void triggerChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        mLauncher.launch(intent);
+//        mLauncher.launch(intent);
     }
     private void updateLabel() {
         String myFormat = "dd/MM/yyyy"; //In which you need put here

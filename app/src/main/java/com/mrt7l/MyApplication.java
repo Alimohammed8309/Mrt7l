@@ -29,10 +29,9 @@ public class MyApplication extends Application {
         // Enable verbose logging for debugging (remove in production)
         OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
         // Initialize with your OneSignal App ID
-        OneSignal.initWithContext(this, "YOUR_APP_ID");
+        OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
         // Use this method to prompt for push notifications.
         // We recommend removing this method after testing and instead use In-App Messages to prompt for notification permission.
-        OneSignal.getNotifications().requestPermission(false, Continue.none());
 //        if (BuildConfig.DEBUG) {
 //            StrictMode.enableDefaults();
 //

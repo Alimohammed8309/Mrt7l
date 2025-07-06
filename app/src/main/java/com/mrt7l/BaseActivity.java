@@ -35,8 +35,7 @@ public class BaseActivity extends AppCompatActivity {
     /*variable declaration*/
     public CustomToast mToast;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static void setStatusBarGradiant(Activity activity) {
+     public static void setStatusBarGradiant(Activity activity) {
         Window window = activity.getWindow();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable background = activity.getResources().getDrawable(R.drawable.bg_toolbar);
         window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);

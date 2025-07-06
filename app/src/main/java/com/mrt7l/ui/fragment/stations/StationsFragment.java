@@ -1,5 +1,7 @@
 package com.mrt7l.ui.fragment.stations;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -9,7 +11,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,22 +45,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.mrt7l.MyApplication;
 import com.mrt7l.R;
 import com.mrt7l.databinding.LocationerrorBinding;
-import com.mrt7l.databinding.LoginerrorBinding;
 import com.mrt7l.databinding.StationsFragmentBinding;
 import com.mrt7l.helpers.BroadcastHelper;
 import com.mrt7l.helpers.ConnectivityReceiver;
@@ -69,23 +71,16 @@ import com.mrt7l.helpers.PreferenceHelper;
 import com.mrt7l.model.LoginResponse;
 import com.mrt7l.model.RegisterCollectionResponse;
 import com.mrt7l.ui.activity.DashboardActivity;
-import com.mrt7l.ui.activity.SignInActivity;
 import com.mrt7l.ui.fragment.reservation.ErrorResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.ResponseBody;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
-public class StationsFragment extends Fragment implements StationsInterface, LocationHelper.OnLocationReceived  {
+public class StationsFragment extends Fragment implements StationsInterface
+, OnMapReadyCallback {
 
     private StationsViewModel mViewModel;
     private static StationsFragment instance;
@@ -95,34 +90,49 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
         }
         return instance;
     }
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private StationsFragmentBinding binding;
     private PreferenceHelper preferenceHelper;
     private LoginResponse loginResponse;
     private double lat,lng;
-    private MapView mMapView;
+//    private MapView mMapView;
     private Marker markerDriver;
     private Bundle mBundle;
     ArrayList<RegisterCollectionResponse.Mrt7alBean.DataBean.CitiesBean> cities = new ArrayList<>();
-
+    private FusedLocationProviderClient fusedLocationClient;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate( inflater,R.layout.stations_fragment, container, false);
-        mMapView =  binding.mapz;
-        mMapView.onCreate(new Bundle());
-        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentApiVersion >= android.os.Build.VERSION_CODES.M) {
-            if (!checkPermission()) {
-                askFormPermissions();
+//        mMapView =  binding.mapz;
+//        mMapView.onCreate(new Bundle());
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.
+                RequestPermission(), isGranted -> {
+            if (isGranted) {
+                getCurrentLocationAndAddMarker();
             } else {
-                runLocationService();
+                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.mapz);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
         }
+
+//        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+//        if (currentApiVersion >= android.os.Build.VERSION_CODES.M) {
+//             checkPermission();
+//
+//        }
 
         manager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        setUpMap();
-        mViewModel = new ViewModelProvider(this).get(StationsViewModel.class);
+         mViewModel = new ViewModelProvider(this).get(StationsViewModel.class);
         preferenceHelper = new PreferenceHelper(requireActivity());
         loginResponse = LoginResponse.getInstance();
         Gson gson = new Gson();
@@ -130,17 +140,75 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
         mViewModel.init(this);
         return binding.getRoot();
     }
+    private void getCurrentLocationAndAddMarker() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(requireActivity(), location -> {
+                    if (location != null) {
+                        LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                        map.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
+//                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+                        LatLng latLang = new LatLng(currentLocation.latitude,
+                                currentLocation.longitude);
+                        myLatLng = latLang;
+                        CameraUpdate factory = CameraUpdateFactory.newLatLngZoom(latLang,15);
+                        map.moveCamera(factory);
+                        map.setOnMarkerClickListener(marker -> {
+                            marker.showInfoWindow();
+                            return true;
+                        });
+                             try {
+                                String collectionModel = new PreferenceHelper(MyApplication.getInstance()
+                                        .getApplicationContext()).getGROUPID();
+                                if (collectionModel != null){
+                                    Gson gson = new Gson();
+                                    RegisterCollectionResponse collectionResponse;
+                                    collectionResponse = gson.fromJson(collectionModel,
+                                            RegisterCollectionResponse.class);
+                                    cities.addAll(collectionResponse.getMrt7al().getData().getCities());
+                                    setUpCitySpinner(binding.citySpinner);
+                                }
 
+                                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(myLatLng, 16);
+                                map.addMarker(new MarkerOptions().position(myLatLng));
+                                map.animateCamera(cu);
+                                 for (int i=0;i<cities.size();i++){
+                                    if (loginResponse.getMrt7al().getData().getCity_id() == cities.get(i).getId()){
+                                        binding.citySpinner.setSelection(i+1);
+                                        break;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                    } else {
+                        Toast.makeText(requireContext(), "Unable to get current location", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
     public void  runLocationService(){
-        LocationHelper locHelper = new LocationHelper(requireActivity());
-        locHelper.setLocationReceivedLister(StationsFragment.this);
-        locHelper.onStart();
+//        LocationHelper locHelper = new LocationHelper(requireActivity());
+//        locHelper.setLocationReceivedLister(StationsFragment.this);
+//        locHelper.onStart();
     }
 
-    private boolean checkPermission() {
-        return (ContextCompat.checkSelfPermission(requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
-    }
+    private void checkPermission() {
+
+             if (ContextCompat.checkSelfPermission(requireActivity(),
+                     Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+
+             } else {
+                 getCurrentLocationAndAddMarker();
+             }
+         }
+
+
+
     private void setUpCitySpinner(Spinner spinners) {
         ArrayList<String> NameList = new ArrayList<>();
         NameList.add("اختر المدينة");
@@ -156,7 +224,8 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
                 if (position > 0) {
                     binding.cityText.setText(NameList.get(position));
                     DialogsHelper.showProgressDialog(requireActivity(),getString(R.string.loading_data));
-                    mViewModel.getStations(String.valueOf(cities.get(position - 1).getId()),String.valueOf(myLatLng.latitude)
+                    mViewModel.getStations(String.valueOf(cities.get(position - 1).getId()),
+                            String.valueOf(myLatLng.latitude)
                             ,String.valueOf(myLatLng.longitude));
                 }
             }
@@ -177,25 +246,6 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
     }
 
     private GoogleMap map;
-    private void setUpMap() {
-        if (map == null) {
-             mMapView.getMapAsync(googleMap -> {
-                 map = googleMap;
-                 if (myLocation != null) {
-                     LatLng latLang = new LatLng(myLocation.getLatitude(),
-                             myLocation.getLongitude());
-                     CameraUpdate factory = CameraUpdateFactory.newLatLngZoom(latLang,15);
-                     map.moveCamera(factory);
-                 }
-                 map.setOnMarkerClickListener(marker -> {
-                     marker.showInfoWindow();
-                     return true;
-                 });
-             });
-
-
-        }
-    }
 
     void goToGoogleMapApp(LatLng latLng){
         Uri gmmIntentUri = Uri.parse("google.navigation:q="+latLng.latitude+"," +latLng.longitude);
@@ -297,7 +347,7 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
 //                        Manifest.permission.ACCESS_COARSE_LOCATION)) {
                     ActivityCompat.requestPermissions(requireActivity(),
                             new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET},
+                                    Manifest.permission.ACCESS_COARSE_LOCATION},
                             8);
 //                }
 //            }
@@ -313,7 +363,7 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
         if (DashboardActivity.tvTitle != null){
             DashboardActivity.tvTitle.setText(getString(R.string.staions));
         }
-        mMapView.onResume();
+//        mMapView.onResume();
         if (receiver == null) {
             receiver = new Receiver();
             IntentFilter filter = new IntentFilter(BroadcastHelper.ACTION_NAME);
@@ -337,7 +387,7 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
     @Override
     public void onPause() {
         super.onPause();
-        mMapView.onPause();
+//        mMapView.onPause();
     }
 
 
@@ -345,8 +395,8 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
     public void onDestroy() {
         super.onDestroy();
         map = null;
-        if (mMapView != null)
-            mMapView.onDestroy();
+//        if (mMapView != null)
+//            mMapView.onDestroy();
         try {
             if (isRecieverRegistered) {
                 if ( getActivity() != null)
@@ -445,64 +495,37 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
 
     }
 
-    @Override
-    public void onLocationReceived(LatLng latlong) {
-        myLatLng = latlong;
-        myLocation.setLatitude(latlong.latitude);
-        myLocation.setLongitude(latlong.longitude);
-    }
+//    @Override
+//    public void onLocationReceived(LatLng latlong) {
+//        myLatLng = latlong;
+//        myLocation.setLatitude(latlong.latitude);
+//        myLocation.setLongitude(latlong.longitude);
+//    }
 
-    @Override
-    public void onLocationReceived(Location location) {
-        myLocation = location;
-        myLatLng = new LatLng(location.getLatitude(),
-                location.getLongitude());
-    }
+//    @Override
+//    public void onLocationReceived(Location location) {
+//        myLocation = location;
+//        myLatLng = new LatLng(location.getLatitude(),
+//                location.getLongitude());
+//    }
 
-    @Override
-    public void onConncted(Bundle bundle) {
-
-    }
+//    @Override
+//    public void onConncted(Bundle bundle) {
+//
+//    }
 
     LatLng myLatLng;
     Location myLocation;
-    @Override
-    public void onConncted(Location location) {
-        if (location != null) {
-            myLocation = location;
-             myLatLng = new LatLng(location.getLatitude(),
-                    location.getLongitude());
-             if (map != null){
-                 try {
-                      String collectionModel = new PreferenceHelper(MyApplication.getInstance()
-                              .getApplicationContext()).getGROUPID();
-                     if (collectionModel != null){
-                         Gson gson = new Gson();
-                         RegisterCollectionResponse collectionResponse;
-                         collectionResponse = gson.fromJson(collectionModel,
-                                 RegisterCollectionResponse.class);
-                         cities.addAll(collectionResponse.getMrt7al().getData().getCities());
-                         setUpCitySpinner(binding.citySpinner);
-                     }
-
-                     CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(myLatLng, 16);
-                     map.addMarker(new MarkerOptions().position(myLatLng));
-                     map.animateCamera(cu);
-                     Gson gson = new Gson();
-                     LoginResponse response = LoginResponse.getInstance();
-                     response = gson.fromJson(new PreferenceHelper(requireActivity()).getUSERNAME(),LoginResponse.class);
-                     for (int i=0;i<cities.size();i++){
-                         if (response.getMrt7al().getData().getCity_id() == cities.get(i).getId()){
-                             binding.citySpinner.setSelection(i+1);
-                             break;
-                         }
-                     }
-                 } catch (Exception e) {
-                     e.printStackTrace();
-                 }
-             }
-        }
-    }
+//    @Override
+//    public void onConncted(Location location) {
+//        if (location != null) {
+//            myLocation = location;
+//             myLatLng = new LatLng(location.getLatitude(),
+//                    location.getLongitude());
+//
+//             }
+//        }
+//    }
     private LocationManager manager;
 
     int gpsMode = 99;
@@ -672,6 +695,12 @@ public class StationsFragment extends Fragment implements StationsInterface, Loc
 
     private Receiver receiver;
     private boolean isRecieverRegistered = false;
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        map = googleMap;
+        checkPermission();
+    }
 
     private class Receiver extends BroadcastReceiver {
 
