@@ -43,7 +43,7 @@ public class DownloadTask {
 //    private final ProgressDialog progressDialog;
     long downloadID;
 
-    private BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
+    private final BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //Fetching the download id received with the broadcast

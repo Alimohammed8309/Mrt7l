@@ -1,6 +1,9 @@
 package com.mrt7l.ui.activity;
 import static com.gun0912.tedpermission.provider.TedPermissionProvider.context;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -48,6 +51,8 @@ import com.mrt7l.model.RegisterResponse;
 import com.mrt7l.ui.fragment.reservation.ErrorResponse;
 
 import com.onesignal.OneSignal;
+import com.squareup.picasso.Picasso;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -66,9 +71,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
     private ActivityRegisterBinding binding;
     private RegisterViewModel viewModel;
     private String birthDay;
-        private Calendar myCalendar;
-        private Uri uri;
-        private int genderId = 0,countryId = 0,cityId = 0;
+    private Calendar myCalendar;
+    private Uri uri;
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private int genderId = 0,countryId = 0,cityId = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,13 +82,25 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
         binding = DataBindingUtil.setContentView(this,R.layout.activity_register);
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
         viewModel.init(this,this);
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        this.uri = uri;
+                             binding.image.setImageURI(uri);
+                            binding.image.setVisibility(View.VISIBLE);
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
+                    }
+                });
         try {
             if (Objects.requireNonNull(getIntent().getExtras()).getString("phone") != null) {
                 binding.phoneNumber.setText(getIntent().getStringExtra("phone"));
                 binding.phoneNumber.setEnabled(false);
             }
         } catch (NullPointerException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         binding.backBtn.setOnClickListener(v -> {
             onBackPressed();
@@ -100,7 +118,10 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
-        binding.uploadImage.setOnClickListener(view -> checkPermission());
+        binding.uploadImage.setOnClickListener(view ->
+                pickMedia.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build()));
         binding.register.setOnClickListener(view -> {
             if(checkInputs()){
                 binding.loginProgress.setVisibility(View.VISIBLE);
@@ -176,24 +197,24 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
                     getBaseContext().getResources().updateConfiguration(config,
                             getBaseContext().getResources().getDisplayMetrics());
                 } catch (IndexOutOfBoundsException e){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         };
-         @Override
-        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                uri = data.getData();
-                        if (uri != null) {
-                            binding.image.setImageURI(uri);
-                            binding.image.setVisibility(View.VISIBLE);
-
-                        }
-                } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
-            }
-            }
+//         @Override
+//        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//            super.onActivityResult(requestCode, resultCode, data);
+//            if (resultCode == Activity.RESULT_OK && data != null) {
+//                uri = data.getData();
+//                        if (uri != null) {
+//                            binding.image.setImageURI(uri);
+//                            binding.image.setVisibility(View.VISIBLE);
+//
+//                        }
+//                } else if (resultCode == ImagePicker.RESULT_ERROR) {
+//                Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+//            }
+//            }
 
 
         @Override
@@ -256,31 +277,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
             }
         });
     }
-    private void checkPermission() {
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("من فضلك قم بالسماح بتصريح الذاكرة لتتمكن من ارفاق صورة جواز السفر")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            ImagePicker.with(RegisterActivity.this).galleryOnly().start();
-        }
-
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-//            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-
-    };
-
-
-        private void updateLabel() {
+         private void updateLabel() {
             String myFormat = "dd/MM/yyyy"; //In which you need put here
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             birthDay = sdf.format(myCalendar.getTime());
@@ -306,7 +303,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
                              try {
                                  binding.genderType.setText(NameList.get(position));
                              }catch (IndexOutOfBoundsException e){
-                                 e.printStackTrace();
+                                 //e.printStackTrace();
                              }
                         genderId = position;
                      } else {
@@ -340,7 +337,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
                         try {
                             binding.nationality.setText(NameList.get(position));
                         } catch (IndexOutOfBoundsException e){
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
                         countryId = initialData.getMrt7al().getData().getNationalities().get(position-1).getId();
                     } else {
@@ -373,7 +370,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
                         try {
                             binding.city.setText(NameList.get(position));
                         } catch (IndexOutOfBoundsException e){
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
 
                         cityId = initialData.getMrt7al().getData().getCities().get(position-1).getId();
@@ -425,7 +422,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
                  try {
                      imagePath= PathUtil.getPath(this,uri);
                  } catch (URISyntaxException | NumberFormatException | NullPointerException e) {
-                     e.printStackTrace();
+                     //e.printStackTrace();
                  }
 
                 try {
@@ -467,7 +464,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
                         }
                     }
                 } catch (NullPointerException | IllegalStateException e){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                  }
              } else {
                      DialogsHelper.showErrorDialog(getString(R.string.phone_exists),RegisterActivity.this);
@@ -478,7 +475,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
             DialogsHelper.disable(binding.wholeView, true);
             binding.phoneNumber.setEnabled(false);
             } catch (NullPointerException | IllegalStateException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
 
@@ -527,7 +524,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterInter
 
 
             } catch (NullPointerException | IllegalStateException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             binding.loginProgress.setVisibility(View.GONE);
             binding.register.setVisibility(View.VISIBLE);

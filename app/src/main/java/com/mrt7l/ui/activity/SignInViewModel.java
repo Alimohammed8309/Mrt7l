@@ -38,7 +38,7 @@ public class SignInViewModel extends ViewModel {
                 try {
                     getNavigator().handleError(e);
                 } catch (NullPointerException | IllegalStateException a){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }            }
 
             @Override

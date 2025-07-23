@@ -88,7 +88,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     Toast.makeText(ResetPasswordActivity.this, "تأكد من اتصالك بالانترنت", Toast.LENGTH_SHORT).show();
                 }
                     } catch (NullPointerException | IllegalStateException a){
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
             }
 

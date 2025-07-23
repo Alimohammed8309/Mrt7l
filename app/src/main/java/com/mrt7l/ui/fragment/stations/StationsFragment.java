@@ -181,7 +181,7 @@ public class StationsFragment extends Fragment implements StationsInterface
                                     }
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                //e.printStackTrace();
                             }
 
                     } else {
@@ -405,7 +405,7 @@ public class StationsFragment extends Fragment implements StationsInterface
 
             }
         } catch (IllegalArgumentException | NullPointerException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -434,7 +434,7 @@ public class StationsFragment extends Fragment implements StationsInterface
                         try {
                             goToGoogleMapApp(latLon);
                         } catch (ActivityNotFoundException e){
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
                         //Cycle through places array
 //                for(Place place : places){
@@ -573,7 +573,7 @@ public class StationsFragment extends Fragment implements StationsInterface
                         Settings.Secure.LOCATION_MODE);
 
             } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
 
@@ -625,7 +625,7 @@ public class StationsFragment extends Fragment implements StationsInterface
                                 removeGpsDialog();
                                 Navigation.findNavController(requireActivity(),R.id.main_fragment).navigateUp();
                             }catch (IllegalStateException e){
-                                e.printStackTrace();
+                                //e.printStackTrace();
                             }
                         });
         gpsAlertDialog = gpsBuilder.create();
@@ -720,7 +720,7 @@ public class StationsFragment extends Fragment implements StationsInterface
                                 map.addMarker(new MarkerOptions().position(new LatLng(lat,lng)));
                                 map.animateCamera(cu);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                //e.printStackTrace();
                             }
                         }
                         break;

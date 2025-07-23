@@ -601,5 +601,6 @@
     <string name="no_tripps">نعتذر ، لا يتوفر جدول رحلات حالياً سوف يتم إضافتها في أقرب وقت</string>
     <string name="show_more">عرض المزيد</string>
     <string name="sub_passengers">مسافرين تابعين</string>
+    <string name="bus_type_format">%1$s %2$s</string>
 
 </resources>

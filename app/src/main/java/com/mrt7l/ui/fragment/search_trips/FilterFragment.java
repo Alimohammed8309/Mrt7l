@@ -134,7 +134,7 @@ public class FilterFragment extends BottomSheetDialogFragment {
         try {
             setUpCompaniesSpinner(companiesSpinner,collectionResponse.getMrt7al().getData().getCompanies());
         }catch (NullPointerException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         if (!isDirect.equals("")){
              if (isDirect.equals("on")){
@@ -299,7 +299,7 @@ public class FilterFragment extends BottomSheetDialogFragment {
             try{
                 selectedCompanyId = Integer.parseInt(Objects.requireNonNull(requireArguments().getString("companyId")));
             } catch (NullPointerException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             busType = getArguments().getString("busType");
         }

@@ -51,7 +51,7 @@ public class SplashActivity extends BaseActivity {
 //            try {
 //                onBackPressed();
 //            } catch (NullPointerException e){
-//                e.printStackTrace();
+//                //e.printStackTrace();
 //            }
                     },
                 2000);

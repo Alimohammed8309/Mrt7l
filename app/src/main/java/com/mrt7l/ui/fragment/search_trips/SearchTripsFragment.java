@@ -220,7 +220,7 @@ public class SearchTripsFragment extends Fragment implements SearchInterface,
 
                         }
                     } catch (NullPointerException e){
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }
@@ -285,7 +285,7 @@ public class SearchTripsFragment extends Fragment implements SearchInterface,
              date = format.parse(stringDate);
             System.out.println(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
        return date;
     }

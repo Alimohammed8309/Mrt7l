@@ -212,7 +212,7 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
             }
         }
         }catch (IllegalStateException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     private ErrorResponse errorResponse;
@@ -250,7 +250,7 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
         binding.noData.setVisibility(View.VISIBLE);
         binding.passengerRecycler.setVisibility(View.GONE);
         }catch (IllegalStateException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -270,7 +270,7 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
             DialogsHelper.showErrorDialog(message,requireActivity());
         }
     }catch (IllegalStateException e){
-        e.printStackTrace();
+        //e.printStackTrace();
     }
     }
 

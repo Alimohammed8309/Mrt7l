@@ -79,7 +79,7 @@ public class HomeBusAdapter extends RecyclerView.Adapter<HomeBusAdapter.BusitemV
             try {
                 navController.navigate(R.id.action_homeFragmentNewest_to_companyDetailsFragment, bundle);
             } catch (IllegalArgumentException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
         if (mRecentSearchList.get(position).getCompany() != null) {
@@ -154,7 +154,7 @@ public class HomeBusAdapter extends RecyclerView.Adapter<HomeBusAdapter.BusitemV
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return theDate;
     }
@@ -171,7 +171,7 @@ public class HomeBusAdapter extends RecyclerView.Adapter<HomeBusAdapter.BusitemV
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -226,7 +226,7 @@ public class HomeBusAdapter extends RecyclerView.Adapter<HomeBusAdapter.BusitemV
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch blockf
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return currentdate;
 
@@ -245,7 +245,7 @@ public class HomeBusAdapter extends RecyclerView.Adapter<HomeBusAdapter.BusitemV
                 Date s = convertStringToDate(currentDate);
                  dd = Constants.DateFormat.FilterFormat.format(s);
             }catch (Exception e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
            if(  dd.equals(date)) {
@@ -263,7 +263,7 @@ public class HomeBusAdapter extends RecyclerView.Adapter<HomeBusAdapter.BusitemV
             date = format.parse(stringDate);
             System.out.println(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return date;
     }

@@ -380,7 +380,7 @@ public class CompanyDetailsFragment extends Fragment implements CompanyDetailsIn
             date = format.parse(stringDate);
             System.out.println(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return date;
     }

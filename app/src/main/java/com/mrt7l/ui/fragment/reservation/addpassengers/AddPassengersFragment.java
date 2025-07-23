@@ -441,7 +441,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             RequestBody requestFile = RequestBody.create(file,MediaType.parse(Objects.requireNonNull(requireActivity().getContentResolver().getType(Uri.parse(fileUri)))));
             return MultipartBody.Part.createFormData("passport_img", file.getName(), requestFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }
@@ -628,7 +628,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
                     binding.passengerRecycler.setAdapter(passengersAdapter);
                 }
             } catch (IllegalStateException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 //            binding.passengerRecycler.setVisibility(View.VISIBLE);
         } else {
@@ -644,7 +644,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             try {
                 imagePath= PathUtil.getPath(requireContext(),uri);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             new PreferenceHelper(requireActivity()).setReloadProfile(true);
             pastSubPassengers.add(addPassengerResponse.getMrt7al().getData().getId());

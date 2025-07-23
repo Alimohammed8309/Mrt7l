@@ -58,7 +58,7 @@ public class PathUtil {
                     return uri.getPath();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
         return null;

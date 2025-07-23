@@ -192,10 +192,12 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
                     }
 
                     Bundle bundle = new Bundle();
-                    if (fromSelection!=-1)
-                    bundle.putString("from", String.valueOf(cities.get(fromSelection).getId()));
-                    if (toSelection!=-1)
+                    if (fromSelection!=-1) {
+                        bundle.putString("from", String.valueOf(cities.get(fromSelection).getId()));
+                    }
+                    if (toSelection!=-1) {
                         bundle.putString("to", String.valueOf(cities.get(toSelection).getId()));
+                    }
                     bundle.putString("busType",busType);
                     if (!binding.edOneWay.getText().toString().isEmpty()) {
                         bundle.putString("date", binding.edOneWay.getText().toString());
@@ -262,7 +264,7 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
                                 binding.progresss.setVisibility(View.VISIBLE);
                             }
                     } catch (NullPointerException e){
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }
@@ -522,7 +524,7 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
                 binding.progresss.setVisibility(View.GONE);
             }
         } catch (IllegalStateException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
          isLoadingData = false;
 
@@ -563,7 +565,7 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
             Toast.makeText(requireActivity(), "تأكد من اتصالك بالانترنت", Toast.LENGTH_SHORT).show();
         }
     }catch (IllegalStateException e){
-        e.printStackTrace();
+        //e.printStackTrace();
     }
 
     }
@@ -574,7 +576,7 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
             date = format.parse(stringDate);
             System.out.println(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return date;
     }
@@ -591,7 +593,12 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
     int fromSelection = -1,toSelection = -1;
     @Override
     public void onGetCollections(boolean success, RegisterCollectionResponse registerCollectionResponse) {
-       try{ cities.addAll(registerCollectionResponse.getMrt7al().getData().getCities());
+       try{
+
+           cities.clear();
+           fromList.clear();
+           toList.clear();
+           cities.addAll(registerCollectionResponse.getMrt7al().getData().getCities());
         fromList.add(getString(R.string.hint_from_city));
         toList.add(getString(R.string.hint_to_city));
         for (int i=0;i<cities.size();i++){

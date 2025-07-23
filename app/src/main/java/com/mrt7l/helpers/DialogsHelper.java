@@ -129,7 +129,7 @@ public class DialogsHelper {
                         activity.startActivity(i);
 //                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             });
             registerErrorDialogBinding.close.setOnClickListener(view -> suspensionDialog.cancel());

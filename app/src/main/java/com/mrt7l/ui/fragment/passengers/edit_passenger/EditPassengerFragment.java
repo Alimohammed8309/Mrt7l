@@ -3,6 +3,7 @@ package com.mrt7l.ui.fragment.passengers.edit_passenger;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -81,21 +82,24 @@ public class EditPassengerFragment extends Fragment implements EditPassengersInt
     }
     private EditPassengerFragmentBinding binding;
     private String token;
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                            uri = result.getData().getData();
-                            binding.image.setImageURI(uri);
-                        }
+
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        this.uri = uri;
+                        binding.image.setImageURI(uri);
+                        binding.image.setVisibility(View.VISIBLE);
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
                     }
                 });
-
     }
 
     @Override
@@ -151,7 +155,9 @@ public class EditPassengerFragment extends Fragment implements EditPassengersInt
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
-        binding.uploadImage.setOnClickListener(view -> checkPermission());
+        binding.uploadImage.setOnClickListener(view ->   pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build()));
         if (bean.getPassport_file() != null && !bean.getPassport_file().isEmpty()) {
                 Glide.with(requireActivity()).asBitmap().load("https://administrator.mrt7al.com/" +
                         bean.getPassport_file())
@@ -163,7 +169,7 @@ public class EditPassengerFragment extends Fragment implements EditPassengersInt
                         try {
                             binding.image.setImageBitmap(resource);
                         }catch (RuntimeException e){
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
                         uri = getImageUri(requireActivity(),resource);
                     }
@@ -186,6 +192,7 @@ public class EditPassengerFragment extends Fragment implements EditPassengersInt
             NavController navController = Navigation.findNavController(requireActivity(),R.id.main_fragment);
             navController.navigateUp();
         });
+
         return binding.getRoot();
     }
     private RequestBody createPartFromString(String param) {
@@ -245,7 +252,7 @@ public class EditPassengerFragment extends Fragment implements EditPassengersInt
                     (requireActivity().getContentResolver().getType(Uri.parse(fileUri)))));
             return MultipartBody.Part.createFormData("passport_img", file.getName(), requestFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
 
@@ -328,36 +335,7 @@ public class EditPassengerFragment extends Fragment implements EditPassengersInt
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + Calendar.getInstance().getTime(),  null);
         return Uri.parse(path);
     }
-    ActivityResultLauncher<Intent> mLauncher;
-    private void checkPermission() {
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("من فضلك قم بالسماح بتصريح الذاكرة لتتمكن من ارفاق صورة جواز السفر")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            triggerChooser();
-        }
 
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-//            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-
-    };
-
-
-    private void triggerChooser() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        mLauncher.launch(intent);
-    }
     private void updateLabel() {
         String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -458,7 +436,7 @@ public class EditPassengerFragment extends Fragment implements EditPassengersInt
             try {
                 imagePath= PathUtil.getPath(requireContext(),uri);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             new PreferenceHelper(requireActivity()).setReloadProfile(true);
             NavController navController = Navigation.findNavController(requireActivity(),R.id.main_fragment);

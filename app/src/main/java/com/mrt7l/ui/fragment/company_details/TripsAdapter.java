@@ -136,7 +136,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.BusitemViewH
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return theDate;
     }
@@ -153,7 +153,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.BusitemViewH
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -204,7 +204,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.BusitemViewH
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch blockf
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return currentdate;
 
@@ -223,7 +223,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.BusitemViewH
                 Date s = convertStringToDate(currentDate);
                 dd = Constants.DateFormat.FilterFormat.format(s);
             }catch (Exception e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
             if(  dd.equals(date)) {
@@ -241,7 +241,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.BusitemViewH
             date = format.parse(stringDate);
             System.out.println(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return date;
     }

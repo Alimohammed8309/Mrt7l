@@ -109,7 +109,7 @@
 //            assert datse != null;
 //            theDate = formats.format(datse);
 //        } catch (ParseException e) {
-//            e.printStackTrace();
+//            //e.printStackTrace();
 //        }
 //
 //return theDate;
@@ -124,7 +124,7 @@
 //            assert datse != null;
 //            theDate = formats.format(datse);
 //        } catch (ParseException e) {
-//            e.printStackTrace();
+//            //e.printStackTrace();
 //        }
 //
 //        return theDate;
@@ -175,7 +175,7 @@
 //            }
 //        } catch (ParseException e) {
 //            // TODO Auto-generated catch blockf
-//            e.printStackTrace();
+//            //e.printStackTrace();
 //        }
 //        return currentdate;
 //

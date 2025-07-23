@@ -178,7 +178,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.BusitemV
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
 return theDate;
@@ -193,7 +193,7 @@ return theDate;
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -244,7 +244,7 @@ return theDate;
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch blockf
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return currentdate;
 
@@ -262,7 +262,7 @@ return theDate;
                 Date s = convertStringToDate(currentDate);
                  dd = Constants.DateFormat.FilterFormat.format(s);
             }catch (Exception e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
            if(dd.equals(date)) {
@@ -286,7 +286,7 @@ return theDate;
             date = format.parse(stringDate);
             System.out.println(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return date;
     }

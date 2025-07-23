@@ -105,7 +105,7 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -137,7 +137,7 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -187,7 +187,7 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch blockf
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return currentdate;
 
@@ -205,7 +205,7 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
 //                Date s = convertStringToDate(currentDate);
 //                dd = Constants.DateFormat.FilterFormat.format(s);
 //            }catch (Exception e){
-//                e.printStackTrace();
+//                //e.printStackTrace();
 //            }
 //
 //            if(  dd.equals(date)) {
@@ -223,7 +223,7 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
             date = format.parse(stringDate);
             System.out.println(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return date;
     }

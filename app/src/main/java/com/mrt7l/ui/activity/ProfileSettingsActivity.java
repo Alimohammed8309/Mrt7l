@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,9 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -72,6 +76,7 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
     private Bitmap imageBitmap;
     private LoginResponse response;
     private int genderId = 0, countryId = 0, cityId = 0,userId;
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +87,17 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         token = new PreferenceHelper(this).getTOKEN();
         userId = new PreferenceHelper(this).getUSERID();
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        this.uri = uri;
+                        binding.passportImage.setImageURI(uri);
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
+                    }
+                });
         Gson gson = new Gson();
         response = LoginResponse.getInstance();
         response = gson.fromJson(new PreferenceHelper(this).getUSERNAME(),LoginResponse.class);
@@ -95,7 +111,10 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
         binding.ivBack.setOnClickListener(view -> finish());
-        binding.uploadImage.setOnClickListener(view -> checkPermission());
+        binding.uploadImage.setOnClickListener(view ->
+                pickMedia.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build()));
         binding.btnSave.setOnClickListener(view -> {
             binding.confirmProgress.setVisibility(View.VISIBLE);
             binding.btnSave.setVisibility(View.GONE);
@@ -107,9 +126,9 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
 //                try {
 //                    uri = getImageUri(ProfileSettingsActivity.this,imageBitmap);
 //                }catch (NullPointerException e){
-//                    e.printStackTrace();
+//                    //e.printStackTrace();
 //                }
-                if (imageBitmap != null) {
+                if (imageBitmap != null && uri == null) {
                     uri = getImageUri(ProfileSettingsActivity.this, imageBitmap);
                 }
 
@@ -218,7 +237,7 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
                     (getContentResolver().getType(Uri.parse(fileUri)))));
             return MultipartBody.Part.createFormData("profilePhoto", file.getName(), requestFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }
@@ -286,14 +305,6 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
         }
     };
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            uri = data.getData();
-            binding.passportImage.setImageURI(uri);
-        }
-    }
 
 
     private Bitmap getBitmap(String filePath) {
@@ -310,30 +321,6 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
         imagePath = path;
         return Uri.parse(path);
     }
-    private void checkPermission() {
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("من فضلك قم بالسماح بتصريح الذاكرة لتتمكن من ارفاق صورة جواز السفر")
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-//            Toast.makeText(requireActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            ImagePicker.with(ProfileSettingsActivity.this).galleryOnly().start();
-        }
-
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-//            Toast.makeText(requireActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-
-    };
-
-
     private void updateLabel() {
         String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -481,7 +468,7 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
             try {
                 imagePath = PathUtil.getPath(ProfileSettingsActivity.this, uri);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             assert imagePath != null;
             File target = new File(imagePath);
@@ -494,8 +481,8 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
 //                                    Toast.makeText(this, imagePath, Toast.LENGTH_SHORT).show();
                     }
                 }
-                if (uri != null)
-                    getContentResolver().delete(uri, null, null);
+//                if (uri != null)
+//                    getContentResolver().delete(uri, null, null);
 
             } catch (UnsupportedOperationException ignored){
             }
@@ -548,7 +535,7 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
         try {
             imagePath = PathUtil.getPath(ProfileSettingsActivity.this, uri);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         assert imagePath != null;
         File target = new File(imagePath);
@@ -561,8 +548,8 @@ public class ProfileSettingsActivity extends BaseActivity  implements ProfileInt
 //                                    Toast.makeText(this, imagePath, Toast.LENGTH_SHORT).show();
                 }
             }
-            if (uri != null)
-                getContentResolver().delete(uri, null, null);
+//            if (uri != null)
+//                getContentResolver().delete(uri, null, null);
         } catch (UnsupportedOperationException ignored){
         }
 

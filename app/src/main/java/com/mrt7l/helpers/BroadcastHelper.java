@@ -22,7 +22,7 @@ public class BroadcastHelper {
         try {
             context.sendBroadcast(intent);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -32,7 +32,7 @@ public class BroadcastHelper {
         try {
             context.sendBroadcast(intent);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 //    public static void sendUpdateLocation(Context context, UpdateLocationViewModel updateLocationViewModel){
@@ -43,7 +43,7 @@ public class BroadcastHelper {
 //        try {
 //            context.sendBroadcast(intent);
 //        } catch (Exception e) {
-//            e.printStackTrace();
+//            //e.printStackTrace();
 //        }
 //    }
 }

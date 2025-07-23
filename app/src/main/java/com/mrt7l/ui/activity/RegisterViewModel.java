@@ -43,7 +43,7 @@ public class RegisterViewModel extends ViewModel {
                 try {
                     getNavigator().handleError(e);
                 } catch (NullPointerException | IllegalStateException a){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
 
@@ -81,7 +81,7 @@ public class RegisterViewModel extends ViewModel {
                 try {
                     getNavigator().handleError(e);
                 } catch (NullPointerException | IllegalStateException a){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
 
@@ -116,7 +116,7 @@ public class RegisterViewModel extends ViewModel {
                 try {
                     getNavigator().handleError(e);
                 } catch (NullPointerException | IllegalStateException a){
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
 

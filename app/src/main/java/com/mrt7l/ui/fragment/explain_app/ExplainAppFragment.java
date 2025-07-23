@@ -102,7 +102,7 @@ public class ExplainAppFragment extends Fragment implements VideosInterface, Vid
                 binding.videosRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
                 binding.videosRecycler.setAdapter(videosAdapter);
             }catch (IllegalStateException e){
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }

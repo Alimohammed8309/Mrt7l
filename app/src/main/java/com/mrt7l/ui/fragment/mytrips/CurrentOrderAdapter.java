@@ -234,7 +234,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return theDate;
     }
@@ -248,7 +248,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return theDate;
     }
@@ -295,7 +295,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch blockf
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return currentdate;
 

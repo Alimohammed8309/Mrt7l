@@ -398,7 +398,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
         binding.mainProgress.setVisibility(View.GONE);
         binding.progresss.setVisibility(View.GONE);
         }catch (IllegalStateException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -427,7 +427,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
         binding.mainProgress.setVisibility(View.GONE);
         binding.progresss.setVisibility(View.GONE);
         }catch (IllegalStateException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -445,7 +445,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                         DialogsHelper.showLoginDialog(getString(R.string.please_login), requireActivity());
                     }
                     }catch(IllegalStateException e){
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 } else if (code == 404) {
                     ResponseBody body = ((HttpException) t).response().errorBody();
@@ -557,7 +557,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                     requireActivity().startActivity(i);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
         registerErrorDialogBinding.okButton.setOnClickListener(view -> dialog.cancel());
@@ -587,7 +587,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                 requireActivity().startActivity(i);
 //            }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -694,7 +694,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                 startActivity(Intent.createChooser(shareIntent, "Choose an app"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     int ratedRowPosition;

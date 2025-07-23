@@ -106,7 +106,7 @@ public class PrintTicketAdapter extends RecyclerView.Adapter<PrintTicketAdapter.
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -121,7 +121,7 @@ public class PrintTicketAdapter extends RecyclerView.Adapter<PrintTicketAdapter.
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -171,7 +171,7 @@ public class PrintTicketAdapter extends RecyclerView.Adapter<PrintTicketAdapter.
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch blockf
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return currentdate;
 

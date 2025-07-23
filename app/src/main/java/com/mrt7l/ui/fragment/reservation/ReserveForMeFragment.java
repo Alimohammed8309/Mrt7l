@@ -187,7 +187,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                 fragmentBinding.waitingTime.setText(String.valueOf(homeBean.getWaitingTime()));
                 fragmentBinding.tripNumber.setText(homeBean.getTrip_number());
             } catch (NullPointerException | Resources.NotFoundException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
 
@@ -209,7 +209,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                 fragmentBinding.waitingTime.setText(String.valueOf(searchBean.getWaitingTime()));
                 fragmentBinding.tripNumber.setText(searchBean.getTrip_number());
             } catch (NullPointerException | Resources.NotFoundException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         } else {
             int position = Integer.parseInt(getArguments().getString("pos"));
@@ -231,7 +231,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                         getTrip_dates().get(position).getWaitingTime()));
                 fragmentBinding.tripNumber.setText(detailsModel.getTrip_dates().get(position).getTrip_number());
             } catch (NullPointerException | Resources.NotFoundException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         if(mViewModel.getPassportImage().getValue() != null &&
@@ -312,7 +312,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                     requireActivity().startActivity(i);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
         fragmentBinding.payCash.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -406,7 +406,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                     MediaType.parse(Objects.requireNonNull(requireActivity().getContentResolver().getType(Uri.parse(fileUri)))));
             return MultipartBody.Part.createFormData("passport_file", file.getName(), requestFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }
@@ -420,7 +420,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                     MediaType.parse(Objects.requireNonNull(requireActivity().getContentResolver().getType(Uri.parse(fileUri)))));
             return MultipartBody.Part.createFormData("receipt_file", file.getName(), requestFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }
@@ -465,7 +465,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -481,7 +481,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -626,7 +626,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
             }
             fragmentBinding.promoProgress.setVisibility(View.GONE);
         } catch (NullPointerException | IllegalStateException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 

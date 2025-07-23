@@ -176,7 +176,7 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
                     MediaType.parse(Objects.requireNonNull(requireActivity().getContentResolver().getType(Uri.parse(fileUri)))));
             return MultipartBody.Part.createFormData("passport_img", file.getName(), requestFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return null;
     }
@@ -407,7 +407,7 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
             try {
                 imagePath= PathUtil.getPath(requireContext(),uri);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             if(imagePath != null) {
                 File target = new File(imagePath);

@@ -182,7 +182,7 @@ public class PastOrderAdapter extends RecyclerView.Adapter<PastOrderAdapter.Busi
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return theDate;
     }
@@ -196,7 +196,7 @@ public class PastOrderAdapter extends RecyclerView.Adapter<PastOrderAdapter.Busi
             assert datse != null;
             theDate = formats.format(datse);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return theDate;
@@ -242,7 +242,7 @@ public class PastOrderAdapter extends RecyclerView.Adapter<PastOrderAdapter.Busi
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch blockf
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return currentdate;
 
