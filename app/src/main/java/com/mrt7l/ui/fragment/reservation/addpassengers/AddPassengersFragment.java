@@ -38,6 +38,7 @@ import com.mrt7l.databinding.AddPassengerReservationDialogBinding;
 import com.mrt7l.databinding.DeletePassengerDialogBinding;
 import com.mrt7l.databinding.EnterPassportDialogBinding;
 import com.mrt7l.databinding.ReservationPassengersBinding;
+import com.mrt7l.helpers.BroadcastHelper;
 import com.mrt7l.helpers.DialogsHelper;
 import com.mrt7l.helpers.FilePath;
 import com.mrt7l.helpers.PathUtil;
@@ -49,6 +50,7 @@ import com.mrt7l.ui.activity.SignInActivity;
 import com.mrt7l.ui.fragment.passengers.AddPassengerResponse;
 import com.mrt7l.ui.fragment.passengers.PassengersResponse;
 import com.mrt7l.ui.fragment.reservation.CheckPassportResponse;
+import com.mrt7l.ui.fragment.reservation.RequestPayModel;
 import com.mrt7l.ui.fragment.reservation.ReservationConfirmedResponse;
 import com.mrt7l.ui.fragment.reservation.ReservationInterface;
 import com.mrt7l.ui.fragment.reservation.ReservationPostModel;
@@ -170,7 +172,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
         loginResponse = LoginResponse.getInstance();
         loginResponse = gson.fromJson(new PreferenceHelper(requireActivity()).getUSERNAME(),LoginResponse.class);
         setUpGenderSpinner(binding.genderSpinner);
-        binding.me.setText( loginResponse.getMrt7al().getData().getUsername() + "  " +
+        binding.me.setText(loginResponse.getMrt7al().getData().getUsername() + "  " +
                 "(" + getString(R.string.main_passenger) +")");
         binding.pastPassenger.setEnabled(false);
         if (passengersResponse.getMrt7al() == null){
@@ -371,7 +373,6 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
 
         return binding.getRoot();
     }
-    private String imagePath;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -579,6 +580,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
 
     @Override
     public void handleError(String t) {
+        DialogsHelper.removeProgressDialog();
         binding.confirmProgress.setVisibility(View.GONE);
         binding.nextStep.setVisibility(View.VISIBLE);
         if(addPassportDialog != null && addPassportDialog.isShowing()){
@@ -591,6 +593,11 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             startActivity(intent);
             requireActivity().finish();
         }
+    }
+
+    @Override
+    public void handlePayError(String t) {
+
     }
 
     @Override
@@ -641,11 +648,11 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
     public void onAddPassenger(AddPassengerResponse addPassengerResponse) {
         DialogsHelper.removeProgressDialog();
         if (addPassengerResponse.getMrt7al().getSuccess()){
-            try {
-                imagePath= PathUtil.getPath(requireContext(),uri);
-            } catch (URISyntaxException e) {
-                //e.printStackTrace();
-            }
+//            try {
+//                imagePath= PathUtil.getPath(requireContext(),uri);
+//            } catch (URISyntaxException e) {
+//                //e.printStackTrace();
+//            }
             new PreferenceHelper(requireActivity()).setReloadProfile(true);
             pastSubPassengers.add(addPassengerResponse.getMrt7al().getData().getId());
             DataBean dataBean = new DataBean();
@@ -673,9 +680,27 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             passenger.setMobile(addPassengerResponse.getMrt7al().getData().getMobile());
             passenger.setCreated(addPassengerResponse.getMrt7al().getData().getCreated());
             passenger.setPassangerType(addPassengerResponse.getMrt7al().getData().getPassangerType());
+            BroadcastHelper.sendInform(requireContext(),"passengerAdded");
             SubPassengers.add(dataBean);
             passengersResponse.getMrt7al().getData().add(passenger);
-            pastPassengersList.add(dataBean);
+             for (int i=0;i<passengersResponse.getMrt7al().getData().size();i++){
+                DataBean dataBeans = new DataBean();
+                dataBeans.setNationality_id(passengersResponse.getMrt7al().getData().get(i).getNationality_id());
+                dataBeans.setUser_id(passengersResponse.getMrt7al().getData().get(i).getUser_id());
+                dataBeans.setId(passengersResponse.getMrt7al().getData().get(i).getId());
+                dataBeans.setPassport_id(passengersResponse.getMrt7al().getData().get(i).getPassport_id());
+                dataBeans.setFull_name(passengersResponse.getMrt7al().getData().get(i).getFull_name());
+                dataBeans.setDate_of_birth(passengersResponse.getMrt7al().getData().get(i).getDate_of_birth());
+                dataBeans.setPassport_file(passengersResponse.getMrt7al().getData().get(i).getPassport_file());
+                dataBeans.setGender(passengersResponse.getMrt7al().getData().get(i).getGender());
+                dataBeans.setMobile(passengersResponse.getMrt7al().getData().get(i).getMobile());
+                dataBeans.setCreated(passengersResponse.getMrt7al().getData().get(i).getCreated());
+                dataBeans.setPassangerType(passengersResponse.getMrt7al().getData().get(i).getPassangerType());
+                pastPassengersList.add(dataBeans);
+            }
+            passengersAdapter = new Passengers_adapter(requireActivity(),
+                    pastPassengersList, this, true);
+            binding.passengerRecycler.setAdapter(passengersAdapter);
             passengersAdapter.notifyDataSetChanged();
             Toast.makeText(requireActivity(), addPassengerResponse.getMrt7al().getMsg()
                     , Toast.LENGTH_SHORT).show();
@@ -692,20 +717,20 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             binding.passengerRecycler.setVisibility(View.VISIBLE);
             binding.addPassengerLayout.setVisibility(View.GONE);
             isAddPassenger = false;
-            if(imagePath != null) {
-                File target = new File(imagePath);
-                try {
-                    if (target.exists() && target.isFile() && target.canWrite()) {
-                        boolean isDeleted = target.delete();
-                        if (isDeleted) {
-                            //                                    Toast.makeText(this, "imageDeleted", Toast.LENGTH_SHORT).show();
-                        } else {
-//                                    Toast.makeText(this, imagePath, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } catch (UnsupportedOperationException ignored){
-                }
-            }
+//            if(imagePath != null) {
+//                File target = new File(imagePath);
+//                try {
+//                    if (target.exists() && target.isFile() && target.canWrite()) {
+//                        boolean isDeleted = target.delete();
+//                        if (isDeleted) {
+//                            //                                    Toast.makeText(this, "imageDeleted", Toast.LENGTH_SHORT).show();
+//                        } else {
+////                                    Toast.makeText(this, imagePath, Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                } catch (UnsupportedOperationException ignored){
+//                }
+//            }
         } else {
             DialogsHelper.showErrorDialog(addPassengerResponse.getMrt7al().getMsg(),requireActivity());
         }
@@ -752,6 +777,16 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
     @Override
     public void onGetCollections(RegisterCollectionResponse registerCollectionResponse) {
         setUpNationalitySpinner(binding.nationalitySpinner,registerCollectionResponse);
+    }
+
+    @Override
+    public void onCheckingPayStatus(boolean success, String message) {
+
+    }
+
+    @Override
+    public void onPayRequested(boolean success, RequestPayModel requestPayModel) {
+
     }
 
     Dialog addPassportDialog;

@@ -1,27 +1,139 @@
 package com.mrt7l.ui.fragment.mytrips;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
+
+import com.google.gson.Gson;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.mrt7l.ui.fragment.home.AddToFavouriteResponse;
+import com.mrt7l.ui.fragment.reservation.CheckPayStatusModel;
+import com.mrt7l.ui.fragment.reservation.ErrorResponse;
+import com.mrt7l.ui.fragment.reservation.RequestPayModel;
 import com.mrt7l.utils.retrofit.ApiClient;
 import com.mrt7l.utils.retrofit.RetrofitProvider;
+
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class MyTripsViewModel extends ViewModel {
     private WeakReference<MyTripsInterface> mNavigator;
     private CurrentOrdersResponse currentOrdersResponse;
     private PastOrdersResponse pastOrderResponse;
+    private ErrorResponse errorResponse;
+    public RequestPayModel requestPayModel;
     public void init(MyTripsInterface contactInterface,String token,int currentOrdersPage,int pastOrdersPage) {
         currentOrdersResponse = CurrentOrdersResponse.getInstance();
         pastOrderResponse = PastOrdersResponse.getInstance();
         setNavigator(contactInterface);
 
     }
+
+    public void requestPay(String token,String reservation_id){
+        Log.v("reservation_id" ,reservation_id);
+        ApiClient apiInterface =   RetrofitProvider.getClient().create(ApiClient.class);
+        Observable<RequestPayModel> observable = apiInterface.requestPay(
+                        token,reservation_id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        observable.subscribe(new DisposableObserver<RequestPayModel>() {
+            @Override
+            public void onNext(@NonNull RequestPayModel model) {
+                try{
+                    requestPayModel = model;
+                    getNavigator().onPayRequested(model.getMrt7al().getSuccess(),
+                            model);
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                try{
+                    if (e instanceof HttpException) {
+                        ResponseBody body = ((HttpException) e).response().errorBody();
+                        Gson gson = new Gson();
+                        try {
+                            assert body != null;
+                            errorResponse = gson.fromJson(body.string(), ErrorResponse.class);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        if (errorResponse.getMrt7al() != null) {
+                            getNavigator().handlePaymentError(errorResponse.getMrt7al().getMsg());
+                        } else {
+                            getNavigator().handlePaymentError("خطأ بالبيانات");
+                        }
+                    }
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+    public void checkPayStatus(String token,String chargeID){
+        Log.v("chargeID" ,chargeID);
+        Observable<CheckPayStatusModel> request = RetrofitProvider.getClient().create(ApiClient.class)
+                .checkPayStatus("Bearer " + token,chargeID)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        request.subscribe(new DisposableObserver<CheckPayStatusModel>() {
+            @Override
+            public void onNext(@NonNull CheckPayStatusModel checkPayStatusModel) {
+                try{
+                    if (checkPayStatusModel.getMrt7al().getSuccess()){
+                        getNavigator().onCheckingPayStatus(true,checkPayStatusModel.getMrt7al().getMsg());
+                    } else {
+                        getNavigator().onCheckingPayStatus(false,checkPayStatusModel.getMrt7al().getMsg());
+                    }
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                try{
+                    if (e instanceof HttpException) {
+                        ResponseBody body = ((HttpException) e).response().errorBody();
+                        Gson gson = new Gson();
+                        try {
+                            assert body != null;
+                            errorResponse = gson.fromJson(body.string(), ErrorResponse.class);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        if (errorResponse.getMrt7al() != null) {
+                            getNavigator().handlePaymentError(errorResponse.getMrt7al().getMsg());
+                        } else {
+                            getNavigator().handlePaymentError("خطأ بالبيانات");
+                        }
+                    }
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
     public void getCurrentTrips(String token,int page){
+        Log.v("token" ,token);
         Observable<CurrentOrdersResponse> request = RetrofitProvider.getClient().create(ApiClient.class)
                 .getCurrentTrips("Bearer " + token,String.valueOf(page))
                 .subscribeOn(Schedulers.newThread())
@@ -91,6 +203,9 @@ public class MyTripsViewModel extends ViewModel {
             }
         });
     }
+
+
+
 
     public void ratePastTrip(String token,String reservation_id,String comfort,String bus_status,
                              String other_service,String wc,String behavior,

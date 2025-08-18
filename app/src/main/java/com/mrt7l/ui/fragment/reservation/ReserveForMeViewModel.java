@@ -34,7 +34,7 @@ public class ReserveForMeViewModel extends ViewModel {
     public ReservationConfirmedResponse reservationConfirmedResponse;
     private WeakReference<ReservationInterface> mNavigator;
     private ErrorResponse errorResponse;
-
+    public  RequestPayModel requestPayModel;
     public void init(ReservationInterface navigator){
         setNavigator(navigator);
         reservationResponse = ReservationResponse.getInstance();
@@ -304,6 +304,104 @@ public class ReserveForMeViewModel extends ViewModel {
             }
         });
     }
+
+    public void requestPay(String token,String reservation_id){
+        ApiClient apiInterface =   RetrofitProvider.getClient().create(ApiClient.class);
+        Observable<RequestPayModel> observable = apiInterface.requestPay(
+                        token,reservation_id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        observable.subscribe(new DisposableObserver<RequestPayModel>() {
+            @Override
+            public void onNext(@NonNull RequestPayModel model) {
+                try{
+                    requestPayModel = model;
+                    getNavigator().onPayRequested(model.getMrt7al().getSuccess(),
+                            model);
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                try{
+                    if (e instanceof HttpException) {
+                        ResponseBody body = ((HttpException) e).response().errorBody();
+                        Gson gson = new Gson();
+                        try {
+                            assert body != null;
+                            errorResponse = gson.fromJson(body.string(), ErrorResponse.class);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        if (errorResponse.getMrt7al() != null) {
+                            getNavigator().handleError(errorResponse.getMrt7al().getMsg());
+                        } else {
+                            getNavigator().handleError("خطأ بالبيانات");
+                        }
+                    }
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+    public void checkPayStatus(String token,String chargeID){
+        Log.v("chargeID" ,chargeID);
+        Observable<CheckPayStatusModel> request = RetrofitProvider.getClient().create(ApiClient.class)
+                .checkPayStatus("Bearer " + token,chargeID)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        request.subscribe(new DisposableObserver<CheckPayStatusModel>() {
+            @Override
+            public void onNext(@NonNull CheckPayStatusModel checkPayStatusModel) {
+                try{
+                    if (checkPayStatusModel.getMrt7al().getSuccess()){
+                        getNavigator().onCheckingPayStatus(true,checkPayStatusModel.getMrt7al().getMsg());
+                    } else {
+                        getNavigator().onCheckingPayStatus(false,checkPayStatusModel.getMrt7al().getMsg());
+                    }
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                try{
+                    if (e instanceof HttpException) {
+                        ResponseBody body = ((HttpException) e).response().errorBody();
+                        Gson gson = new Gson();
+                        try {
+                            assert body != null;
+                            errorResponse = gson.fromJson(body.string(), ErrorResponse.class);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        if (errorResponse.getMrt7al() != null) {
+                            getNavigator().handlePayError(errorResponse.getMrt7al().getMsg());
+                        } else {
+                            getNavigator().handlePayError("خطأ بالبيانات");
+                        }
+                    }
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
     public void addTripWithResetConfirmed(String token, List<RequestBody> subIdsList,
                         RequestBody mainPassenger,RequestBody promo,RequestBody beforeConfirm,
                         RequestBody payMethod,RequestBody trip_date_id,MultipartBody.Part resetImage){

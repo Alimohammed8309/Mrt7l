@@ -25,10 +25,10 @@ public class PassengersViewModel extends ViewModel {
 
     }
 
-    public void getPassengers(int userid,String token){
+    public void getPassengers(int page,String token){
          ApiClient apiInterface =   RetrofitProvider.getClient().create(ApiClient.class);
         Observable<PassengersResponse> observable = apiInterface.getPassengers("Bearer "+
-                token,String.valueOf(userid),1000)
+                token,String.valueOf(page),1000)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
         observable.subscribe(new DisposableObserver<PassengersResponse>() {

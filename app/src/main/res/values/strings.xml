@@ -538,6 +538,7 @@
     <string name="voucher_discount">خصم الرمز الترويجي</string>
     <string name="pay_cash">الدفع نقدا</string>
     <string name="pay_bank">التحويل البنكي</string>
+    <string name="pay_visa">الدفع بالفيزا</string>
     <string name="upload_bill">رفع مستند السداد</string>
     <string name="accept_policy">أوافق على سياسات حجز الشركة</string>
     <string name="reservation_number">رقم الحجز</string>
@@ -594,7 +595,7 @@
     <string name="confirm_promo">تطبيق</string>
     <string name="reserve_car">حجز سيارة</string>
     <string name="small_space"><![CDATA[<---------]]></string>
-     <string name="hiak">حياك, في مرتحل</string>
+    <string name="hiak">حياك, في مرتحل</string>
     <string name="enterdata">فضلا ادخل بياناتك بشكل صحيح</string>
     <string name="need_data">نحتاج بعض البيانات لإتمام الحجز</string>
     <string name="complete_register">إتمام الحجز</string>

@@ -2,26 +2,18 @@ package com.mrt7l.ui.fragment.mytrips;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.mrt7l.R;
 import com.mrt7l.databinding.ItemBookingBinding;
-import com.mrt7l.ui.fragment.company_details.CompanyDetailsResponse;
 import com.squareup.picasso.Picasso;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,9 +23,9 @@ import java.util.Locale;
 public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapter.BusitemViewHolder> {
     /*variable declaration*/
      private ArrayList<CurrentOrdersResponse.Mrt7alBean.DataBean> mBusList;
-    private ClickListener clickListener;
-    private String whats;
-    private Context context;
+    private final ClickListener clickListener;
+    private final String whats;
+    private final Context context;
     /*constructor*/
 
     public CurrentOrderAdapter(ArrayList<CurrentOrdersResponse.Mrt7alBean.DataBean> aBusList,
@@ -78,7 +70,10 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.placeTitle.setText(mBusModel.getTrip_date().getCompany().getAddress());
                 holder1.binding.accountTitle.setText(mBusModel.getTrip_date().getCompany().getBank_account());
             }
-
+            holder1.binding.payByVisa.setOnClickListener(v -> {
+                Log.d("TAG", "onBindViewHolder: "+mBusModel.getRes_passangers().get(0).getReservation_id());
+                clickListener.onPayByVisaClicked(String.valueOf(mBusModel.getRes_passangers().get(0).getReservation_id()));
+            });
             holder1.binding.tvStartTime.setText(formatTime(mBusModel.getTrip_date().getDatetime_to()));
             holder1.binding.tvEndTime.setText(formatTime(mBusModel.getTrip_date().getDatetime_from()));
             holder1.binding.tvTotalDuration.setText(String.valueOf(mBusModel.getTrip_date().getWaitingTime()));
@@ -94,6 +89,11 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.editTrip.setVisibility(View.VISIBLE);
                 holder1.binding.tripPending.setText(context.getString(R.string.pending));
                 holder1.binding.printTicket.setVisibility(View.GONE);
+                if (mBusModel.getPayMethod() != null) {
+                    if (mBusModel.getPayMethod().equals("tap")) {
+                        holder1.binding.payByVisa.setVisibility(View.VISIBLE);
+                    }
+                }
             } else if (mBusModel.getStatus().equals("canceled")) {
                 holder1.binding.tripPending.setVisibility(View.GONE);
                 holder1.binding.tripConfirmed.setVisibility(View.GONE);
@@ -102,6 +102,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.cancel.setVisibility(View.GONE);
                 holder1.binding.editTrip.setVisibility(View.GONE);
                 holder1.binding.printTicket.setVisibility(View.GONE);
+                holder1.binding.payByVisa.setVisibility(View.GONE);
             } else {
                 holder1.binding.tripPending.setVisibility(View.GONE);
                 holder1.binding.tripConfirmed.setVisibility(View.VISIBLE);
@@ -110,6 +111,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.printTicket.setVisibility(View.VISIBLE);
                 holder1.binding.cancel.setVisibility(View.GONE);
                 holder1.binding.editTrip.setVisibility(View.GONE);
+                holder1.binding.payByVisa.setVisibility(View.GONE);
             }
 
             holder1.binding.detailsText.setOnClickListener(v -> {
@@ -208,6 +210,8 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
         void onCancel(CurrentOrdersResponse.Mrt7alBean.DataBean datesBean,int pos);
         void onWhatsapp(String phone);
         void onDetailsOpened(int position);
+        void onPayByVisaClicked(String reservationId);
+
     }
 
     /*item count*/

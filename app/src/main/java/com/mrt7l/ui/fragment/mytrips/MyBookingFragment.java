@@ -1,5 +1,7 @@
 package com.mrt7l.ui.fragment.mytrips;
 
+import static com.mrt7l.helpers.ConnectivityReceiver.isConnected;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -54,14 +58,17 @@ import com.mrt7l.databinding.LoginerrorBinding;
 import com.mrt7l.databinding.PendingReservationDialogBinding;
 import com.mrt7l.databinding.PrintTicketFragmentBinding;
 import com.mrt7l.databinding.RatingDialogBinding;
+import com.mrt7l.databinding.RegisterErrorDialogBinding;
 import com.mrt7l.helpers.ConnectivityReceiver;
 import com.mrt7l.helpers.DialogsHelper;
 import com.mrt7l.helpers.PreferenceHelper;
 import com.mrt7l.ui.activity.DashboardActivity;
+import com.mrt7l.ui.activity.PayActivity;
 import com.mrt7l.ui.activity.SignInActivity;
 import com.mrt7l.ui.fragment.about.AboutAppResponse;
 import com.mrt7l.ui.fragment.print_ticket.PrintTicketAdapter;
 import com.mrt7l.ui.fragment.reservation.ErrorResponse;
+import com.mrt7l.ui.fragment.reservation.RequestPayModel;
 
 import okhttp3.ResponseBody;
 
@@ -79,6 +86,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
     private int pastpastVisiblesItems, pastvisibleItemCount, pasttotalItemCount,pastmLastFirstVisibleItem = 0;
     private boolean isLoadingData =false ,pastisLoadingData = false,isScrollDown =true,pastisScrollDown = true;
     private LinearLayoutManager currentManager,pastManager;
+    private ActivityResultLauncher<Intent> webViewLauncher;
     private boolean isRefreshData =false;
     /* create view */
     @Override
@@ -91,6 +99,18 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                     R.id.action_notifications
             );
         });
+        // Register Activity result launcher
+        webViewLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Log.v("result",result.getData().toString());
+                        viewModel.checkPayStatus(token,viewModel.requestPayModel.getMrt7al().getData().getId());
+                    } else {
+                        DialogsHelper.removeProgressDialog();
+                        Toast.makeText(requireActivity(), "فشلت عملية الدفع من فضلك حاول مرة اخرى", Toast.LENGTH_SHORT).show();
+                    }
+                });
         binding.refreshButton.setOnRefreshListener(() -> {
             binding.noData.setVisibility(View.GONE);
             isRefreshData = true;
@@ -253,7 +273,20 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
             viewModel.getPastTrips(token,pastOrdersPage);
         }
     }
-
+    public void showPaymentFailedDialog(String message) {
+        final Dialog dialog = new Dialog(requireActivity(), android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        RegisterErrorDialogBinding registerErrorDialogBinding =
+                DataBindingUtil.inflate(LayoutInflater.from(requireActivity()), R.layout.register_error_dialog, null, false);
+        registerErrorDialogBinding.content.setText(message);
+        registerErrorDialogBinding.okButton.setOnClickListener(view -> {
+            Navigation.findNavController(requireActivity(), R.id.main_fragment).navigate(R.id.backToHome);
+            dialog.cancel();
+        });
+        dialog.setContentView(registerErrorDialogBinding.getRoot());
+        dialog.show();
+    }
     MyTripsViewModel viewModel;
     private String token;
 
@@ -436,15 +469,15 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
     public void handleError(Throwable t) {
         binding.mainProgress.setVisibility(View.GONE);
         binding.progresss.setVisibility(View.GONE);
-        if (ConnectivityReceiver.isConnected()){
+        if (isConnected()) {
             if (t instanceof HttpException) {
                 int code = ((HttpException) t).code();
                 if (code == 403) {
-                    try{
-                    if (!DialogsHelper.isLoginDialogOnScreen()) {
-                        DialogsHelper.showLoginDialog(getString(R.string.please_login), requireActivity());
-                    }
-                    }catch(IllegalStateException e){
+                    try {
+                        if (!DialogsHelper.isLoginDialogOnScreen()) {
+                            DialogsHelper.showLoginDialog(getString(R.string.please_login), requireActivity());
+                        }
+                    } catch (IllegalStateException e) {
                         //e.printStackTrace();
                     }
                 } else if (code == 404) {
@@ -458,20 +491,21 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                     }
                     if (errorResponse.getMrt7al() != null) {
                         if (!errorResponse.getMrt7al().getMsg().equals("لم يتم العثور على نتائج بحث"))
-                        Toast.makeText(requireActivity(), errorResponse.getMrt7al().getMsg(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity(), errorResponse.getMrt7al().getMsg(), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(requireActivity(), "خطأ بالبيانات", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
-        } else
-        Toast.makeText(requireActivity(), "تأكد من اتصالك بالانترنت", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(requireActivity(), "تأكد من اتصالك بالانترنت", Toast.LENGTH_SHORT).show();
 
-        if(currentOrders.size()==0) {
-            if (!isRefreshData) {
-                binding.noData.setVisibility(View.VISIBLE);
-                binding.rvPast.setVisibility(View.GONE);
-                binding.rvBooking.setVisibility(View.GONE);
+            if (currentOrders.size() == 0) {
+                if (!isRefreshData) {
+                    binding.noData.setVisibility(View.VISIBLE);
+                    binding.rvPast.setVisibility(View.GONE);
+                    binding.rvBooking.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -506,6 +540,41 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void openPayActivity(String url) {
+        Intent intent = new Intent(getActivity(), PayActivity.class);
+        intent.putExtra("url", url);
+        webViewLauncher.launch(intent);
+    }
+    @Override
+    public void handlePaymentError(String message) {
+        DialogsHelper.removeProgressDialog();
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCheckingPayStatus(boolean success, String message) {
+        DialogsHelper.removeProgressDialog();
+        if(success){
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+            viewModel.getCurrentTrips(token,currentOrdersPage);
+            viewModel.getPastTrips(token,pastOrdersPage);
+        } else {
+            DialogsHelper.removeProgressDialog();
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    @Override
+    public void onPayRequested(boolean success, RequestPayModel requestPayModel) {
+        Log.d("TAG", "onPayRequested: "+requestPayModel.getMrt7al().getSuccess());
+        if(requestPayModel.getMrt7al().getSuccess()){
+            openPayActivity(requestPayModel.getMrt7al().getData().getTransaction().getUrl());
+        } else {
+            DialogsHelper.removeProgressDialog();
+            Toast.makeText(requireActivity(), requestPayModel.getMrt7al().getMsg(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -595,6 +664,12 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
     public void onDetailsOpened(int position) {
         binding.rvBooking.scrollToPosition(position );
 
+    }
+
+    @Override
+    public void onPayByVisaClicked(String reservationId) {
+        DialogsHelper.showProgressDialog(requireActivity(),getString(R.string.loading_data));
+        viewModel.requestPay(token,reservationId);
     }
 
     private int canceledPosition;

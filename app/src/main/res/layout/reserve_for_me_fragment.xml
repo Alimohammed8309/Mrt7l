@@ -865,12 +865,19 @@
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/payVisa"
+                android:textColor="@color/colorlink_blue"
+                android:text="@string/pay_visa"
+                android:layout_marginStart="20dp"
+                />
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/payBank"
                 android:textColor="@color/colorlink_blue"
                 android:text="@string/pay_bank"
                 android:layout_marginStart="20dp"
                 />
-
 
         </RadioGroup>
         <LinearLayout

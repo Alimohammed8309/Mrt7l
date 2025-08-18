@@ -32,6 +32,8 @@ import com.mrt7l.ui.fragment.passengers.PassengersResponse;
 import com.mrt7l.ui.fragment.passengers.RemovePassengerResponse;
 import com.mrt7l.ui.fragment.passengers.edit_passenger.EditPassengersResponse;
 import com.mrt7l.ui.fragment.reservation.CheckPassportResponse;
+import com.mrt7l.ui.fragment.reservation.CheckPayStatusModel;
+import com.mrt7l.ui.fragment.reservation.RequestPayModel;
 import com.mrt7l.ui.fragment.reservation.ReservationConfirmedResponse;
 import com.mrt7l.ui.fragment.reservation.ReservationResponse;
 import com.mrt7l.ui.fragment.reservation.VerifyPromoResponse;
@@ -288,6 +290,16 @@ public interface ApiClient {
     @GET("website/billPdf/{tripId}.json")
     Observable<RequestPdfResponse> requestPdf(@Header("Authorization") String token,
                                               @Path("tripId") String tripId);
+
+    @FormUrlEncoded
+    @Headers({"CONNECT_TIMEOUT:20000", "READ_TIMEOUT:20000", "WRITE_TIMEOUT:20000"})
+    @POST("website/tab-gateway/webview/request")
+    Observable<RequestPayModel> requestPay(@Header("Authorization") String token,
+                                           @Field("reservation_id") String reservationId);
+    @Headers({"CONNECT_TIMEOUT:20000", "READ_TIMEOUT:20000", "WRITE_TIMEOUT:20000"})
+    @GET("website/tab-gateway/webview/get-charge-status")
+    Observable<CheckPayStatusModel> checkPayStatus(@Header("Authorization") String token,
+                                                   @Query("chargeID") String reservationId);
     interface RetrofitDownload {
         @GET("/maven2/com/squareup/retrofit/retrofit/2.0.0-beta2/{fileName}")
         Call<ResponseBody> downloadRetrofit(@Path("fileName") String fileName);

@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -37,6 +38,7 @@ import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.mrt7l.R;
 import com.mrt7l.databinding.AddPassengerFragmentBinding;
+import com.mrt7l.helpers.BroadcastHelper;
 import com.mrt7l.helpers.ConnectivityReceiver;
 import com.mrt7l.helpers.DialogsHelper;
 import com.mrt7l.helpers.FilePath;
@@ -397,10 +399,14 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
     @Override
     public void onResponse(boolean isSuccess, AddPassengerResponse registerResponse) {
 
+        binding.confirmProgress.setVisibility(View.GONE);
+        DialogsHelper.disable(binding.wholeView, true);
         if (isSuccess){
             DialogsHelper.disable(binding.wholeView, true);
             Toast.makeText(requireActivity(), getString(R.string.passenger_added)
                     , Toast.LENGTH_SHORT).show();
+
+            BroadcastHelper.sendInform(requireContext(),"passengerAdded");
             new PreferenceHelper(requireActivity()).setReloadProfile(true);
             NavController navController = Navigation.findNavController(requireActivity(), R.id.main_fragment);
             navController.navigateUp();
@@ -425,6 +431,7 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
             }
         }
         DialogsHelper.disable(binding.wholeView, true);
+        binding.confirmProgress.setVisibility(View.GONE);
 
     }
 
@@ -432,6 +439,7 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
     @Override
     public void handleError(Throwable t) {
         DialogsHelper.disable(binding.wholeView, true);
+        binding.confirmProgress.setVisibility(View.GONE);
 
         if (ConnectivityReceiver.isConnected()){
             if (t instanceof HttpException) {

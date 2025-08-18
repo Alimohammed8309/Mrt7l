@@ -174,7 +174,7 @@
                     android:visibility="gone"
                     android:layout_marginBottom="@dimen/spacing_medium"
                     android:clipToPadding="false"
-                    android:overScrollMode="never" />
+                    android:overScrollMode="always" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPast"
@@ -182,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_medium"
                     android:clipToPadding="false"
-                    android:overScrollMode="never"
+                    android:overScrollMode="always"
                     />
                 <ProgressBar
                     android:layout_width="match_parent"

@@ -451,8 +451,9 @@ public class SearchTripsFragment extends Fragment implements SearchInterface,
                      isDirect = intent.getStringExtra("isDirect");
                  if(!Objects.equals(intent.getStringExtra("busType"), ""))
                      busType = intent.getStringExtra("busType");
-                 if(!Objects.equals(intent.getStringExtra("selectedCompanyId"), ""))
-                 companyID = intent.getStringExtra("selectedCompanyId");
+                 if(!Objects.equals(intent.getStringExtra("selectedCompanyId"), "")) {
+                     companyID = intent.getStringExtra("selectedCompanyId");
+                 }
                  page =1;
                  binding.rvBus.setVisibility(View.GONE);
                  binding.mainProgress.setVisibility(View.VISIBLE);

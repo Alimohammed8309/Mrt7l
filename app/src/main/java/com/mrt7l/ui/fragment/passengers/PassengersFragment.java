@@ -1,15 +1,21 @@
 package com.mrt7l.ui.fragment.passengers;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,10 +26,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.mrt7l.R;
 import com.mrt7l.databinding.PassengersFragmentBinding;
+import com.mrt7l.helpers.BroadcastHelper;
 import com.mrt7l.helpers.ConnectivityReceiver;
 import com.mrt7l.helpers.DialogsHelper;
 import com.mrt7l.helpers.PreferenceHelper;
@@ -52,6 +63,7 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
     private PassengersResponse passengersResponse;
     private String token;
     private boolean isTrip = false;
+    private Receiver passengersReciver = new Receiver();
     private int tripPosition;
      private SearchTripsResponse.Mrt7alBean.DataBean searchBean;
      private CompanyDetailsResponse.Mrt7alBean.DataBean detailsBean;
@@ -179,6 +191,8 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
     @Override
     public void onResume() {
         super.onResume();
+        ContextCompat.registerReceiver(requireActivity(), passengersReciver, new IntentFilter("searchFilter"), ContextCompat.RECEIVER_NOT_EXPORTED);
+
         if (new PreferenceHelper(requireActivity()).isReloadProfile()){
              binding.mainProgress.setVisibility(View.VISIBLE);
              binding.passengerRecycler.setVisibility(View.GONE);
@@ -227,8 +241,6 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
                     if (!DialogsHelper.isLoginDialogOnScreen())
                         DialogsHelper.showLoginDialog(getString(R.string.please_login), requireActivity());
                 } else if (code == 404) {
-                    Log.v("404", "my booking fragment page not found");
-
                     ResponseBody body = ((HttpException) t).response().errorBody();
                     Gson gson = new Gson();
                     try {
@@ -252,6 +264,32 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
         }catch (IllegalStateException e){
             //e.printStackTrace();
         }
+    }
+    private class Receiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            String methodName = arg1.getStringExtra(BroadcastHelper.BROADCAST_EXTRA_METHOD_NAME);
+            if (methodName != null && !methodName.isEmpty()) {
+                if (methodName.equals("passengerAdded")) {
+                    mViewModel.getPassengers(page, token);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(passengersReciver);
+        super.onPause();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(passengersReciver);
+        super.onDestroy();
+
     }
 
     @Override

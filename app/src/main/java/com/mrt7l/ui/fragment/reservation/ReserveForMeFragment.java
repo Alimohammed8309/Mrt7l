@@ -49,6 +49,7 @@ import com.mrt7l.helpers.FilePath;
 import com.mrt7l.helpers.PreferenceHelper;
 import com.mrt7l.model.EditProfileResponse;
 import com.mrt7l.model.RegisterCollectionResponse;
+import com.mrt7l.ui.activity.PayActivity;
 import com.mrt7l.ui.fragment.about.AboutAppResponse;
 import com.mrt7l.ui.fragment.company_details.CompanyDetailsResponse;
 import com.mrt7l.ui.fragment.home.HomeResponse;
@@ -101,7 +102,8 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
     private SearchTripsResponse.Mrt7alBean.DataBean searchBean;
     private CompanyDetailsResponse.Mrt7alBean.DataBean detailsModel;
     private String token;
-
+    private static final int WEBVIEW_REQUEST_CODE = 100;
+    private ActivityResultLauncher<Intent> webViewLauncher;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     @Override
@@ -124,7 +126,17 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                     }
                 });
 
-
+// Register Activity result launcher
+        webViewLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Log.v("result",result.getData().toString());
+                        mViewModel.checkPayStatus(token,mViewModel.requestPayModel.getMrt7al().getData().getId());
+                    } else {
+                        showPaymentFailedDialog("تم الغاء عملية الدفع يمكنك استكمال عملية الدفع من صفحة حجوزاتي");
+                    }
+                });
     }
     boolean isDetailsOpened = false;
     boolean isPricesOpened = false;
@@ -320,6 +332,11 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                 fragmentBinding.uploadBillLayout.setVisibility(View.GONE);
             }
         });
+        fragmentBinding.payVisa.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                fragmentBinding.uploadBillLayout.setVisibility(View.GONE);
+            }
+        });
         fragmentBinding.payBank.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 fragmentBinding.uploadBillLayout.setVisibility(View.VISIBLE);
@@ -332,6 +349,8 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                 postModel.setPayMethod("cash");
             } else if (fragmentBinding.payBank.isChecked()) {
                 postModel.setPayMethod("transfer");
+            } else if (fragmentBinding.payVisa.isChecked()) {
+                postModel.setPayMethod("tap");
             } else {
                 DialogsHelper.showErrorDialog(getString(R.string.choose_pay_type), requireActivity());
                 return;
@@ -364,7 +383,11 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
 
         return fragmentBinding.getRoot();
     }
-
+    private void openPayActivity(String url) {
+        Intent intent = new Intent(getActivity(), PayActivity.class);
+        intent.putExtra("url", url);
+        webViewLauncher.launch(intent);
+    }
     private boolean checkData() {
         if (fragmentBinding.payBank.isChecked() && uri == null) {
             DialogsHelper.showErrorDialog(getString(R.string.choose_reset), requireActivity());
@@ -585,12 +608,19 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
 
     @Override
     public void onConfirmedResponse(boolean isSuccess, ReservationConfirmedResponse reservationConfirmedResponse) {
-        DialogsHelper.removeProgressDialog();
+
         if (!isSuccess) {
+            DialogsHelper.removeProgressDialog();
             DialogsHelper.showErrorDialog(reservationConfirmedResponse.getMrt7al().getMsg(),
                     requireActivity());
         } else {
-            showAcceptedDialog();
+             if (fragmentBinding.payVisa.isChecked()) {
+                 mViewModel.requestPay(token,reservationConfirmedResponse.getMrt7al().getData().getId().toString());
+            } else {
+                 DialogsHelper.removeProgressDialog();
+                 showAcceptedDialog();
+            }
+
         }
     }
 
@@ -609,7 +639,20 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
         dialog.setContentView(registerErrorDialogBinding.getRoot());
         dialog.show();
     }
-
+    public void showPaymentFailedDialog(String message) {
+            final Dialog dialog = new Dialog(requireActivity(), android.R.style.Theme_Translucent_NoTitleBar);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            RegisterErrorDialogBinding registerErrorDialogBinding =
+                    DataBindingUtil.inflate(LayoutInflater.from(requireActivity()), R.layout.register_error_dialog, null, false);
+            registerErrorDialogBinding.content.setText(message);
+            registerErrorDialogBinding.okButton.setOnClickListener(view -> {
+                        Navigation.findNavController(requireActivity(), R.id.main_fragment).navigate(R.id.backToHome);
+                        dialog.cancel();
+                    });
+            dialog.setContentView(registerErrorDialogBinding.getRoot());
+            dialog.show();
+        }
     @Override
     public void handleError(String t) {
         try {
@@ -628,6 +671,11 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
         } catch (NullPointerException | IllegalStateException e){
             //e.printStackTrace();
         }
+    }
+
+    @Override
+    public void handlePayError(String message) {
+        showPaymentFailedDialog(message);
     }
 
     @Override
@@ -724,6 +772,22 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
     @Override
     public void onGetCollections(RegisterCollectionResponse registerCollectionResponse) {
 
+    }
+
+    @Override
+    public void onCheckingPayStatus(boolean success, String message) {
+        if(success){
+            showAcceptedDialog();
+        } else {
+            showPaymentFailedDialog(message);
+        }
+    }
+
+    @Override
+    public void onPayRequested(boolean success, RequestPayModel requestPayModel) {
+        if(requestPayModel.getMrt7al().getSuccess()){
+            openPayActivity(requestPayModel.getMrt7al().getData().getTransaction().getUrl());
+        }
     }
 
 
