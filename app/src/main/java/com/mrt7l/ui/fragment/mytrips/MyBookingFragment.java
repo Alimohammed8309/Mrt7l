@@ -35,6 +35,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -88,175 +89,222 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
     private LinearLayoutManager currentManager,pastManager;
     private ActivityResultLauncher<Intent> webViewLauncher;
     private boolean isRefreshData =false;
+    private boolean isDataLoadedBefore =false;
+
     /* create view */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mybooking, container, false);
-        mTvCompleted = binding.tvCompleted;
-        mTvCancel = binding.tvCancelled;
-        binding.ivNotification.setOnClickListener(view -> {
-            Navigation.findNavController(requireActivity(),R.id.main_fragment).navigate(
-                    R.id.action_notifications
-            );
-        });
-        // Register Activity result launcher
-        webViewLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        Log.v("result",result.getData().toString());
-                        viewModel.checkPayStatus(token,viewModel.requestPayModel.getMrt7al().getData().getId());
-                    } else {
-                        DialogsHelper.removeProgressDialog();
-                        Toast.makeText(requireActivity(), "فشلت عملية الدفع من فضلك حاول مرة اخرى", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        binding.refreshButton.setOnRefreshListener(() -> {
-            binding.noData.setVisibility(View.GONE);
-            isRefreshData = true;
-            currentOrdersPage = 1;
-            pastOrdersPage = 1;
-            binding.mainProgress.setVisibility(View.VISIBLE);
+        if(!isDataLoadedBefore) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mybooking, container, false);
+            mTvCompleted = binding.tvCompleted;
+            mTvCancel = binding.tvCancelled;
+            binding.ivNotification.setOnClickListener(view -> {
+                Navigation.findNavController(requireActivity(), R.id.main_fragment).navigate(
+                        R.id.action_notifications
+                );
+            });
+//        binding.refreshButton.setOnChildScrollUpCallback(new SwipeRefreshLayout.OnChildScrollUpCallback() {
+//            @Override
+//            public boolean canChildScrollUp(@NonNull SwipeRefreshLayout parent, @Nullable View child) {
+//                if (child instanceof RecyclerView) {
+//                    RecyclerView recyclerView = (RecyclerView) child;
+//                    // Return true if RecyclerView can scroll up, false otherwise
+//                    return recyclerView.canScrollVertically(-1); // -1 indicates scrolling up
+//                }
+//                return false; // Default behavior if child is not a RecyclerView
+//            }
+//        });
+            // Register Activity result launcher
+            webViewLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                            Log.v("result", result.getData().toString());
+                            viewModel.checkPayStatus(token, viewModel.requestPayModel.getMrt7al().getData().getId());
+                        } else {
+                            DialogsHelper.removeProgressDialog();
+                            Toast.makeText(requireActivity(), "فشلت عملية الدفع من فضلك حاول مرة اخرى", Toast.LENGTH_SHORT).show();
+                             }
+                    });
+            binding.rvBooking.setNestedScrollingEnabled(false);
+            binding.rvPast.setNestedScrollingEnabled(false);
+            binding.refreshButton.setOnRefreshListener(() -> {
+                binding.noData.setVisibility(View.GONE);
+                isRefreshData = true;
+                currentOrdersPage = 1;
+//            ((DashboardActivity) (requireActivity())).hideView(binding.refreshPastButton);
+                ((DashboardActivity) (requireActivity())).hideView(binding.rvBooking);
+//            ((DashboardActivity) (requireActivity())).hideView(binding.refreshButton);
+                binding.mainProgress.setVisibility(View.VISIBLE);
+
 //                DialogsHelper.showProgressDialog(requireActivity(), getString(R.string.loading_data));
-            new PreferenceHelper(requireActivity()).setReloadMyTrips(false);
-            viewModel.getCurrentTrips(token,currentOrdersPage);
+                new PreferenceHelper(requireActivity()).setReloadMyTrips(false);
+                viewModel.getCurrentTrips(token, currentOrdersPage);
 //            final Handler handler = new Handler(Looper.getMainLooper());
-            new Handler().postDelayed(() -> viewModel.getPastTrips(token,pastOrdersPage), 4000);
-            new Handler().postDelayed(() -> binding.refreshButton.setRefreshing(false), 2000);
-            binding.currentLine.setVisibility(View.VISIBLE);
-            binding.pastLine.setVisibility(View.GONE);
-            ((DashboardActivity) (requireActivity())).showView(binding.rvBooking);
-            ((DashboardActivity) (requireActivity())).hideView(binding.rvPast);
-        });
-        currentManager = new LinearLayoutManager(requireActivity());
-        pastManager = new LinearLayoutManager(requireActivity());
-        binding.rvPast.setLayoutManager(pastManager);
-        binding.rvBooking.setLayoutManager(currentManager);
-        currentOrdersResponse = CurrentOrdersResponse.getInstance();
-        pastOrderResponse = PastOrdersResponse.getInstance();
-        initializeListeners();
-        token = new PreferenceHelper(requireActivity()).getTOKEN();
-        viewModel = new ViewModelProvider(this).get(MyTripsViewModel.class);
-        viewModel.init(this, token, currentOrdersPage, pastOrdersPage);
+                new Handler().postDelayed(() -> {
+                    binding.refreshButton.setRefreshing(false);
+//                ((DashboardActivity) (requireActivity())).showView(binding.refreshButton);
+                    ((DashboardActivity) (requireActivity())).showView(binding.rvBooking);
 
-        try{
-         if (new PreferenceHelper(requireActivity()).getUSERID() == 0) {
-            binding.noData.setVisibility(View.VISIBLE);
-            binding.rvBooking.setVisibility(View.GONE);
-            binding.mainProgress.setVisibility(View.GONE);
-        } else {
-             if (new PreferenceHelper(requireActivity()).isReloadMyTrips()){
-                 currentOrdersPage =1;
-                 pastOrdersPage =1;
-                 binding.mainProgress.setVisibility(View.VISIBLE);
+                }, 2000);
+
+
+                binding.currentLine.setVisibility(View.VISIBLE);
+//
+//
+            });
+            binding.refreshPastButton.setOnRefreshListener(() -> {
+                binding.noData.setVisibility(View.GONE);
+                isRefreshData = true;
+                pastOrdersPage = 1;
+                ((DashboardActivity) (requireActivity())).hideView(binding.rvPast);
+                binding.mainProgress.setVisibility(View.VISIBLE);
 //                DialogsHelper.showProgressDialog(requireActivity(), getString(R.string.loading_data));
-                 new PreferenceHelper(requireActivity()).setReloadMyTrips(false);
-                 viewModel.getCurrentTrips(token,currentOrdersPage);
-                 final Handler handler = new Handler(Looper.getMainLooper());
-                 handler.postDelayed(() -> viewModel.getPastTrips(token,pastOrdersPage), 3000);
+                new PreferenceHelper(requireActivity()).setReloadMyTrips(false);
+                viewModel.getPastTrips(token, pastOrdersPage);
+//            final Handler handler = new Handler(Looper.getMainLooper());
+                new Handler().postDelayed(new Runnable() {
 
-             } else {
-                 if (currentOrdersResponse.getMrt7al() == null &&
-                 pastOrderResponse.getMrt7al() == null) {
+                    @Override
+                    public void run() {
+                        binding.refreshPastButton.setRefreshing(false);
+                        ((DashboardActivity) (requireActivity())).showView(binding.rvPast);
+                    }
+                }, 2000);
+                binding.pastLine.setVisibility(View.VISIBLE);
+
+            });
+            currentManager = new LinearLayoutManager(requireActivity());
+            pastManager = new LinearLayoutManager(requireActivity());
+            binding.rvPast.setLayoutManager(pastManager);
+            binding.rvBooking.setLayoutManager(currentManager);
+            currentOrdersResponse = CurrentOrdersResponse.getInstance();
+            pastOrderResponse = PastOrdersResponse.getInstance();
+            initializeListeners();
+            token = new PreferenceHelper(requireActivity()).getTOKEN();
+            viewModel = new ViewModelProvider(this).get(MyTripsViewModel.class);
+            viewModel.init(this, token, currentOrdersPage, pastOrdersPage);
+
+            try {
+                if (new PreferenceHelper(requireActivity()).getUSERID() == 0) {
+                    binding.noData.setVisibility(View.VISIBLE);
+                    binding.refreshButton.setVisibility(View.GONE);
+                    binding.mainProgress.setVisibility(View.GONE);
+                } else {
+                    if (new PreferenceHelper(requireActivity()).isReloadMyTrips()) {
+                        currentOrdersPage = 1;
+                        pastOrdersPage = 1;
+                        binding.mainProgress.setVisibility(View.VISIBLE);
+//                DialogsHelper.showProgressDialog(requireActivity(), getString(R.string.loading_data));
+                        new PreferenceHelper(requireActivity()).setReloadMyTrips(false);
+                        viewModel.getCurrentTrips(token, currentOrdersPage);
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(() -> viewModel.getPastTrips(token, pastOrdersPage), 3000);
+
+                    } else {
+                        if (currentOrdersResponse.getMrt7al() == null &&
+                                pastOrderResponse.getMrt7al() == null) {
 //                     binding.progresss.setVisibility(View.VISIBLE);
-                     binding.mainProgress.setVisibility(View.VISIBLE);
-                     viewModel.getCurrentTrips(token,currentOrdersPage);
-                     viewModel.getPastTrips(token,pastOrdersPage);
+                            binding.mainProgress.setVisibility(View.VISIBLE);
+                            viewModel.getCurrentTrips(token, currentOrdersPage);
+                            viewModel.getPastTrips(token, pastOrdersPage);
 //                DialogsHelper.showProgressDialog(requireActivity(), getString(R.string.loading_data));
-                  } else {
-                     if (currentOrdersResponse.getMrt7al() != null ) {
-                         if (currentOrdersResponse.getMrt7al().getData().size() > 0) {
-                             currentOrders.addAll(currentOrdersResponse.getMrt7al().getData());
-                             currentOrderAdapter = new CurrentOrderAdapter(currentOrders, this,
-                                     AboutAppResponse.getInstance().getMrt7al()
-                                             .getData().getMobile_whats(), requireContext());
-                             binding.rvBooking.setAdapter(currentOrderAdapter);
-                             binding.rvPast.setVisibility(View.GONE);
-                             binding.rvBooking.setVisibility(View.VISIBLE);
-                         }
-                     } else {
-                         binding.rvBooking.setVisibility(View.GONE);
-                         binding.noData.setVisibility(View.VISIBLE);
-                         binding.mainProgress.setVisibility(View.GONE);
-                     }
-                     if (pastOrderResponse.getMrt7al().getData().size() > 0) {
-                         ordersList = pastOrderResponse.getMrt7al().getData();
-                         pastOrderAdapter = new PastOrderAdapter(ordersList, requireContext(),this);
-                         binding.rvPast.setAdapter(pastOrderAdapter);
-                     }
-                 }
-             }
-        }
-        } catch (NullPointerException | IllegalStateException a){
-            a.printStackTrace();
-        }
-        binding.rvBooking.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                                              public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                                  super.onScrolled(recyclerView, dx, dy);
-                                              }
+                        } else {
+                            if (currentOrdersResponse.getMrt7al() != null) {
+                                if (currentOrdersResponse.getMrt7al().getData().size() > 0) {
+                                    currentOrders.addAll(currentOrdersResponse.getMrt7al().getData());
+                                    currentOrderAdapter = new CurrentOrderAdapter(currentOrders, this,
+                                            AboutAppResponse.getInstance().getMrt7al()
+                                                    .getData().getMobile_whats(), requireContext());
+                                    binding.rvBooking.setAdapter(currentOrderAdapter);
+                                    binding.refreshPastButton.setVisibility(View.GONE);
+                                    binding.refreshButton.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                binding.refreshButton.setVisibility(View.GONE);
+                                binding.noData.setVisibility(View.VISIBLE);
+                                binding.mainProgress.setVisibility(View.GONE);
+                            }
+                            if (pastOrderResponse.getMrt7al().getData().size() > 0) {
+                                ordersList = pastOrderResponse.getMrt7al().getData();
+                                pastOrderAdapter = new PastOrderAdapter(ordersList, requireContext(), this);
+                                binding.rvPast.setAdapter(pastOrderAdapter);
+                            }
+                        }
+                    }
+                }
+            } catch (NullPointerException | IllegalStateException a) {
+                a.printStackTrace();
+            }
+            binding.rvBooking.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                                      public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                                          super.onScrolled(recyclerView, dx, dy);
+                                                      }
 
-                                              @Override
-                                              public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                                  super.onScrollStateChanged(recyclerView, newState);
-                                                  visibleItemCount = currentManager.getChildCount();
-                                                  totalItemCount = currentManager.getItemCount();
-                                                  pastVisiblesItems = currentManager.findFirstVisibleItemPosition();
-                                                  if (pastVisiblesItems > mLastFirstVisibleItem) {
-                                                      isScrollDown = true;
-                                                  } else if (pastVisiblesItems < mLastFirstVisibleItem) {
-                                                      isScrollDown = false;
-                                                  }
-
-                                                  mLastFirstVisibleItem = pastVisiblesItems;
-                                                  if (isScrollDown)
-                                                      if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 7) {
-                                                          if (!isLoadingData) {
-                                                              //new updateData().execute();
-                                                              isLoadingData = true;
-                                                              currentOrdersPage =currentOrdersPage+1;
-                                                              if (currentOrdersResponse.getMrt7al().getPagination().getPageCount() >= currentOrdersPage) {
-                                                                  viewModel.getCurrentTrips(token, currentOrdersPage);
-                                                                  binding.progresss.setVisibility(View.VISIBLE);
-                                                              }
+                                                      @Override
+                                                      public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                                          super.onScrollStateChanged(recyclerView, newState);
+                                                          visibleItemCount = currentManager.getChildCount();
+                                                          totalItemCount = currentManager.getItemCount();
+                                                          pastVisiblesItems = currentManager.findFirstVisibleItemPosition();
+                                                          if (pastVisiblesItems > mLastFirstVisibleItem) {
+                                                              isScrollDown = true;
+                                                          } else if (pastVisiblesItems < mLastFirstVisibleItem) {
+                                                              isScrollDown = false;
                                                           }
-                                                      }
-                                              }
-                                          }
-        );
-        binding.rvPast.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                                                  public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                                      super.onScrolled(recyclerView, dx, dy);
-                                                  }
 
-                                                  @Override
-                                                  public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                                      super.onScrollStateChanged(recyclerView, newState);
-                                                      pastvisibleItemCount = pastManager.getChildCount();
-                                                      pasttotalItemCount = pastManager.getItemCount();
-                                                      pastpastVisiblesItems = pastManager.findFirstVisibleItemPosition();
-                                                      if (pastpastVisiblesItems > pastmLastFirstVisibleItem) {
-                                                          pastisScrollDown = true;
-                                                      } else if (pastVisiblesItems < mLastFirstVisibleItem) {
-                                                          pastisScrollDown = false;
-                                                      }
-
-                                                      pastmLastFirstVisibleItem = pastpastVisiblesItems;
-                                                      if (pastisScrollDown)
-                                                          if ((pastvisibleItemCount + pastpastVisiblesItems) >= pasttotalItemCount - 7) {
-                                                              if (!pastisLoadingData) {
-                                                                  //new updateData().execute();
-                                                                  pastisLoadingData = true;
-                                                                  pastOrdersPage =pastOrdersPage+1;
-                                                                  if (pastOrderResponse.getMrt7al().getPagination().getPageCount() >= pastOrdersPage) {
-                                                                      viewModel.getPastTrips(token, pastOrdersPage);
-                                                                      binding.progresss.setVisibility(View.VISIBLE);
+                                                          mLastFirstVisibleItem = pastVisiblesItems;
+                                                          if (isScrollDown)
+                                                              if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 7) {
+                                                                  if (!isLoadingData) {
+                                                                      //new updateData().execute();
+                                                                      isLoadingData = true;
+                                                                      currentOrdersPage = currentOrdersPage + 1;
+                                                                      if (currentOrdersResponse.getMrt7al().getPagination().getPageCount() >= currentOrdersPage) {
+                                                                          viewModel.getCurrentTrips(token, currentOrdersPage);
+                                                                          binding.progresss.setVisibility(View.VISIBLE);
+                                                                      }
                                                                   }
                                                               }
-                                                          }
+                                                      }
                                                   }
+            );
+            binding.rvPast.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                                   public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                                       super.onScrolled(recyclerView, dx, dy);
+                                                   }
 
-                                              }
-        );
+                                                   @Override
+                                                   public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                                       super.onScrollStateChanged(recyclerView, newState);
+                                                       pastvisibleItemCount = pastManager.getChildCount();
+                                                       pasttotalItemCount = pastManager.getItemCount();
+                                                       pastpastVisiblesItems = pastManager.findFirstVisibleItemPosition();
+                                                       if (pastpastVisiblesItems > pastmLastFirstVisibleItem) {
+                                                           pastisScrollDown = true;
+                                                       } else if (pastVisiblesItems < mLastFirstVisibleItem) {
+                                                           pastisScrollDown = false;
+                                                       }
+
+                                                       pastmLastFirstVisibleItem = pastpastVisiblesItems;
+                                                       if (pastisScrollDown)
+                                                           if ((pastvisibleItemCount + pastpastVisiblesItems) >= pasttotalItemCount - 7) {
+                                                               if (!pastisLoadingData) {
+                                                                   //new updateData().execute();
+                                                                   pastisLoadingData = true;
+                                                                   pastOrdersPage = pastOrdersPage + 1;
+                                                                   if (pastOrderResponse.getMrt7al().getPagination().getPageCount() >= pastOrdersPage) {
+                                                                       viewModel.getPastTrips(token, pastOrdersPage);
+                                                                       binding.progresss.setVisibility(View.VISIBLE);
+                                                                   }
+                                                               }
+                                                           }
+                                                   }
+
+                                               }
+            );
+            isLoadingData = true;
+        }
         return binding.getRoot();
     }
 
@@ -377,8 +425,8 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
 //                mTvCancel.setBackground(ContextCompat.getDrawable(requireActivity(), R.drawable.bg_rightswitch));
                     binding.currentLine.setVisibility(View.VISIBLE);
                     binding.pastLine.setVisibility(View.GONE);
-                ((DashboardActivity) (requireActivity())).showView(binding.rvBooking);
-                ((DashboardActivity) (requireActivity())).hideView(binding.rvPast);
+                ((DashboardActivity) (requireActivity())).showView(binding.refreshButton);
+                ((DashboardActivity) (requireActivity())).hideView(binding.refreshPastButton);
                 if (currentOrders.size() > 0) {
                     binding.noData.setVisibility(View.GONE);
                 } else {
@@ -391,8 +439,8 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
             } else {
                 binding.currentLine.setVisibility(View.GONE);
                 binding.pastLine.setVisibility(View.VISIBLE);
-                ((DashboardActivity) (requireActivity())).hideView(binding.rvBooking);
-                ((DashboardActivity) (requireActivity())).showView(binding.rvPast);
+                ((DashboardActivity) (requireActivity())).hideView(binding.refreshButton);
+                ((DashboardActivity) (requireActivity())).showView(binding.refreshPastButton);
                 if (ordersList.size() > 0) {
                     binding.noData.setVisibility(View.GONE);
                 } else {
@@ -418,7 +466,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                         this,AboutAppResponse.getInstance().getMrt7al().
                         getData().getMobile_whats(),requireContext());
                 binding.rvBooking.setAdapter(currentOrderAdapter);
-                binding.rvBooking.setVisibility(View.VISIBLE);
+                binding.refreshButton.setVisibility(View.VISIBLE);
 //                binding.rvBooking.setVisibility(View.VISIBLE);
 //                binding.noData.setVisibility(View.GONE);
 //                binding.rvPast.setVisibility(View.GONE);
@@ -451,7 +499,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                 }
                 pastOrderAdapter = new PastOrderAdapter(ordersList,requireContext(),this);
                 binding.rvPast.setAdapter(pastOrderAdapter);
-                binding.rvPast.setVisibility(View.GONE);
+                binding.refreshPastButton.setVisibility(View.VISIBLE);
 //                binding.rvPast.setVisibility(View.VISIBLE);
 //                binding.noData.setVisibility(View.GONE);
 //                binding.rvBooking.setVisibility(View.GONE);
@@ -503,8 +551,8 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
             if (currentOrders.size() == 0) {
                 if (!isRefreshData) {
                     binding.noData.setVisibility(View.VISIBLE);
-                    binding.rvPast.setVisibility(View.GONE);
-                    binding.rvBooking.setVisibility(View.GONE);
+                    binding.refreshPastButton.setVisibility(View.GONE);
+                    binding.refreshButton.setVisibility(View.GONE);
                 }
             }
         }
@@ -543,6 +591,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
         }
     }
     private void openPayActivity(String url) {
+        DialogsHelper.removeProgressDialog();
         Intent intent = new Intent(getActivity(), PayActivity.class);
         intent.putExtra("url", url);
         webViewLauncher.launch(intent);

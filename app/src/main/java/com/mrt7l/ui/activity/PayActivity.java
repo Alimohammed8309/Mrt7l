@@ -3,6 +3,7 @@ package com.mrt7l.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -18,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.mrt7l.R;
+import com.mrt7l.helpers.DialogsHelper;
 
 public class PayActivity extends AppCompatActivity {
     private WebView webView;
@@ -27,6 +29,7 @@ public class PayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pay);
+        DialogsHelper.showProgressDialog(this,getString(R.string.redirecting_to_pay));
         String url = getIntent().getStringExtra("url");
         FrameLayout.LayoutParams fl = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT);
@@ -40,6 +43,7 @@ public class PayActivity extends AppCompatActivity {
          setupWebView();
         frameLayout.addView(webView);
         webView.loadUrl(url);
+        new Handler().postDelayed(DialogsHelper::removeProgressDialog, 5000);
     }
     private void setupWebView() {
         WebSettings webSettings = webView.getSettings();

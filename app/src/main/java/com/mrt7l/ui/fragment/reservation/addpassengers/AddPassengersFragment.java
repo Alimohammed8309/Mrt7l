@@ -683,25 +683,25 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             BroadcastHelper.sendInform(requireContext(),"passengerAdded");
             SubPassengers.add(dataBean);
             passengersResponse.getMrt7al().getData().add(passenger);
-             for (int i=0;i<passengersResponse.getMrt7al().getData().size();i++){
-                DataBean dataBeans = new DataBean();
-                dataBeans.setNationality_id(passengersResponse.getMrt7al().getData().get(i).getNationality_id());
-                dataBeans.setUser_id(passengersResponse.getMrt7al().getData().get(i).getUser_id());
-                dataBeans.setId(passengersResponse.getMrt7al().getData().get(i).getId());
-                dataBeans.setPassport_id(passengersResponse.getMrt7al().getData().get(i).getPassport_id());
-                dataBeans.setFull_name(passengersResponse.getMrt7al().getData().get(i).getFull_name());
-                dataBeans.setDate_of_birth(passengersResponse.getMrt7al().getData().get(i).getDate_of_birth());
-                dataBeans.setPassport_file(passengersResponse.getMrt7al().getData().get(i).getPassport_file());
-                dataBeans.setGender(passengersResponse.getMrt7al().getData().get(i).getGender());
-                dataBeans.setMobile(passengersResponse.getMrt7al().getData().get(i).getMobile());
-                dataBeans.setCreated(passengersResponse.getMrt7al().getData().get(i).getCreated());
-                dataBeans.setPassangerType(passengersResponse.getMrt7al().getData().get(i).getPassangerType());
-                pastPassengersList.add(dataBeans);
-            }
-            passengersAdapter = new Passengers_adapter(requireActivity(),
-                    pastPassengersList, this, true);
-            binding.passengerRecycler.setAdapter(passengersAdapter);
-            passengersAdapter.notifyDataSetChanged();
+//             for (int i=0;i<passengersResponse.getMrt7al().getData().size();i++){
+//                DataBean dataBeans = new DataBean();
+//                dataBeans.setNationality_id(passengersResponse.getMrt7al().getData().get(i).getNationality_id());
+//                dataBeans.setUser_id(passengersResponse.getMrt7al().getData().get(i).getUser_id());
+//                dataBeans.setId(passengersResponse.getMrt7al().getData().get(i).getId());
+//                dataBeans.setPassport_id(passengersResponse.getMrt7al().getData().get(i).getPassport_id());
+//                dataBeans.setFull_name(passengersResponse.getMrt7al().getData().get(i).getFull_name());
+//                dataBeans.setDate_of_birth(passengersResponse.getMrt7al().getData().get(i).getDate_of_birth());
+//                dataBeans.setPassport_file(passengersResponse.getMrt7al().getData().get(i).getPassport_file());
+//                dataBeans.setGender(passengersResponse.getMrt7al().getData().get(i).getGender());
+//                dataBeans.setMobile(passengersResponse.getMrt7al().getData().get(i).getMobile());
+//                dataBeans.setCreated(passengersResponse.getMrt7al().getData().get(i).getCreated());
+//                dataBeans.setPassangerType(passengersResponse.getMrt7al().getData().get(i).getPassangerType());
+                pastPassengersList.add(dataBean);
+//            }
+//            passengersAdapter = new Passengers_adapter(requireActivity(),
+//                    pastPassengersList, this, true);
+//            binding.passengerRecycler.setAdapter(passengersAdapter);
+            passengersAdapter.notifyItemInserted(pastPassengersList.size() -1);
             Toast.makeText(requireActivity(), addPassengerResponse.getMrt7al().getMsg()
                     , Toast.LENGTH_SHORT).show();
             binding.fullName.setText("");

@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/refreshButton"
-        >
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -166,16 +162,25 @@
                     </LinearLayout>
 
                 </LinearLayout>
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:id="@+id/refreshButton"  >
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvBooking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_marginBottom="@dimen/spacing_medium"
                     android:clipToPadding="false"
                     android:overScrollMode="always" />
-
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:id="@+id/refreshPastButton"  >
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPast"
                     android:layout_width="match_parent"
@@ -184,6 +189,7 @@
                     android:clipToPadding="false"
                     android:overScrollMode="always"
                     />
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
                 <ProgressBar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -198,8 +204,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/mainProgress"
-                    android:visibility="gone"
-                    android:layout_marginTop="190dp"
+                     android:layout_marginTop="190dp"
                     />
                 <TextView
                     android:id="@+id/noData"
@@ -219,7 +224,7 @@
 
 
         </RelativeLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </layout>
 

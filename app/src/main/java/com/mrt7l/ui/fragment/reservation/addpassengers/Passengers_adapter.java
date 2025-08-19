@@ -93,11 +93,7 @@ public class Passengers_adapter extends RecyclerView.Adapter<Passengers_adapter.
         holder.rowBinding.delete.setOnClickListener(view -> {
             showDeletePassengerDialog("هل تريد حذف هذا المسافر بالفعل",anActivity,position);
         });
-        if (list.get(position).isSelected()){
-            holder.rowBinding.name.setChecked(true);
-        } else {
-            holder.rowBinding.name.setChecked(false);
-        }
+        holder.rowBinding.name.setChecked(list.get(position).isSelected());
         holder.rowBinding.name.setOnClickListener(view -> {
             list.get(position).setSelected(!list.get(position).isSelected());
              getmNavigator().onPassengerChecked(list.get(position));

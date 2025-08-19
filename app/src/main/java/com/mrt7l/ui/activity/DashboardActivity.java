@@ -108,15 +108,14 @@ public class DashboardActivity extends BaseActivity implements
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()) {
-            case R.id.ivNotification:
+             if(v.getId() == R.id.ivNotification) {
                 if (new PreferenceHelper(this).getUSERID() != 0) {
-                    Navigation.findNavController(this,R.id.main_fragment).navigate(R.id.action_notifications);
+                    Navigation.findNavController(this, R.id.main_fragment).navigate(R.id.action_notifications);
                 } else {
                     DialogsHelper.showLoginDialog(getString(R.string.please_login), this);
                 }
-                break;
-        }
+            }
+
     }
 
     /* get Activity result */

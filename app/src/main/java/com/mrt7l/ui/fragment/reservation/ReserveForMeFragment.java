@@ -82,7 +82,6 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
 
     private ReserveForMeViewModel mViewModel;
     private ArrayList<PassengerModel> passengers = new ArrayList<>();
-    private ArrayList<ReservationResponse.Mrt7alBean.DataBean> passengersList = new ArrayList<>();
 
     public static ReserveForMeFragment newInstance() {
         return new ReserveForMeFragment();
@@ -302,8 +301,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                 postModel.setBeforeConfirm("ON");
                 postModel.setPromoCode(fragmentBinding.voucherEt.getText().toString());
                 isFirstOpen = true;
-                passengersList.clear();
-                mViewModel.verifyPromo("Bearer " + token,
+                 mViewModel.verifyPromo("Bearer " + token,
                         getSubIdsList(postModel), createPartFromString(postModel.getMainPassanger()),
                         createPartFromString(fragmentBinding.voucherEt.getText().toString())
                         , createPartFromString(postModel.getBeforeConfirm()),

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,21 +96,22 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
     private int pastVisiblesItems, visibleItemCount, totalItemCount,mLastFirstVisibleItem = 0;
      private boolean isLoadingData =false ,isScrollDown =true;
     private LinearLayoutManager currentManager;
-
+    private boolean isViewLoadedBefore = false;
     /* create view */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-        homeResponse = HomeResponse.getInstance();
-        RegisterCollectionResponse registerCollectionResponse =
-                RegisterCollectionResponse.getInstance();
-             initView(binding.getRoot());
-             binding.ivNotification.setOnClickListener(view -> {
-                 Navigation.findNavController(requireActivity(), R.id.main_fragment).navigate(
-                         R.id.action_notifications
-                 );
-             });
-        currentManager = new LinearLayoutManager(requireActivity());
+        if(!isViewLoadedBefore) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+            homeResponse = HomeResponse.getInstance();
+            RegisterCollectionResponse registerCollectionResponse =
+                    RegisterCollectionResponse.getInstance();
+            initView(binding.getRoot());
+            binding.ivNotification.setOnClickListener(view -> {
+                Navigation.findNavController(requireActivity(), R.id.main_fragment).navigate(
+                        R.id.action_notifications
+                );
+            });
+            currentManager = new LinearLayoutManager(requireActivity());
             setListener();
             getData();
 
@@ -135,73 +137,73 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
             binding.refreshButton.setOnRefreshListener(() -> {
                 binding.mainProgress.setVisibility(View.VISIBLE);
                 binding.rvBus.setVisibility(View.GONE);
-                 page =1;
+                page = 1;
                 mRecentSearchList.clear();
                 searchDate = updateSearchLabel();
-                viewModel.search(searchDate,"ANDRIOD_IOS",String.valueOf(page));
+                viewModel.search(searchDate, "ANDRIOD_IOS", String.valueOf(page));
                 new Handler().postDelayed(() -> binding.refreshButton.setRefreshing(false), 2000);
             });
-        mDepartDateCalendar = Calendar.getInstance();
-        binding.tvDate.setText(Constants.DateFormat.DAY_MONTH_YEAR_FORMATTER.
-                format(mDepartDateCalendar.getTime()));
-        try{
-        if (homeResponse.getMrt7al() == null) {
+            mDepartDateCalendar = Calendar.getInstance();
+            binding.tvDate.setText(Constants.DateFormat.DAY_MONTH_YEAR_FORMATTER.
+                    format(mDepartDateCalendar.getTime()));
+            try {
+                if (homeResponse.getMrt7al() == null) {
 //            binding.mainProgress.setVisibility(View.VISIBLE);
-            binding.mainProgress.setVisibility(View.VISIBLE);
-            viewModel.search(searchDate,"ANDRIOD_IOS",String.valueOf(page));
-            } else {
-                mRecentSearchList.clear();
-                mRecentSearchList.addAll(homeResponse.getMrt7al().getData());
-                binding.rvBus.setLayoutManager(currentManager);
-                mRecentSearchAdapter = new HomeBusAdapter(requireActivity(), mRecentSearchList, this);
-                binding.rvBus.setAdapter(mRecentSearchAdapter);
-                Date date = convertStringToDate(mRecentSearchList.get(0).getDatetime_from()
-                        .replace("T", " ").replace("+03:00", ""));
-                if (date != null) {
-                    mDepartDateCalendar.setTime(date);
-                    binding.tvDate.setText(Constants.DateFormat.DAY_MONTH_YEAR_FORMATTER.format(mDepartDateCalendar.getTime()));
+                    binding.mainProgress.setVisibility(View.VISIBLE);
+                    viewModel.search(searchDate, "ANDRIOD_IOS", String.valueOf(page));
+                } else {
+                    mRecentSearchList.clear();
+                    mRecentSearchList.addAll(homeResponse.getMrt7al().getData());
+                    binding.rvBus.setLayoutManager(currentManager);
+                    mRecentSearchAdapter = new HomeBusAdapter(requireActivity(), mRecentSearchList, this);
+                    binding.rvBus.setAdapter(mRecentSearchAdapter);
+                    Date date = convertStringToDate(mRecentSearchList.get(0).getDatetime_from()
+                            .replace("T", " ").replace("+03:00", ""));
+                    if (date != null) {
+                        mDepartDateCalendar.setTime(date);
+                        binding.tvDate.setText(Constants.DateFormat.DAY_MONTH_YEAR_FORMATTER.format(mDepartDateCalendar.getTime()));
 //                    mRecentSearchAdapter.FilterData(Constants.DateFormat.FilterFormat.format(mDepartDateCalendar.getTime()));
-                }
-                if (registerCollectionResponse.getMrt7al() != null) {
-                    cities.clear();
-                    fromList.clear();
-                    toList.clear();
-                    cities.addAll(registerCollectionResponse.getMrt7al().getData().getCities());
-                    fromList.add(getString(R.string.hint_from_city));
-                    toList.add(getString(R.string.hint_to_city));
-                    for (int i = 0; i < cities.size(); i++) {
-                        fromList.add(cities.get(i).getName());
-                        toList.add(cities.get(i).getName());
                     }
+                    if (registerCollectionResponse.getMrt7al() != null) {
+                        cities.clear();
+                        fromList.clear();
+                        toList.clear();
+                        cities.addAll(registerCollectionResponse.getMrt7al().getData().getCities());
+                        fromList.add(getString(R.string.hint_from_city));
+                        toList.add(getString(R.string.hint_to_city));
+                        for (int i = 0; i < cities.size(); i++) {
+                            fromList.add(cities.get(i).getName());
+                            toList.add(cities.get(i).getName());
+                        }
 
-                    setupFromSpinner(binding.edFromCity);
-                    setupToSpinner(binding.edToCity);
+                        setupFromSpinner(binding.edFromCity);
+                        setupToSpinner(binding.edToCity);
+                    }
                 }
+            } catch (NullPointerException | IllegalStateException a) {
+                a.printStackTrace();
             }
-        } catch (NullPointerException | IllegalStateException a){
-            a.printStackTrace();
-        }
             binding.searchBtn.setOnClickListener(view -> {
                 if (validate()) {
                     busType = "";
-                    if (binding.vip.isChecked() && !binding.economy.isChecked()){
+                    if (binding.vip.isChecked() && !binding.economy.isChecked()) {
                         busType = "vip";
                     }
-                    if (binding.economy.isChecked() && !binding.vip.isChecked()){
-                        busType =  "normal";
+                    if (binding.economy.isChecked() && !binding.vip.isChecked()) {
+                        busType = "normal";
                     }
 
                     Bundle bundle = new Bundle();
-                    if (fromSelection!=-1) {
+                    if (fromSelection != -1) {
                         bundle.putString("from", String.valueOf(cities.get(fromSelection).getId()));
                     }
-                    if (toSelection!=-1) {
+                    if (toSelection != -1) {
                         bundle.putString("to", String.valueOf(cities.get(toSelection).getId()));
                     }
-                    bundle.putString("busType",busType);
+                    bundle.putString("busType", busType);
                     if (!binding.edOneWay.getText().toString().isEmpty()) {
                         bundle.putString("date", binding.edOneWay.getText().toString());
-                    }  else {
+                    } else {
                         bundle.putString("date", "");
 
                     }
@@ -211,11 +213,11 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
                         bundle.putString("time", "");
 
                     }
-                           bundle.putString("count", String.valueOf(
-                                   adultCount + childCount + babyCount));
+                    bundle.putString("count", String.valueOf(
+                            adultCount + childCount + babyCount));
 
                     Navigation.findNavController(requireActivity(), R.id.main_fragment).navigate(
-                            R.id.action_homeFragmentNewest_to_searchTripsFragment,bundle
+                            R.id.action_homeFragmentNewest_to_searchTripsFragment, bundle
                     );
                 }
             });
@@ -231,44 +233,50 @@ public class HomeFragmentNewest extends Fragment implements View.OnClickListener
                 binding.rvBus.setVisibility(View.GONE);
                 binding.tvDate.setText(Constants.DateFormat.DAY_MONTH_YEAR_FORMATTER.format(mDepartDateCalendar.getTime()));
                 searchDate = updateSearchLabel();
-                page =1;
-                viewModel.search( searchDate,"",String.valueOf(page));  });
-                binding.ivNext.setOnClickListener(view -> {
+                page = 1;
+                viewModel.search(searchDate, "", String.valueOf(page));
+            });
+            binding.ivNext.setOnClickListener(view -> {
                 mRecentSearchList.clear();
                 mDepartDateCalendar.add(Calendar.DATE, 1);
                 binding.mainProgress.setVisibility(View.VISIBLE);
                 binding.tvDate.setText(Constants.DateFormat.DAY_MONTH_YEAR_FORMATTER.format(mDepartDateCalendar.getTime()));
                 searchDate = updateSearchLabel();
-                page =1;
+                page = 1;
                 binding.noData.setVisibility(View.GONE);
                 binding.rvBus.setVisibility(View.GONE);
-                viewModel.search(searchDate,"",String.valueOf(page));
+                viewModel.search(searchDate, "", String.valueOf(page));
             });
-        binding.scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            View view =  binding.scrollView.getChildAt(binding.scrollView.getChildCount() - 1);
-            int diff = (view.getBottom() - (binding.scrollView.getHeight() + binding.scrollView
-                    .getScrollY()));
+            binding.scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                View view = binding.scrollView.getChildAt(binding.scrollView.getChildCount() - 1);
+                int diff = (view.getBottom() - (binding.scrollView.getHeight() + binding.scrollView
+                        .getScrollY()));
 
-            if (diff == 0) {
+                if (diff == 0) {
 //                Log.v("diff ",String.valueOf(diff));
-                // your pagination code
-                if (!isLoadingData) {
-                    //new updateData().execute();
-                    isLoadingData = true;
-                    searchDate =updateSearchLabel();
-                    page =page+1;
-                    try {
-                        if (homeResponse.getMrt7al().getPagination() != null)
-                            if (homeResponse.getMrt7al().getPagination().getPageCount() >= page) {
-                                viewModel.search(searchDate, "", String.valueOf(page));
-                                binding.progresss.setVisibility(View.VISIBLE);
-                            }
-                    } catch (NullPointerException e){
-                        //e.printStackTrace();
+                    // your pagination code
+                    if (!isLoadingData) {
+                        //new updateData().execute();
+                        isLoadingData = true;
+                        searchDate = updateSearchLabel();
+                        page = page + 1;
+                        try {
+                            if (homeResponse.getMrt7al().getPagination() != null)
+                                if (homeResponse.getMrt7al().getPagination().getPageCount() >= page) {
+                                    binding.progresss.setVisibility(View.VISIBLE);
+                                    binding.scrollView.postDelayed(() ->
+                                            binding.scrollView.scrollTo(0, binding.scrollView
+                                                    .getScrollY() + 200), 100);
+                                    viewModel.search(searchDate, "", String.valueOf(page));
+                                }
+                        } catch (NullPointerException e) {
+                            //e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
+            });
+            isViewLoadedBefore = true;
+        }
         return binding.getRoot();
     }
     private int adultCount=0,childCount=0,babyCount =0;

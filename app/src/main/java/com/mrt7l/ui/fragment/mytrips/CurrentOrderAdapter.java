@@ -70,8 +70,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.placeTitle.setText(mBusModel.getTrip_date().getCompany().getAddress());
                 holder1.binding.accountTitle.setText(mBusModel.getTrip_date().getCompany().getBank_account());
             }
-            holder1.binding.payByVisa.setOnClickListener(v -> {
-                Log.d("TAG", "onBindViewHolder: "+mBusModel.getRes_passangers().get(0).getReservation_id());
+            holder1.binding.visaIcon.setOnClickListener(v -> {
                 clickListener.onPayByVisaClicked(String.valueOf(mBusModel.getRes_passangers().get(0).getReservation_id()));
             });
             holder1.binding.tvStartTime.setText(formatTime(mBusModel.getTrip_date().getDatetime_to()));
@@ -91,7 +90,8 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.printTicket.setVisibility(View.GONE);
                 if (mBusModel.getPayMethod() != null) {
                     if (mBusModel.getPayMethod().equals("tap")) {
-                        holder1.binding.payByVisa.setVisibility(View.VISIBLE);
+                        holder1.binding.visaIcon.setVisibility(View.VISIBLE);
+                        holder1.binding.bankView.setVisibility(View.GONE);
                     }
                 }
             } else if (mBusModel.getStatus().equals("canceled")) {
@@ -102,7 +102,7 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.cancel.setVisibility(View.GONE);
                 holder1.binding.editTrip.setVisibility(View.GONE);
                 holder1.binding.printTicket.setVisibility(View.GONE);
-                holder1.binding.payByVisa.setVisibility(View.GONE);
+                holder1.binding.visaIcon.setVisibility(View.GONE);
             } else {
                 holder1.binding.tripPending.setVisibility(View.GONE);
                 holder1.binding.tripConfirmed.setVisibility(View.VISIBLE);
@@ -111,7 +111,12 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.printTicket.setVisibility(View.VISIBLE);
                 holder1.binding.cancel.setVisibility(View.GONE);
                 holder1.binding.editTrip.setVisibility(View.GONE);
-                holder1.binding.payByVisa.setVisibility(View.GONE);
+                holder1.binding.visaIcon.setVisibility(View.GONE);
+                if (mBusModel.getPayMethod() != null) {
+                    if (mBusModel.getPayMethod().equals("tap")) {
+                        holder1.binding.bankView.setVisibility(View.GONE);
+                    }
+                }
             }
 
             holder1.binding.detailsText.setOnClickListener(v -> {
@@ -126,7 +131,11 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
          }
 
         if (mBusModel.getPayMethod() != null) {
-            holder1.binding.payStatus.setText(mBusModel.getPayMethod());
+            if(mBusModel.getPayMethod().equals("tap")){
+                holder1.binding.payStatus.setText(context.getString(R.string.pay_visa));
+            } else {
+                holder1.binding.payStatus.setText(mBusModel.getPayMethod());
+            }
             if (mBusModel.getPayMethod().equals("transfer")) {
                 if (mBusModel.getReceipt_file() != null) {
                     holder1.binding.billPhoto.setVisibility(View.VISIBLE);

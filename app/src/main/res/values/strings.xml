@@ -385,8 +385,9 @@
     <string name="upload_passport">من فضلك قم باختيار صورة جواز السفر</string>
     <string name="registering">جاري التسجيل</string>
     <string name="loading_data">جاري تحميل البيانات</string>
-    <string name="loging">جاري تسجيل الدخول</string>
-    <string name="sending">جاري الارسال</string>
+     <string name="loging">جاري تسجيل الدخول</string>
+    <string name = "redirecting_to_pay">برجاء الانتظار جاري تحويلك لموقع الدفع الالكترونى</string>
+     <string name="sending">جاري الارسال</string>
     <string name="notes_sent">شكرا على تواصلك معنا</string>
     <string name="error">خطأ بالبيانات</string>
     <string name="add_past_passenger">اضافة مسافر سابق</string>
@@ -538,7 +539,7 @@
     <string name="voucher_discount">خصم الرمز الترويجي</string>
     <string name="pay_cash">الدفع نقدا</string>
     <string name="pay_bank">التحويل البنكي</string>
-    <string name="pay_visa">الدفع بالفيزا</string>
+    <string name="pay_visa">الدفع الالكترونى</string>
     <string name="upload_bill">رفع مستند السداد</string>
     <string name="accept_policy">أوافق على سياسات حجز الشركة</string>
     <string name="reservation_number">رقم الحجز</string>

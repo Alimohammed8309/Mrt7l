@@ -1,9 +1,8 @@
 package com.mrt7l.ui.fragment.home;
 
 import java.util.ArrayList;
-import java.util.Observable;
 
-public class HomeResponse extends Observable {
+public class HomeResponse  {
     private static HomeResponse instance;
 
 
@@ -21,11 +20,11 @@ public class HomeResponse extends Observable {
 
     public void setMrt7al(Mrt7alBean mrt7al) {
         this.mrt7al = mrt7al;
-        setChanged();
+        
     }
 
 
-    public static class Mrt7alBean extends Observable{
+    public static class Mrt7alBean {
         private Boolean success;
         private String msg;
         private ArrayList<DataBean> data;
@@ -38,7 +37,7 @@ public class HomeResponse extends Observable {
 
         public void setSuccess(Boolean success) {
             this.success = success;
-            setChanged();
+            
         }
 
         public String getMsg() {
@@ -47,7 +46,7 @@ public class HomeResponse extends Observable {
 
         public void setMsg(String msg) {
             this.msg = msg;
-            setChanged();
+            
         }
 
         public ArrayList<DataBean> getData() {
@@ -56,7 +55,7 @@ public class HomeResponse extends Observable {
 
         public void setData(ArrayList<DataBean> data) {
             this.data = data;
-            setChanged();
+            
         }
 
         public PaginationBean getPagination() {
@@ -65,7 +64,7 @@ public class HomeResponse extends Observable {
 
         public void setPagination(PaginationBean pagination) {
             this.pagination = pagination;
-            setChanged();
+            
         }
 
         public ArrayList<DaySliderBean> getDay_slider() {
@@ -74,10 +73,10 @@ public class HomeResponse extends Observable {
 
         public void setDay_slider(ArrayList<DaySliderBean> day_slider) {
             this.day_slider = day_slider;
-            setChanged();
+            
         }
 
-        public static class PaginationBean extends Observable{
+        public static class PaginationBean {
             private int count;
             private int current;
             private int perPage;
@@ -102,7 +101,7 @@ public class HomeResponse extends Observable {
 
             public void setCount(int count) {
                 this.count = count;
-                setChanged();
+                
             }
 
             public int getCurrent() {
@@ -111,7 +110,7 @@ public class HomeResponse extends Observable {
 
             public void setCurrent(int current) {
                 this.current = current;
-                setChanged();
+                
             }
 
             public int getPerPage() {
@@ -120,7 +119,7 @@ public class HomeResponse extends Observable {
 
             public void setPerPage(int perPage) {
                 this.perPage = perPage;
-                setChanged();
+                
             }
 
             public int getPage() {
@@ -129,7 +128,7 @@ public class HomeResponse extends Observable {
 
             public void setPage(int page) {
                 this.page = page;
-                setChanged();
+                
             }
 
             public int getRequestedPage() {
@@ -138,7 +137,7 @@ public class HomeResponse extends Observable {
 
             public void setRequestedPage(int requestedPage) {
                 this.requestedPage = requestedPage;
-                setChanged();
+                
             }
 
             public int getPageCount() {
@@ -147,7 +146,7 @@ public class HomeResponse extends Observable {
 
             public void setPageCount(int pageCount) {
                 this.pageCount = pageCount;
-                setChanged();
+                
             }
 
             public int getStart() {
@@ -156,7 +155,7 @@ public class HomeResponse extends Observable {
 
             public void setStart(int start) {
                 this.start = start;
-                setChanged();
+                
             }
 
             public int getEnd() {
@@ -165,7 +164,7 @@ public class HomeResponse extends Observable {
 
             public void setEnd(int end) {
                 this.end = end;
-                setChanged();
+                
             }
 
             public Boolean getPrevPage() {
@@ -174,7 +173,7 @@ public class HomeResponse extends Observable {
 
             public void setPrevPage(Boolean prevPage) {
                 this.prevPage = prevPage;
-                setChanged();
+                
             }
 
             public Boolean getNextPage() {
@@ -183,7 +182,7 @@ public class HomeResponse extends Observable {
 
             public void setNextPage(Boolean nextPage) {
                 this.nextPage = nextPage;
-                setChanged();
+                
             }
 
             public String getSort() {
@@ -192,7 +191,7 @@ public class HomeResponse extends Observable {
 
             public void setSort(String sort) {
                 this.sort = sort;
-                setChanged();
+                
             }
 
             public String getDirection() {
@@ -201,7 +200,7 @@ public class HomeResponse extends Observable {
 
             public void setDirection(String direction) {
                 this.direction = direction;
-                setChanged();
+                
             }
 
             public Boolean getSortDefault() {
@@ -210,7 +209,7 @@ public class HomeResponse extends Observable {
 
             public void setSortDefault(Boolean sortDefault) {
                 this.sortDefault = sortDefault;
-                setChanged();
+                
             }
 
             public Boolean getDirectionDefault() {
@@ -219,7 +218,7 @@ public class HomeResponse extends Observable {
 
             public void setDirectionDefault(Boolean directionDefault) {
                 this.directionDefault = directionDefault;
-                setChanged();
+                
             }
 
             public String getLimit() {
@@ -228,7 +227,7 @@ public class HomeResponse extends Observable {
 
             public void setLimit(String limit) {
                 this.limit = limit;
-                setChanged();
+                
             }
 
             public String getScope() {
@@ -237,7 +236,7 @@ public class HomeResponse extends Observable {
 
             public void setScope(String scope) {
                 this.scope = scope;
-                setChanged();
+                
             }
 
             public String getFinder() {
@@ -246,11 +245,11 @@ public class HomeResponse extends Observable {
 
             public void setFinder(String finder) {
                 this.finder = finder;
-                setChanged();
+                
             }
         }
 
-        public static class DataBean extends Observable{
+        public static class DataBean {
             private int id;
             private int available_count;
             private int company_id;
@@ -306,7 +305,7 @@ public class HomeResponse extends Observable {
 
             public void setId(int id) {
                 this.id = id;
-                setChanged();
+                
             }
 
             public int getAvailable_count() {
@@ -315,7 +314,7 @@ public class HomeResponse extends Observable {
 
             public void setAvailable_count(int available_count) {
                 this.available_count = available_count;
-                setChanged();
+                
             }
 
             public int getCompany_id() {
@@ -324,7 +323,7 @@ public class HomeResponse extends Observable {
 
             public void setCompany_id(int company_id) {
                 this.company_id = company_id;
-                setChanged();
+                
             }
 
             public String getDatetime_from() {
@@ -333,7 +332,7 @@ public class HomeResponse extends Observable {
 
             public void setDatetime_from(String datetime_from) {
                 this.datetime_from = datetime_from;
-                setChanged();
+                
             }
 
             public String getDatetime_to() {
@@ -342,7 +341,7 @@ public class HomeResponse extends Observable {
 
             public void setDatetime_to(String datetime_to) {
                 this.datetime_to = datetime_to;
-                setChanged();
+                
             }
 
             public String getTripType() {
@@ -351,7 +350,7 @@ public class HomeResponse extends Observable {
 
             public void setTripType(String tripType) {
                 this.tripType = tripType;
-                setChanged();
+                
             }
 
             public int getPrice() {
@@ -360,7 +359,7 @@ public class HomeResponse extends Observable {
 
             public void setPrice(int price) {
                 this.price = price;
-                setChanged();
+                
             }
 
             public String getActualCount() {
@@ -369,7 +368,7 @@ public class HomeResponse extends Observable {
 
             public void setActualCount(String actualCount) {
                 this.actualCount = actualCount;
-                setChanged();
+                
             }
 
             public int getAdult_price() {
@@ -378,7 +377,7 @@ public class HomeResponse extends Observable {
 
             public void setAdult_price(int adult_price) {
                 this.adult_price = adult_price;
-                setChanged();
+                
             }
 
             public FromCityBean getFrom_city() {
@@ -387,7 +386,7 @@ public class HomeResponse extends Observable {
 
             public void setFrom_city(FromCityBean from_city) {
                 this.from_city = from_city;
-                setChanged();
+                
             }
 
             public ToCityBean getTo_city() {
@@ -396,7 +395,7 @@ public class HomeResponse extends Observable {
 
             public void setTo_city(ToCityBean to_city) {
                 this.to_city = to_city;
-                setChanged();
+                
             }
 
             public int getTripDateTime() {
@@ -405,7 +404,7 @@ public class HomeResponse extends Observable {
 
             public void setTripDateTime(int tripDateTime) {
                 this.tripDateTime = tripDateTime;
-                setChanged();
+                
             }
 
             public String getTax() {
@@ -414,7 +413,7 @@ public class HomeResponse extends Observable {
 
             public void setTax(String tax) {
                 this.tax = tax;
-                setChanged();
+                
             }
 
             public String getCreated() {
@@ -423,7 +422,7 @@ public class HomeResponse extends Observable {
 
             public void setCreated(String created) {
                 this.created = created;
-                setChanged();
+                
             }
 
             public String getModified() {
@@ -432,7 +431,7 @@ public class HomeResponse extends Observable {
 
             public void setModified(String modified) {
                 this.modified = modified;
-                setChanged();
+                
             }
 
             public String getTrip_number() {
@@ -441,7 +440,7 @@ public class HomeResponse extends Observable {
 
             public void setTrip_number(String trip_number) {
                 this.trip_number = trip_number;
-                setChanged();
+                
             }
 
             public int getStation_id() {
@@ -450,7 +449,7 @@ public class HomeResponse extends Observable {
 
             public void setStation_id(int station_id) {
                 this.station_id = station_id;
-                setChanged();
+                
             }
 
             public String getTenTrips() {
@@ -459,7 +458,7 @@ public class HomeResponse extends Observable {
 
             public void setTenTrips(String tenTrips) {
                 this.tenTrips = tenTrips;
-                setChanged();
+                
             }
 
             public String getIs_direct() {
@@ -468,7 +467,7 @@ public class HomeResponse extends Observable {
 
             public void setIs_direct(String is_direct) {
                 this.is_direct = is_direct;
-                setChanged();
+                
             }
 
             public int getDuplication_count() {
@@ -477,7 +476,7 @@ public class HomeResponse extends Observable {
 
             public void setDuplication_count(int duplication_count) {
                 this.duplication_count = duplication_count;
-                setChanged();
+                
             }
 
             public int getChild_price() {
@@ -486,7 +485,7 @@ public class HomeResponse extends Observable {
 
             public void setChild_price(int child_price) {
                 this.child_price = child_price;
-                setChanged();
+                
             }
 
             public int getBaby_price() {
@@ -495,7 +494,7 @@ public class HomeResponse extends Observable {
 
             public void setBaby_price(int baby_price) {
                 this.baby_price = baby_price;
-                setChanged();
+                
             }
 
             public int getWaitingTime() {
@@ -504,7 +503,7 @@ public class HomeResponse extends Observable {
 
             public void setWaitingTime(int waitingTime) {
                 this.waitingTime = waitingTime;
-                setChanged();
+                
             }
 
             public CompanyBean getCompany() {
@@ -513,7 +512,7 @@ public class HomeResponse extends Observable {
 
             public void setCompany(CompanyBean company) {
                 this.company = company;
-                setChanged();
+                
             }
 
             public int getPassengerActualCount() {
@@ -522,7 +521,7 @@ public class HomeResponse extends Observable {
 
             public void setPassengerActualCount(int passengerActualCount) {
                 this.passengerActualCount = passengerActualCount;
-                setChanged();
+                
             }
 
             public int getPassengerCountOnReservation() {
@@ -531,7 +530,7 @@ public class HomeResponse extends Observable {
 
             public void setPassengerCountOnReservation(int passengerCountOnReservation) {
                 this.passengerCountOnReservation = passengerCountOnReservation;
-                setChanged();
+                
             }
 
             public int getPassengerNetAvailable() {
@@ -540,7 +539,7 @@ public class HomeResponse extends Observable {
 
             public void setPassengerNetAvailable(int passengerNetAvailable) {
                 this.passengerNetAvailable = passengerNetAvailable;
-                setChanged();
+                
             }
 
             public String getType() {
@@ -549,7 +548,7 @@ public class HomeResponse extends Observable {
 
             public void setType(String type) {
                 this.type = type;
-                setChanged();
+                
             }
 
             public String getBus_type() {
@@ -558,7 +557,7 @@ public class HomeResponse extends Observable {
 
             public void setBus_type(String bus_type) {
                 this.bus_type = bus_type;
-                setChanged();
+                
             }
 
             public int getAvab_chairs() {
@@ -567,10 +566,10 @@ public class HomeResponse extends Observable {
 
             public void setAvab_chairs(int avab_chairs) {
                 this.avab_chairs = avab_chairs;
-                setChanged();
+                
             }
 
-            public static class FromCityBean extends Observable{
+            public static class FromCityBean {
                 private String name;
 
                 public String getName() {
@@ -579,11 +578,11 @@ public class HomeResponse extends Observable {
 
                 public void setName(String name) {
                     this.name = name;
-                    setChanged();
+                    
                 }
             }
 
-            public static class ToCityBean extends Observable{
+            public static class ToCityBean {
                 private String name;
 
                 public String getName() {
@@ -592,11 +591,11 @@ public class HomeResponse extends Observable {
 
                 public void setName(String name) {
                     this.name = name;
-                    setChanged();
+                    
                 }
             }
 
-            public static class CompanyBean extends Observable{
+            public static class CompanyBean {
                 private int id;
                 private String name;
                 private String logo_pic;
@@ -621,7 +620,7 @@ public class HomeResponse extends Observable {
 
                 public void setId(int id) {
                     this.id = id;
-                    setChanged();
+                    
                 }
 
                 public String getName() {
@@ -630,7 +629,7 @@ public class HomeResponse extends Observable {
 
                 public void setName(String name) {
                     this.name = name;
-                    setChanged();
+                    
                 }
 
                 public String getLogo_pic() {
@@ -639,7 +638,7 @@ public class HomeResponse extends Observable {
 
                 public void setLogo_pic(String logo_pic) {
                     this.logo_pic = logo_pic;
-                    setChanged();
+                    
                 }
 
                 public String getCompany_info() {
@@ -648,7 +647,7 @@ public class HomeResponse extends Observable {
 
                 public void setCompany_info(String company_info) {
                     this.company_info = company_info;
-                    setChanged();
+                    
                 }
 
                 public int getUser_id() {
@@ -657,7 +656,7 @@ public class HomeResponse extends Observable {
 
                 public void setUser_id(int user_id) {
                     this.user_id = user_id;
-                    setChanged();
+                    
                 }
 
                 public String getBank_account() {
@@ -666,7 +665,7 @@ public class HomeResponse extends Observable {
 
                 public void setBank_account(String bank_account) {
                     this.bank_account = bank_account;
-                    setChanged();
+                    
                 }
 
                 public String getAddress() {
@@ -675,7 +674,7 @@ public class HomeResponse extends Observable {
 
                 public void setAddress(String address) {
                     this.address = address;
-                    setChanged();
+                    
                 }
 
                 public String getIs_star() {
@@ -684,7 +683,7 @@ public class HomeResponse extends Observable {
 
                 public void setIs_star(String is_star) {
                     this.is_star = is_star;
-                    setChanged();
+                    
                 }
 
                 public String getNotes() {
@@ -693,7 +692,7 @@ public class HomeResponse extends Observable {
 
                 public void setNotes(String notes) {
                     this.notes = notes;
-                    setChanged();
+                    
                 }
 
                 public int getIs_block() {
@@ -702,7 +701,7 @@ public class HomeResponse extends Observable {
 
                 public void setIs_block(int is_block) {
                     this.is_block = is_block;
-                    setChanged();
+                    
                 }
 
                 public ArrayList<CompanyPhotosBean> getCompany_photos() {
@@ -711,7 +710,7 @@ public class HomeResponse extends Observable {
 
                 public void setCompany_photos(ArrayList<CompanyPhotosBean> company_photos) {
                     this.company_photos = company_photos;
-                    setChanged();
+                    
                 }
 
 //                public UserBean getUser() {
@@ -720,10 +719,10 @@ public class HomeResponse extends Observable {
 //
 //                public void setUser(UserBean user) {
 //                    this.user = user;
-//                    setChanged();
+//                    
 //                }
 
-//                public static class UserBean extends Observable{
+//                public static class UserBean {
 //                    private int id;
 //                    private String city;
 //                    private String full_name;
@@ -734,7 +733,7 @@ public class HomeResponse extends Observable {
 //
 //                    public void setId(int id) {
 //                        this.id = id;
-//                        setChanged();
+//                        
 //                    }
 //
 //                    public String getCity() {
@@ -743,7 +742,7 @@ public class HomeResponse extends Observable {
 //
 //                    public void setCity(String city) {
 //                        this.city = city;
-//                        setChanged();
+//                        
 //                    }
 //
 //                    public String getFull_name() {
@@ -752,11 +751,11 @@ public class HomeResponse extends Observable {
 //
 //                    public void setFull_name(String full_name) {
 //                        this.full_name = full_name;
-//                        setChanged();
+//                        
 //                    }
 //                }
 
-                public static class CompanyPhotosBean extends Observable{
+                public static class CompanyPhotosBean {
                     private int id;
                     private String photo;
                     private int company_id;
@@ -767,7 +766,7 @@ public class HomeResponse extends Observable {
 
                     public void setId(int id) {
                         this.id = id;
-                        setChanged();
+                        
                     }
 
                     public String getPhoto() {
@@ -776,7 +775,7 @@ public class HomeResponse extends Observable {
 
                     public void setPhoto(String photo) {
                         this.photo = photo;
-                        setChanged();
+                        
                     }
 
                     public int getCompany_id() {
@@ -785,13 +784,13 @@ public class HomeResponse extends Observable {
 
                     public void setCompany_id(int company_id) {
                         this.company_id = company_id;
-                        setChanged();
+                        
                     }
                 }
             }
         }
 
-        public static class DaySliderBean extends Observable{
+        public static class DaySliderBean {
             private String day;
             private String date;
             private String count;
@@ -802,7 +801,7 @@ public class HomeResponse extends Observable {
 
             public void setDay(String day) {
                 this.day = day;
-                setChanged();
+                
             }
 
             public String getDate() {
@@ -811,7 +810,7 @@ public class HomeResponse extends Observable {
 
             public void setDate(String date) {
                 this.date = date;
-                setChanged();
+                
             }
 
             public String getCount() {
@@ -820,7 +819,7 @@ public class HomeResponse extends Observable {
 
             public void setCount(String count) {
                 this.count = count;
-                setChanged();
+                
             }
         }
     }

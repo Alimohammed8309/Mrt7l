@@ -138,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_square"
-                    android:hint="@string/nationality"
+                    android:hint="@string/lbl_gender"
                     android:paddingStart="4dp"
                     android:paddingTop="6dp"
                     android:paddingEnd="8dp"
@@ -156,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_square"
                     android:hint="@string/lbl_gender"
-                    android:paddingStart="4dp"
+                    android:paddingStart="8dp"
                     android:paddingTop="6dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="6dp"
@@ -167,8 +167,8 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/ic_arrow_drop_down_black_24dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -209,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_square"
                     android:hint="@string/nationality"
-                    android:paddingStart="4dp"
+                    android:paddingStart="8dp"
                     android:paddingTop="6dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="6dp"
@@ -220,8 +220,8 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/ic_arrow_drop_down_black_24dp"
                     app:layout_constraintBottom_toBottomOf="parent"

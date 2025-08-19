@@ -897,6 +897,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
+                            android:id ="@+id/bankView"
                             android:orientation="horizontal"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -943,23 +944,47 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/contactLayout">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="@drawable/bg_rounded_border_pay"
+                                android:layout_marginEnd="10dp"
+
+                                android:layout_marginStart="10dp"
+                                android:id="@+id/visaIcon"
+
+                                >
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="5dp"
+                                android:src="@drawable/visa"
+                                android:contentDescription="visa"
+                                 />
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/mastercard"
+                                android:contentDescription="visa"
+                                android:id="@+id/masterCardIcon"
+                                />
                             <TextView
                                 android:id="@+id/payByVisa"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
-                                 android:layout_marginEnd="18dp"
-                                android:layout_marginStart="18dp"
-                                android:paddingEnd="14dp"
-                                android:visibility="gone"
+                                 android:paddingEnd="14dp"
+                                android:textStyle="bold"
                                 android:paddingStart="14dp"
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp"
-                                 android:text="@string/pay_visa"
-                                android:background="@drawable/bg_red_square"
-                                android:textColor="@color/white"
-                                android:textSize="13sp"
+                                 android:text="@string/text_ticket_book"
+                                 android:textColor="@color/black"
+                                android:textSize="12sp"
                                  />
+                            </LinearLayout>
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
