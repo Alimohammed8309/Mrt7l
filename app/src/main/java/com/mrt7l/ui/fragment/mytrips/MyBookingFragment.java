@@ -89,12 +89,10 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
     private LinearLayoutManager currentManager,pastManager;
     private ActivityResultLauncher<Intent> webViewLauncher;
     private boolean isRefreshData =false;
-    private boolean isDataLoadedBefore =false;
 
     /* create view */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(!isDataLoadedBefore) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mybooking, container, false);
             mTvCompleted = binding.tvCompleted;
             mTvCancel = binding.tvCancelled;
@@ -304,7 +302,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                                                }
             );
             isLoadingData = true;
-        }
+
         return binding.getRoot();
     }
 

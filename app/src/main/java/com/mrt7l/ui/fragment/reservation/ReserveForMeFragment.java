@@ -327,19 +327,24 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
         });
         fragmentBinding.payCash.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
+                fragmentBinding.bankLayout.setVisibility(View.GONE);
                 fragmentBinding.uploadBillLayout.setVisibility(View.GONE);
             }
         });
         fragmentBinding.payVisa.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
                 fragmentBinding.uploadBillLayout.setVisibility(View.GONE);
+                fragmentBinding.bankLayout.setVisibility(View.GONE);
             }
         });
         fragmentBinding.payBank.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 fragmentBinding.uploadBillLayout.setVisibility(View.VISIBLE);
+                fragmentBinding.bankLayout.setVisibility(View.VISIBLE);
             } else {
                 fragmentBinding.uploadBillLayout.setVisibility(View.GONE);
+                fragmentBinding.bankLayout.setVisibility(View.GONE);
+
             }
         });
         fragmentBinding.confirmReservation.setOnClickListener(v -> {
@@ -662,7 +667,7 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
                 reservationPostModel.getSub_passanger_ids().clear();
                 reservationPostModel.getSubPassengers().clear();
                 reservationPostModel.setMainPassanger("OFF");
-
+                reservationPostModel = new ReservationPostModel();
                 Navigation.findNavController(requireActivity(), R.id.main_fragment).navigateUp();
             }
             fragmentBinding.promoProgress.setVisibility(View.GONE);

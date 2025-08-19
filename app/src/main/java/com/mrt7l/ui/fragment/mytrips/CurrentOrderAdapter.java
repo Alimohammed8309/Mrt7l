@@ -92,6 +92,8 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                     if (mBusModel.getPayMethod().equals("tap")) {
                         holder1.binding.visaIcon.setVisibility(View.VISIBLE);
                         holder1.binding.bankView.setVisibility(View.GONE);
+                        holder1.binding.payTitle.setVisibility(View.GONE);
+                        holder1.binding.noteLayout.setVisibility(View.GONE);
                     }
                 }
             } else if (mBusModel.getStatus().equals("canceled")) {
@@ -115,6 +117,8 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 if (mBusModel.getPayMethod() != null) {
                     if (mBusModel.getPayMethod().equals("tap")) {
                         holder1.binding.bankView.setVisibility(View.GONE);
+                        holder1.binding.payTitle.setVisibility(View.GONE);
+                        holder1.binding.noteLayout.setVisibility(View.GONE);
                     }
                 }
             }

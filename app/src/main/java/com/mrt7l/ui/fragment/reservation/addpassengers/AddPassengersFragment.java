@@ -154,16 +154,13 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate( inflater,R.layout.reservation_passengers, container, false);
         reservationPostModel = ReservationPostModel.getInstance();
-
         passengersResponse = PassengersResponse.getInstance();
         token = new PreferenceHelper(requireActivity()).getTOKEN();
         userId = new PreferenceHelper(requireActivity()).getUSERID();
         viewModel = new ViewModelProvider(requireActivity()).get(ReserveForMeViewModel.class);
         viewModel.init(this);
         viewModel.setIsPassportSent(true);
-        binding.cancel.setOnClickListener(v -> {
-            Navigation.findNavController(requireActivity(),R.id.main_fragment).navigateUp();
-        });
+        binding.cancel.setOnClickListener(v -> Navigation.findNavController(requireActivity(),R.id.main_fragment).navigateUp());
         binding.close.setOnClickListener(v -> {
             binding.addPassengerLayout.setVisibility(View.GONE);
             isAddPassenger = false;
@@ -400,7 +397,9 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.d("TAG", "onResume: ");
+        SubPassengers.clear();
+        pastSubPassengers.clear();
     }
 
     private void setUpNationalitySpinner(Spinner spinners, final RegisterCollectionResponse initialData) {
@@ -633,6 +632,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
                     passengersAdapter = new Passengers_adapter(requireActivity(),
                             pList, this, true);
                     binding.passengerRecycler.setAdapter(passengersAdapter);
+                    binding.mainProgress.setVisibility(View.GONE);
                 }
             } catch (IllegalStateException e){
                 //e.printStackTrace();

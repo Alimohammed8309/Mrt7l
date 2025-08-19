@@ -386,7 +386,7 @@
     <string name="registering">جاري التسجيل</string>
     <string name="loading_data">جاري تحميل البيانات</string>
      <string name="loging">جاري تسجيل الدخول</string>
-    <string name = "redirecting_to_pay">برجاء الانتظار جاري تحويلك لموقع الدفع الالكترونى</string>
+    <string name = "redirecting_to_pay">يرجى الانتظار سيتم تحويلك لبوابة الدفع</string>
      <string name="sending">جاري الارسال</string>
     <string name="notes_sent">شكرا على تواصلك معنا</string>
     <string name="error">خطأ بالبيانات</string>

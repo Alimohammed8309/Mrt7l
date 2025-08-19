@@ -844,27 +844,19 @@
             />
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="32dp"
+            android:layout_width="180dp"
+            android:layout_height="35dp"
             app:layout_constraintTop_toBottomOf="@+id/payTypeTitle"
             app:layout_constraintBottom_toTopOf="@+id/bankLayout"
             app:layout_constraintEnd_toEndOf="parent"
+            android:scaleType="fitXY"
+            android:layout_marginTop="6dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/visa"
             android:contentDescription="visa"
             android:id="@+id/visaIcon"
             />
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="32dp"
-            app:layout_constraintTop_toBottomOf="@+id/payTypeTitle"
-            app:layout_constraintBottom_toTopOf="@+id/bankLayout"
-            app:layout_constraintEnd_toStartOf="@+id/visaIcon"
 
-            android:src="@drawable/mastercard"
-            android:contentDescription="visa"
-            android:id="@+id/masterCardIcon"
-            />
         <RadioGroup
             android:id="@+id/payGroup"
             android:layout_width="match_parent"
@@ -907,6 +899,7 @@
             android:orientation="horizontal"
             android:gravity="right"
             android:id="@+id/bankLayout"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/payGroup"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
