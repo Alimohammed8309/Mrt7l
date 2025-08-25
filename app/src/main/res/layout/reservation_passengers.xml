@@ -134,6 +134,20 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="8dp"
                     android:layoutDirection="rtl" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:id="@+id/noData"
+                    android:layout_marginEnd="7dp"
+                    android:visibility="gone"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="140dp"
+                    android:text="@string/no_passengers"
+                    android:gravity="center"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
                 <ProgressBar
                     android:id="@+id/mainProgress"
                     android:layout_width="match_parent"

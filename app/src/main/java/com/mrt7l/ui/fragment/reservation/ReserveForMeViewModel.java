@@ -15,6 +15,7 @@ import com.mrt7l.helpers.PreferenceHelper;
 import com.mrt7l.model.RegisterCollectionResponse;
 import com.mrt7l.ui.fragment.passengers.AddPassengerResponse;
 import com.mrt7l.ui.fragment.passengers.PassengersResponse;
+import com.mrt7l.ui.fragment.passengers.RemovePassengerResponse;
 import com.mrt7l.utils.retrofit.ApiClient;
 import com.mrt7l.utils.retrofit.RetrofitProvider;
 import java.io.IOException;
@@ -144,7 +145,51 @@ public class ReserveForMeViewModel extends ViewModel {
             }
         });
     }
+    public void removePassenger(String id,String token){
+        ApiClient apiInterface =   RetrofitProvider.getClient().create(ApiClient.class);
+        Observable<RemovePassengerResponse> observable = apiInterface.removePassenger(
+                        "Bearer "+token,id)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        observable.subscribe(new DisposableObserver<RemovePassengerResponse>() {
+            @Override
+            public void onNext(@NonNull RemovePassengerResponse model) {
+                try{
+                    getNavigator().onPassengerDeleted(model.getMrt7al().isSuccess(),model.getMrt7al().getMsg());
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onError(@NonNull Throwable e) {
+                try{
+                    if (e instanceof HttpException) {
+                        ResponseBody body = ((HttpException) e).response().errorBody();
+                        Gson gson = new Gson();
+                        try {
+                            assert body != null;
+                            errorResponse = gson.fromJson(body.string(), ErrorResponse.class);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        if (errorResponse.getMrt7al() != null) {
+                            getNavigator().handleError(errorResponse.getMrt7al().getMsg());
+                        } else {
+                            getNavigator().handleError("خطأ بالبيانات");
+                        }
+                    }
+                } catch (NullPointerException a){
+                    a.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
     public void addTripWithReset(String token, List<RequestBody> subIdsList,
                                  RequestBody mainPassenger,RequestBody promo,RequestBody beforeConfirm,
                                  RequestBody payMethod,RequestBody trip_date_id,RequestBody passportId,

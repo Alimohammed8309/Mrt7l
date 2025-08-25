@@ -255,6 +255,7 @@ public class CurrentOrdersResponse extends Observable {
             private int id;
             private String payMethod;
             private String receipt_file;
+            private String tap_status;
             private String ticket_number;
             private int passenger_count;
             private int children_count;
@@ -295,6 +296,15 @@ public class CurrentOrdersResponse extends Observable {
 
             public void setTripID(String tripID) {
                 this.tripID = tripID;
+                setChanged();
+            }
+
+            public String getTap_status() {
+                return tap_status;
+            }
+
+            public void setTap_status(String tap_status) {
+                this.tap_status = tap_status;
                 setChanged();
             }
 
@@ -630,7 +640,7 @@ public class CurrentOrdersResponse extends Observable {
                 private ToCityBean to_city;
                 private String tripType;
                 private int station_id;
-                private int tripDateTime;
+                private long tripDateTime;
                 private int price;
                 private int child_price;
                 private int baby_price;
@@ -724,11 +734,11 @@ public class CurrentOrdersResponse extends Observable {
                     setChanged();
                 }
 
-                public int getTripDateTime() {
+                public long getTripDateTime() {
                     return tripDateTime;
                 }
 
-                public void setTripDateTime(int tripDateTime) {
+                public void setTripDateTime(long tripDateTime) {
                     this.tripDateTime = tripDateTime;
                     setChanged();
                 }

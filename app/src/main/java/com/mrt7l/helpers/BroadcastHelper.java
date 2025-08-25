@@ -12,7 +12,7 @@ public class BroadcastHelper {
     public static final String ACTION_NAME = "searchFilter";
     public static final String UPDATE_LOCATION_METHOD = "updateLocation";
     public static final String NEW_NOTIFICATION = "newNotification";
-    public static final String NEW_TASK = "newTask";
+    public static final String ReloadPassengers = "ReloadPassengers";
 
 
     public static void sendInform(Context context, String method) {

@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -98,6 +99,8 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
     private LoginResponse loginResponse;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     ActivityResultLauncher<PickVisualMediaRequest> passportPickMedia;
+    private int PassengerToDelete = 0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -429,6 +432,48 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
         });
 
     }
+    @Override
+    public void OnDelete(DataBean registerResponse,int pos) {
+        DialogsHelper.showSimpleProgressDialog(getString(R.string.deleting),requireActivity());
+        PassengerToDelete = pos;
+        viewModel.removePassenger(String.valueOf(registerResponse.getId()),token);
+    }
+
+    @Override
+    public void onPassengerDeleted(boolean success,String message) {
+        DialogsHelper.removeSimpleProgressDialog();
+        try{
+            if (success){
+                for (int i=0;i<SubPassengers.size();i++){
+                    if (SubPassengers.get(i).getId() == pastPassengersList.get(PassengerToDelete).getId()){
+                        SubPassengers.remove(i);
+                        break;
+                    }
+                }
+                for (int i=0;i<pastSubPassengers.size();i++){
+                    if (pastSubPassengers.get(i) == pastPassengersList.get(PassengerToDelete).getId()){
+                        pastSubPassengers.remove(i);
+                        break;
+                    }
+                }
+                if(!pastPassengersList.isEmpty()) {
+                    pastPassengersList.remove(PassengerToDelete);
+                }
+                BroadcastHelper.sendInform(requireActivity(),BroadcastHelper.ReloadPassengers);
+                passengersAdapter.notifyItemRemoved(PassengerToDelete);
+                if (pastPassengersList.isEmpty()){
+                    binding.noData.setVisibility(View.VISIBLE);
+                    binding.passengerRecycler.setVisibility(View.GONE);
+                }
+                Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+            } else {
+                DialogsHelper.showErrorDialog(message,requireActivity());
+            }
+        }catch (IllegalStateException e){
+            //e.printStackTrace();
+        }
+    }
+
     private RequestBody createPartFromString(String param) {
         return RequestBody.create(param,MediaType.parse("multipart/form-data")  );
     }
@@ -680,7 +725,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             passenger.setMobile(addPassengerResponse.getMrt7al().getData().getMobile());
             passenger.setCreated(addPassengerResponse.getMrt7al().getData().getCreated());
             passenger.setPassangerType(addPassengerResponse.getMrt7al().getData().getPassangerType());
-            BroadcastHelper.sendInform(requireContext(),"passengerAdded");
+            BroadcastHelper.sendInform(requireContext(),BroadcastHelper.ReloadPassengers);
             SubPassengers.add(dataBean);
             passengersResponse.getMrt7al().getData().add(passenger);
 //             for (int i=0;i<passengersResponse.getMrt7al().getData().size();i++){
@@ -773,7 +818,15 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
             addPassportDialog.cancel();
         }
     }
-
+    @Override
+    public void OnEdit(PassengersResponse.Mrt7alBean.DataBean registerResponse) {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.main_fragment);
+        Gson gson = new Gson();
+        String model = gson.toJson(registerResponse);
+        Bundle bundle = new Bundle();
+        bundle.putString("model",model);
+        navController.navigate(R.id.action_passengersFragment_to_editPassengerFragment,bundle);
+    }
     @Override
     public void onGetCollections(RegisterCollectionResponse registerCollectionResponse) {
         setUpNationalitySpinner(binding.nationalitySpinner,registerCollectionResponse);
@@ -884,10 +937,7 @@ public class AddPassengersFragment extends Fragment implements ReservationInterf
 
     }
 
-    @Override
-    public void OnDelete(DataBean registerResponse, int pos) {
 
-    }
 
     @Override
     public void onPassengerChecked(DataBean  Bean) {

@@ -209,7 +209,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
 //                DialogsHelper.showProgressDialog(requireActivity(), getString(R.string.loading_data));
                         } else {
                             if (currentOrdersResponse.getMrt7al() != null) {
-                                if (currentOrdersResponse.getMrt7al().getData().size() > 0) {
+                                if (!currentOrdersResponse.getMrt7al().getData().isEmpty()) {
                                     currentOrders.addAll(currentOrdersResponse.getMrt7al().getData());
                                     currentOrderAdapter = new CurrentOrderAdapter(currentOrders, this,
                                             AboutAppResponse.getInstance().getMrt7al()
@@ -223,7 +223,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                                 binding.noData.setVisibility(View.VISIBLE);
                                 binding.mainProgress.setVisibility(View.GONE);
                             }
-                            if (pastOrderResponse.getMrt7al().getData().size() > 0) {
+                            if (!pastOrderResponse.getMrt7al().getData().isEmpty()) {
                                 ordersList = pastOrderResponse.getMrt7al().getData();
                                 pastOrderAdapter = new PastOrderAdapter(ordersList, requireContext(), this);
                                 binding.rvPast.setAdapter(pastOrderAdapter);
@@ -425,7 +425,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                     binding.pastLine.setVisibility(View.GONE);
                 ((DashboardActivity) (requireActivity())).showView(binding.refreshButton);
                 ((DashboardActivity) (requireActivity())).hideView(binding.refreshPastButton);
-                if (currentOrders.size() > 0) {
+                if (!currentOrders.isEmpty()) {
                     binding.noData.setVisibility(View.GONE);
                 } else {
                     binding.noData.setVisibility(View.VISIBLE);
@@ -439,7 +439,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                 binding.pastLine.setVisibility(View.VISIBLE);
                 ((DashboardActivity) (requireActivity())).hideView(binding.refreshButton);
                 ((DashboardActivity) (requireActivity())).showView(binding.refreshPastButton);
-                if (ordersList.size() > 0) {
+                if (!ordersList.isEmpty()) {
                     binding.noData.setVisibility(View.GONE);
                 } else {
                     binding.noData.setVisibility(View.VISIBLE);
@@ -454,7 +454,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
     public void onCurrentResponse(boolean isSuccess, CurrentOrdersResponse currentOrdersResponse) {
         try{
          if (isSuccess) {
-            if (currentOrdersResponse.getMrt7al().getData().size() > 0) {
+            if (!currentOrdersResponse.getMrt7al().getData().isEmpty()) {
                 if (currentOrdersPage >1) {
                     currentOrders.addAll(currentOrdersResponse.getMrt7al().getData());
                 } else {
@@ -472,6 +472,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
             } else {
 //                binding.rvBooking.setVisibility(View.GONE);
 //                binding.noData.setVisibility(View.VISIBLE);
+                binding.noData.setVisibility(View.VISIBLE);
             }
         }
         binding.mainProgress.setVisibility(View.GONE);
@@ -489,7 +490,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
     public void onPastResponse(boolean isSuccess, PastOrdersResponse currentOrdersResponse) {
         try{
         if (isSuccess) {
-            if (currentOrdersResponse.getMrt7al().getData().size() > 0) {
+            if (!currentOrdersResponse.getMrt7al().getData().isEmpty()) {
                 if (pastOrdersPage ==1) {
                     ordersList = currentOrdersResponse.getMrt7al().getData();
                 } else {
@@ -497,7 +498,7 @@ public class MyBookingFragment extends Fragment implements View.OnClickListener,
                 }
                 pastOrderAdapter = new PastOrderAdapter(ordersList,requireContext(),this);
                 binding.rvPast.setAdapter(pastOrderAdapter);
-                binding.refreshPastButton.setVisibility(View.VISIBLE);
+//                binding.refreshPastButton.setVisibility(View.VISIBLE);
 //                binding.rvPast.setVisibility(View.VISIBLE);
 //                binding.noData.setVisibility(View.GONE);
 //                binding.rvBooking.setVisibility(View.GONE);

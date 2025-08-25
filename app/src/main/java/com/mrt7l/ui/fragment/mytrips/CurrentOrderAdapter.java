@@ -89,11 +89,20 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
                 holder1.binding.tripPending.setText(context.getString(R.string.pending));
                 holder1.binding.printTicket.setVisibility(View.GONE);
                 if (mBusModel.getPayMethod() != null) {
-                    if (mBusModel.getPayMethod().equals("tap")) {
+                    if (mBusModel.getPayMethod().equals("tap") && !mBusModel.getTap_status().equals("captured")) {
                         holder1.binding.visaIcon.setVisibility(View.VISIBLE);
                         holder1.binding.bankView.setVisibility(View.GONE);
                         holder1.binding.payTitle.setVisibility(View.GONE);
                         holder1.binding.noteLayout.setVisibility(View.GONE);
+                    } else {
+                        holder1.binding.tripPending.setVisibility(View.GONE);
+                        holder1.binding.tripConfirmed.setVisibility(View.VISIBLE);
+                        holder1.binding.tripCanceled.setVisibility(View.GONE);
+                        holder1.binding.tripConfirmed.setText(context.getString(R.string.confirmed));
+                        holder1.binding.printTicket.setVisibility(View.VISIBLE);
+                        holder1.binding.cancel.setVisibility(View.GONE);
+                        holder1.binding.editTrip.setVisibility(View.GONE);
+                        holder1.binding.visaIcon.setVisibility(View.GONE);
                     }
                 }
             } else if (mBusModel.getStatus().equals("canceled")) {
@@ -131,7 +140,11 @@ public class CurrentOrderAdapter extends RecyclerView.Adapter<CurrentOrderAdapte
             });
             holder1.binding.price.setText( mBusModel.getTrip_date().getPrice() +" ريال  ");
             holder1.binding.tripNum.setText(mBusModel.getTripID());
-            holder1.binding.startStation.setText(mBusModel.getTrip_date().getStation().getName());
+            try {
+                holder1.binding.startStation.setText(mBusModel.getTrip_date().getStation().getName());
+            } catch (Exception e) {
+                holder1.binding.startStation.setText("");
+            }
          }
 
         if (mBusModel.getPayMethod() != null) {

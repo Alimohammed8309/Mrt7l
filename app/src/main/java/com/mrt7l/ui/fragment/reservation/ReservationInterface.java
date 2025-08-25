@@ -11,6 +11,7 @@ public interface ReservationInterface {
          void onConfirmedResponse(boolean isSucces,ReservationConfirmedResponse reservationConfirmedResponse);
         void handleError(String  t);
      void handlePayError(String  t);
+    void onPassengerDeleted(boolean success,String message);
     void onVerifyPromo(ReservationResponse verifyPromoResponse);
         void onGetPassengers(PassengersResponse passengersResponse);
         void onAddPassenger(AddPassengerResponse addPassengerResponse);

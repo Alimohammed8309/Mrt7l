@@ -1,10 +1,8 @@
 package com.mrt7l.ui.fragment.passengers;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,16 +18,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.mrt7l.R;
@@ -38,7 +31,6 @@ import com.mrt7l.helpers.BroadcastHelper;
 import com.mrt7l.helpers.ConnectivityReceiver;
 import com.mrt7l.helpers.DialogsHelper;
 import com.mrt7l.helpers.PreferenceHelper;
-import com.mrt7l.ui.activity.DashboardActivity;
 import com.mrt7l.ui.fragment.company_details.CompanyDetailsResponse;
 import com.mrt7l.ui.fragment.reservation.ErrorResponse;
 import com.mrt7l.ui.fragment.reservation.PassengerModel;
@@ -271,7 +263,7 @@ public class PassengersFragment extends Fragment implements PassengersInterface,
         public void onReceive(Context arg0, Intent arg1) {
             String methodName = arg1.getStringExtra(BroadcastHelper.BROADCAST_EXTRA_METHOD_NAME);
             if (methodName != null && !methodName.isEmpty()) {
-                if (methodName.equals("passengerAdded")) {
+                if (methodName.equals(BroadcastHelper.ReloadPassengers)) {
                     mViewModel.getPassengers(page, token);
                 }
             }

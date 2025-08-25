@@ -55,11 +55,14 @@ import com.mrt7l.ui.fragment.company_details.CompanyDetailsResponse;
 import com.mrt7l.ui.fragment.home.HomeResponse;
 import com.mrt7l.ui.fragment.passengers.AddPassengerResponse;
 import com.mrt7l.ui.fragment.passengers.PassengersResponse;
+import com.mrt7l.ui.fragment.passengers.RemovePassengerResponse;
 import com.mrt7l.ui.fragment.reservation.addpassengers.AddPassengersFragment;
 import com.mrt7l.ui.fragment.reservation.addpassengers.PassengerPriceModel;
 import com.mrt7l.ui.fragment.reservation.addpassengers.PassengersAdapter;
 import com.mrt7l.ui.fragment.reservation.addpassengers.PassengersPriceAdapter;
 import com.mrt7l.ui.fragment.search_trips.SearchTripsResponse;
+import com.mrt7l.utils.retrofit.ApiClient;
+import com.mrt7l.utils.retrofit.RetrofitProvider;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -74,6 +77,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -642,6 +649,8 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
         dialog.setContentView(registerErrorDialogBinding.getRoot());
         dialog.show();
     }
+
+
     public void showPaymentFailedDialog(String message) {
             final Dialog dialog = new Dialog(requireActivity(), android.R.style.Theme_Translucent_NoTitleBar);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -679,6 +688,11 @@ public class ReserveForMeFragment extends Fragment implements ReservationInterfa
     @Override
     public void handlePayError(String message) {
         showPaymentFailedDialog(message);
+    }
+
+    @Override
+    public void onPassengerDeleted(boolean success, String message) {
+
     }
 
     @Override

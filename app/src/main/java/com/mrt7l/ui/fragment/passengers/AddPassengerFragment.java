@@ -406,29 +406,11 @@ public class AddPassengerFragment extends Fragment implements AddPassengersInter
             Toast.makeText(requireActivity(), getString(R.string.passenger_added)
                     , Toast.LENGTH_SHORT).show();
 
-            BroadcastHelper.sendInform(requireContext(),"passengerAdded");
+            BroadcastHelper.sendInform(requireContext(),BroadcastHelper.ReloadPassengers);
             new PreferenceHelper(requireActivity()).setReloadProfile(true);
             NavController navController = Navigation.findNavController(requireActivity(), R.id.main_fragment);
             navController.navigateUp();
-            try {
-                imagePath= PathUtil.getPath(requireContext(),uri);
-            } catch (URISyntaxException e) {
-                //e.printStackTrace();
-            }
-            if(imagePath != null) {
-                File target = new File(imagePath);
-                try {
-                    if (target.exists() && target.isFile() && target.canWrite()) {
-                        boolean isDeleted = target.delete();
-                        if (isDeleted) {
-                            //                                    Toast.makeText(this, "imageDeleted", Toast.LENGTH_SHORT).show();
-                        } else {
-//                                    Toast.makeText(this, imagePath, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } catch (UnsupportedOperationException ignored){
-                }
-            }
+
         }
         DialogsHelper.disable(binding.wholeView, true);
         binding.confirmProgress.setVisibility(View.GONE);

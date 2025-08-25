@@ -8,4 +8,5 @@ public interface HandlePassengersInterface {
     void OnDelete(AddPassengersFragment.DataBean registerResponse,int pos);
     void onPassengerChecked(AddPassengersFragment.DataBean dataBean);
 
+    void OnEdit(  PassengersResponse.Mrt7alBean.DataBean registerResponse);
 }
